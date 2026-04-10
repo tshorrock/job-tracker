@@ -102,7 +102,7 @@
     .bento {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      grid-auto-rows: 100px;
+      grid-auto-rows: 110px;
       gap: 10px;
     }
 
@@ -120,9 +120,9 @@
     /* ── CELL SPANS ── */
     .c-stat   { grid-column: span 3; grid-row: span 1; }
     .c-meta   { grid-column: span 3; grid-row: span 1; }
-    .c-jobs   { grid-column: span 8; grid-row: span 8; }
-    .c-boards { grid-column: span 4; grid-row: span 5; }
-    .c-srcs   { grid-column: span 4; grid-row: span 3; }
+    .c-jobs   { grid-column: span 8; grid-row: span 6; }
+    .c-boards { grid-column: span 4; grid-row: span 4; }
+    .c-srcs   { grid-column: span 4; grid-row: span 2; }
 
     /* ── STAT CELLS ── */
     .stat-cell {
@@ -143,7 +143,7 @@
       font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
     }
     .stat-num {
-      font-size: 42px; font-weight: 900; letter-spacing: -2px; line-height: 1; color: #fff;
+      font-size: 48px; font-weight: 900; letter-spacing: -2px; line-height: 1; color: #fff;
     }
     .stat-num.lime { color: var(--lime); }
     .stat-num.coral { color: var(--coral); }
@@ -200,6 +200,22 @@
     .jrow.hot { border-left: 2px solid var(--lime); }
     .jrow.adj { border-left: 2px solid var(--lavender); }
     @keyframes pop { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+
+    .dismiss-btn {
+      flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--muted); font-size: 12px; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .15s; opacity: 0; z-index: 10;
+      font-family: monospace;
+    }
+    .jrow-wrap:hover .dismiss-btn { opacity: 1; }
+    .dismiss-btn:hover { background: rgba(255,77,109,0.2); border-color: rgba(255,77,109,0.4); color: #ff4d6d; }
+
+    .jrow-wrap {
+      display: flex; align-items: center; gap: 8px;
+      border-radius: 10px; position: relative;
+    }
 
     .jrow-left { flex: 1; min-width: 0; }
     .jrow-title { font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
@@ -458,15 +474,29 @@ function updateMeta() {
   document.getElementById('s2').textContent = tot;
 }
 
+let dismissed = new Set(JSON.parse(localStorage.getItem('ts_dismissed') || '[]'));
+
+function dismiss(id, e) {
+  e.preventDefault(); e.stopPropagation();
+  dismissed.add(id);
+  localStorage.setItem('ts_dismissed', JSON.stringify([...dismissed]));
+  render();
+}
+
 function getJobs() {
   const q = (document.getElementById('q').value||'').toLowerCase();
-  let r = [...jobs];
+  let r = [...jobs].filter(j => !dismissed.has(j.id || make_id(j.title, j.company)));
   if(activeF==='new') r = r.filter(j=>isNew(j));
   if(activeF==='hot') r = r.filter(j=>isHot(j));
   if(activeF==='ai')  r = r.filter(j=>isAI(j));
   if(activeF==='adj') r = r.filter(j=>isAdj(j));
   if(q) r = r.filter(j=>(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q)||(j.description||'').toLowerCase().includes(q));
   return r.sort((a,b)=>(b.score||0)-(a.score||0));
+}
+
+function make_id(title, company) {
+  // Simple client-side ID matching server-side logic
+  return (title||'').toLowerCase().trim().slice(0,20) + (company||'').toLowerCase().trim().slice(0,20);
 }
 
 function render() {
@@ -499,16 +529,21 @@ function render() {
       adj  ? `<span class="jtag jt-adj">adjacent</span>` : '',
     ].filter(Boolean).join('');
 
-    return `<a class="jrow ${cls}" href="${j.url}" target="_blank" rel="noopener" style="animation-delay:${Math.min(i*.03,.5)}s">
-      <div class="jrow-left">
-        <div class="jrow-title">${j.title||'Untitled'}</div>
-        <div class="jrow-meta"><span class="jco">${j.company||'Unknown'}</span><span class="jdot">·</span>${tags}</div>
-      </div>
-      <div class="jrow-right">
-        <div class="score-pips">${pips}</div>
-        <div class="go-btn">Open →</div>
-      </div>
-    </a>`;
+    const jid = j.id || (j.title+j.company).toLowerCase().replace(/\s/g,'').slice(0,32);
+
+    return `<div class="jrow-wrap" style="animation-delay:${Math.min(i*.03,.5)}s">
+      <a class="jrow ${cls}" href="${j.url}" target="_blank" rel="noopener" style="flex:1">
+        <div class="jrow-left">
+          <div class="jrow-title">${j.title||'Untitled'}</div>
+          <div class="jrow-meta"><span class="jco">${j.company||'Unknown'}</span><span class="jdot">·</span>${tags}</div>
+        </div>
+        <div class="jrow-right">
+          <div class="score-pips">${pips}</div>
+          <div class="go-btn">Open →</div>
+        </div>
+      </a>
+      <button class="dismiss-btn" onclick="dismiss('${jid}',event)" title="Remove this job">✕</button>
+    </div>`;
   }).join('');
 }
 
