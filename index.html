@@ -1,393 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TS · Job Command</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TS · Jobs</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0d11;
+  --s1:#121520;
+  --s2:#181c28;
+  --s3:#1e2334;
+  --lime:#d4f244;
+  --ld:rgba(212,242,68,.10);
+  --ld2:rgba(212,242,68,.18);
+  --amber:#f0a500;
+  --ad:rgba(240,165,0,.10);
+  --coral:#ff5533;
+  --cd:rgba(255,85,51,.10);
+  --mint:#00d4a4;
+  --md:rgba(0,212,164,.10);
+  --text:#edf1f7;
+  --sub:#66788a;
+  --dim:#2a3348;
+  --bdr:rgba(255,255,255,.07);
+  --bdr2:rgba(255,255,255,.13);
+}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
 
-    :root {
-      --bg:      #0c0e14;
-      --card:    #13161f;
-      --card2:   #1a1e2a;
-      --card3:   #1f2435;
-      --lime:    #c8f135;
-      --lime-d:  rgba(200,241,53,0.10);
-      --coral:   #ff5f3d;
-      --coral-d: rgba(255,95,61,0.10);
-      --sky:     #41c8f0;
-      --sky-d:   rgba(65,200,240,0.10);
-      --lav:     #a78bfa;
-      --lav-d:   rgba(167,139,250,0.10);
-      --red:     #ff4060;
-      --text:    #e8eef6;
-      --sub:     #8896aa;
-      --dim:     #3a4558;
-      --border:  rgba(255,255,255,0.06);
-      --border2: rgba(255,255,255,0.11);
-    }
+/* TOPBAR */
+.top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 28px;border-bottom:1px solid var(--bdr);
+  position:sticky;top:0;z-index:100;
+  background:rgba(11,13,17,.92);backdrop-filter:blur(12px);
+  gap:16px;flex-wrap:wrap;
+}
+.logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:900;letter-spacing:-1.5px;color:#fff}
+.logo em{font-style:normal;color:var(--lime)}
+.logo-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--sub);margin-left:12px}
 
-    html { background: var(--bg); }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Cabinet Grotesk', sans-serif;
-      min-height: 100vh;
-      font-size: 15px;
-    }
+.top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.search{
+  display:flex;align-items:center;gap:8px;
+  background:var(--s1);border:1px solid var(--bdr2);
+  border-radius:10px;padding:9px 14px;width:250px;
+  transition:border-color .2s;
+}
+.search:focus-within{border-color:rgba(212,242,68,.4)}
+.search input{background:none;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;width:100%}
+.search input::placeholder{color:var(--sub)}
 
-    /* ── PAGE ── */
-    .page { max-width: 1440px; margin: 0 auto; padding: 24px 24px 60px; }
+.chips{display:flex;gap:6px}
+.chip{
+  padding:7px 16px;border-radius:20px;cursor:pointer;
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.5px;
+  border:1px solid var(--bdr2);color:var(--sub);background:var(--s1);
+  transition:all .15s;user-select:none;
+}
+.chip:hover{border-color:var(--lime);color:var(--lime)}
+.chip.on{background:var(--ld);border-color:rgba(212,242,68,.4);color:var(--lime)}
+.chip.on.a{background:var(--ad);border-color:rgba(240,165,0,.4);color:var(--amber)}
+.chip.on.c{background:var(--cd);border-color:rgba(255,85,51,.4);color:var(--coral)}
+.run{
+  padding:8px 18px;border-radius:10px;border:none;cursor:pointer;
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;font-weight:700;
+  text-transform:uppercase;background:var(--lime);color:#0b0d11;transition:opacity .15s;
+}
+.run:hover{opacity:.85}
 
-    /* ── TOPBAR ── */
-    .topbar {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
-    }
-    .logo { font-size: 20px; font-weight: 900; letter-spacing: -1px; color: #fff; }
-    .logo em { font-style: normal; color: var(--lime); }
-    .logo-sub {
-      font-family: 'Instrument Mono', monospace;
-      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--sub); margin-left: 10px;
-    }
+/* PAGE */
+.page{padding:24px 28px 60px;max-width:1500px;margin:0 auto}
 
-    .controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+/* STAT STRIP */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.stat{
+  background:var(--s1);border:1px solid var(--bdr);border-radius:14px;
+  padding:22px 24px;position:relative;overflow:hidden;
+}
+.stat::after{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.stat.lime::after{background:var(--lime)}
+.stat.amber::after{background:var(--amber)}
+.stat.coral::after{background:var(--coral)}
+.stat.mint::after{background:var(--mint)}
+.stat.dim::after{background:var(--dim)}
+.stat-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--sub);margin-bottom:8px}
+.stat-n{font-family:'Syne',sans-serif;font-size:48px;font-weight:900;letter-spacing:-3px;line-height:1;color:#fff}
+.stat-n.lime{color:var(--lime)}
+.stat-n.amber{color:var(--amber)}
+.stat-n.coral{color:var(--coral)}
+.stat-n.mint{color:var(--mint)}
+.stat-hint{font-size:12px;color:var(--sub);margin-top:6px}
 
-    .search {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--card); border: 1px solid var(--border2);
-      border-radius: 10px; padding: 9px 14px; width: 260px;
-    }
-    .search:focus-within { border-color: rgba(200,241,53,.4); }
-    .search input {
-      background: none; border: none; outline: none;
-      color: var(--text); font-family: 'Cabinet Grotesk', sans-serif;
-      font-size: 14px; width: 100%;
-    }
-    .search input::placeholder { color: var(--sub); }
+/* STATUS PILL */
+.status-row{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.status-pill{
+  display:flex;align-items:center;gap:8px;
+  background:var(--s1);border:1px solid var(--bdr);border-radius:20px;
+  padding:7px 16px;font-size:13px;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--lime);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.status-txt{font-weight:600;color:#fff}
+.status-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--sub)}
+.dismiss-all{
+  margin-left:auto;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;
+  text-transform:uppercase;padding:6px 14px;border-radius:8px;cursor:pointer;
+  background:var(--cd);border:1px solid rgba(255,85,51,.25);color:var(--coral);
+  transition:all .15s;
+}
+.dismiss-all:hover{background:var(--coral);color:#fff}
 
-    .chips { display: flex; gap: 6px; }
-    .chip {
-      padding: 7px 16px; border-radius: 20px; cursor: pointer;
-      font-family: 'Instrument Mono', monospace; font-size: 11px;
-      letter-spacing: .5px; border: 1px solid var(--border2);
-      color: var(--sub); background: var(--card); transition: all .15s;
-      user-select: none;
-    }
-    .chip:hover { border-color: var(--lime); color: var(--lime); }
-    .chip.on { background: var(--lime-d); border-color: rgba(200,241,53,.4); color: var(--lime); }
-    .chip.on.c { background: var(--coral-d); border-color: rgba(255,95,61,.4); color: var(--coral); }
-    .chip.on.s { background: var(--sky-d); border-color: rgba(65,200,240,.4); color: var(--sky); }
+/* MAIN LAYOUT */
+.main{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
 
-    .run-btn {
-      padding: 8px 18px; border-radius: 10px; border: none; cursor: pointer;
-      font-family: 'Instrument Mono', monospace; font-size: 11px; letter-spacing: 1px;
-      font-weight: 700; text-transform: uppercase;
-      background: var(--lime); color: #0c0e14; transition: opacity .15s;
-    }
-    .run-btn:hover { opacity: .85; }
+/* JOB GRID */
+.job-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-hdr{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.grid-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff}
+.grid-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--sub)}
 
-    /* ── BENTO GRID ── */
-    .bento {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 380px;
-      grid-template-rows: auto 1fr;
-      gap: 10px;
-      min-height: calc(100vh - 120px);
-    }
+/* JOB CARD */
+.jcard{
+  background:var(--s1);border:1px solid var(--bdr);border-radius:14px;
+  padding:22px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:14px;
+  animation:fadeUp .3s ease both;
+  transition:border-color .15s,background .15s;
+}
+.jcard:hover{border-color:var(--bdr2);background:var(--s2)}
+.jcard.hot{border-top:3px solid var(--lime)}
+.jcard.adj{border-top:3px solid var(--amber)}
+.jcard.new-j{border-top:3px solid var(--mint)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-    /* ── STAT CARDS (top row) ── */
-    .stats-row {
-      grid-column: 1 / 4;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 10px;
-    }
+.jcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.jcard-score{
+  font-family:'Syne',sans-serif;font-size:36px;font-weight:900;
+  letter-spacing:-2px;line-height:1;flex-shrink:0;
+}
+.jcard-score.high{color:var(--lime)}
+.jcard-score.mid{color:var(--amber)}
+.jcard-score.low{color:var(--sub)}
+.score-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--sub);text-align:right;margin-top:2px}
 
-    .stat {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 24px 28px;
-      position: relative; overflow: hidden;
-    }
-    .stat::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    }
-    .stat.lime::before  { background: linear-gradient(90deg, var(--lime), transparent); }
-    .stat.coral::before { background: linear-gradient(90deg, var(--coral), transparent); }
-    .stat.sky::before   { background: linear-gradient(90deg, var(--sky), transparent); }
-    .stat.lav::before   { background: linear-gradient(90deg, var(--lav), transparent); }
+.jcard-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#fff;line-height:1.25;letter-spacing:-.4px}
+.jcard-co{font-size:13px;color:var(--sub);margin-top:5px}
 
-    .stat-lbl {
-      font-family: 'Instrument Mono', monospace;
-      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--sub); margin-bottom: 10px;
-    }
-    .stat-n {
-      font-size: 52px; font-weight: 900; letter-spacing: -3px; line-height: 1; color: #fff;
-    }
-    .stat-n.lime  { color: var(--lime); }
-    .stat-n.coral { color: var(--coral); }
-    .stat-n.sky   { color: var(--sky); }
-    .stat-hint { font-size: 12px; color: var(--sub); margin-top: 8px; }
+.jcard-tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.5px;text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;
+}
+.t-src{background:rgba(255,255,255,.05);color:var(--sub)}
+.t-new{background:var(--md);color:var(--mint)}
+.t-ai{background:rgba(212,242,68,.08);color:var(--lime)}
+.t-hot{background:var(--ld);color:var(--lime)}
+.t-adj{background:var(--ad);color:var(--amber)}
 
-    /* ── STATUS CARD ── */
-    .status-card {
-      grid-column: 4;
-      grid-row: 1;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 24px 28px;
-      display: flex; flex-direction: column; justify-content: center; gap: 8px;
-    }
-    .status-lbl {
-      font-family: 'Instrument Mono', monospace;
-      font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--sub);
-    }
-    .status-dot { display: flex; align-items: center; gap: 8px; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); animation: blink 2s infinite; flex-shrink: 0; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
-    .status-val { font-size: 16px; font-weight: 700; color: #fff; }
-    .status-time { font-family: 'Instrument Mono', monospace; font-size: 11px; color: var(--sub); }
+.jcard-reason{font-size:12px;color:var(--sub);line-height:1.5;font-style:italic}
 
-    /* ── JOBS PANEL ── */
-    .jobs-panel {
-      grid-column: 1 / 4;
-      grid-row: 2;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden;
-      display: flex; flex-direction: column;
-    }
-    .panel-hdr {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 24px 16px; border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-    .panel-title { font-size: 15px; font-weight: 700; color: #fff; }
-    .panel-count { font-family: 'Instrument Mono', monospace; font-size: 11px; color: var(--sub); }
-    .jobs-scroll {
-      flex: 1; overflow-y: auto; padding: 12px 16px;
-      scrollbar-width: thin; scrollbar-color: var(--card3) transparent;
-    }
-    .jobs-scroll::-webkit-scrollbar { width: 4px; }
-    .jobs-scroll::-webkit-scrollbar-thumb { background: var(--card3); border-radius: 2px; }
+.jcard-actions{display:flex;align-items:center;gap:8px;margin-top:auto}
+.open-btn{
+  flex:1;text-align:center;padding:9px 0;border-radius:8px;
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;font-weight:700;
+  text-transform:uppercase;text-decoration:none;
+  background:var(--ld);border:1px solid rgba(212,242,68,.2);color:var(--lime);
+  transition:all .15s;
+}
+.open-btn:hover{background:var(--lime);color:#0b0d11}
+.x-btn{
+  width:36px;height:36px;border-radius:8px;border:1px solid var(--bdr2);
+  background:var(--s2);color:var(--sub);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;flex-shrink:0;
+}
+.x-btn:hover{background:var(--cd);border-color:rgba(255,85,51,.3);color:var(--coral)}
 
-    /* ── JOB CARD ── */
-    .jcard-wrap { display: flex; align-items: stretch; gap: 0; margin-bottom: 8px; }
+/* EMPTY */
+.empty{
+  grid-column:1/-1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:16px;padding:60px;text-align:center;
+  background:var(--s1);border:1px solid var(--bdr);border-radius:14px;
+}
+.empty-ico{font-family:'Syne',sans-serif;font-size:48px;font-weight:900;color:var(--dim)}
+.empty-t{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--dim)}
+.empty-s{font-family:'DM Mono',monospace;font-size:11px;color:var(--sub);line-height:1.8}
 
-    .jcard {
-      flex: 1;
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      padding: 18px 20px;
-      background: var(--card2); border: 1px solid var(--border);
-      border-radius: 12px 0 0 12px;
-      text-decoration: none; color: inherit;
-      transition: all .15s;
-      animation: fadeIn .3s ease both;
-    }
-    .jcard:hover { background: var(--card3); border-color: var(--border2); }
-    .jcard.hot { border-left: 3px solid var(--lime); }
-    .jcard.adj { border-left: 3px solid var(--lav); }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+/* RIGHT COL */
+.right{display:flex;flex-direction:column;gap:12px;position:sticky;top:76px}
 
-    .jcard-left { flex: 1; min-width: 0; }
-    .jcard-title {
-      font-size: 16px; font-weight: 700; color: #fff;
-      margin-bottom: 6px; line-height: 1.3;
-    }
-    .jcard-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .jcard-co { font-size: 13px; color: var(--sub); }
-    .sep { color: var(--dim); font-size: 10px; }
+.rpanel{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;overflow:hidden}
+.rpanel-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px 12px;border-bottom:1px solid var(--bdr);
+}
+.rpanel-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff}
+.rpanel-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--sub)}
+.rpanel-body{padding:8px}
 
-    .tag {
-      font-family: 'Instrument Mono', monospace;
-      font-size: 9px; letter-spacing: .5px; text-transform: uppercase;
-      padding: 3px 7px; border-radius: 4px;
-    }
-    .t-src  { background: rgba(255,255,255,.05); color: var(--sub); }
-    .t-new  { background: var(--lime-d); color: var(--lime); }
-    .t-ai   { background: var(--sky-d); color: var(--sky); }
-    .t-hot  { background: var(--coral-d); color: var(--coral); }
-    .t-adj  { background: var(--lav-d); color: var(--lav); }
+.blink{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;border-radius:8px;text-decoration:none;transition:background .12s;cursor:pointer;
+}
+.blink:hover{background:var(--s2)}
+.blink:hover .bn{color:var(--lime)}
+.blink:hover .ba{transform:translateX(3px);color:var(--lime)}
+.bn{font-size:13px;font-weight:500;color:var(--sub);transition:color .12s}
+.ba{font-size:11px;color:var(--dim);transition:all .12s}
 
-    .jcard-reason {
-      font-size: 12px; color: var(--sub); margin-top: 6px;
-      font-style: italic; line-height: 1.4;
-    }
-
-    .jcard-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; }
-    .score-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-    .score-num {
-      font-family: 'Instrument Mono', monospace;
-      font-size: 22px; font-weight: 700; line-height: 1;
-    }
-    .score-num.high { color: var(--lime); }
-    .score-num.mid  { color: var(--coral); }
-    .score-num.low  { color: var(--sub); }
-    .score-lbl { font-family: 'Instrument Mono', monospace; font-size: 8px; color: var(--dim); letter-spacing: 1px; }
-    .open-btn {
-      font-family: 'Instrument Mono', monospace; font-size: 10px; letter-spacing: 1px;
-      padding: 6px 12px; border-radius: 7px; white-space: nowrap;
-      background: var(--lime-d); border: 1px solid rgba(200,241,53,.25);
-      color: var(--lime); transition: all .15s;
-    }
-    .jcard:hover .open-btn { background: var(--lime); color: #0c0e14; }
-
-    .dismiss-btn {
-      flex-shrink: 0;
-      width: 40px; border-radius: 0 12px 12px 0;
-      background: var(--card2); border: 1px solid var(--border);
-      border-left: none;
-      color: var(--dim); font-size: 14px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all .15s; opacity: 0;
-    }
-    .jcard-wrap:hover .dismiss-btn { opacity: 1; }
-    .dismiss-btn:hover { background: rgba(255,64,96,.15); color: var(--red); border-color: rgba(255,64,96,.3); }
-
-    /* ── RIGHT COLUMN ── */
-    .right-col {
-      grid-column: 4;
-      grid-row: 2;
-      display: flex; flex-direction: column; gap: 10px;
-    }
-
-    .rpanel {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden;
-      display: flex; flex-direction: column;
-    }
-    .rpanel.boards { flex: 1; min-height: 0; }
-
-    .rpanel-hdr {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 20px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0;
-    }
-    .rpanel-title { font-size: 13px; font-weight: 700; color: #fff; }
-    .rpanel-sub { font-family: 'Instrument Mono', monospace; font-size: 10px; color: var(--sub); }
-
-    .rpanel-scroll { flex: 1; overflow-y: auto; padding: 6px 8px; }
-    .rpanel-scroll::-webkit-scrollbar { width: 3px; }
-    .rpanel-scroll::-webkit-scrollbar-thumb { background: var(--card3); }
-
-    .blink {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 12px; border-radius: 8px; cursor: pointer;
-      text-decoration: none; transition: background .12s;
-    }
-    .blink:hover { background: var(--card2); }
-    .blink:hover .blink-name { color: var(--lime); }
-    .blink:hover .blink-arr { color: var(--lime); transform: translateX(3px); }
-    .blink-name { font-size: 13px; font-weight: 600; color: var(--sub); transition: color .12s; }
-    .blink-arr { font-size: 11px; color: var(--dim); transition: all .12s; }
-
-    .src-row { display: flex; align-items: center; gap: 10px; padding: 0 20px 10px; }
-    .src-name { font-size: 11px; color: var(--sub); width: 100px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .src-track { flex: 1; height: 3px; background: var(--card3); border-radius: 2px; overflow: hidden; }
-    .src-fill { height: 100%; background: var(--lime); border-radius: 2px; transition: width 1.2s; }
-    .src-n { font-family: 'Instrument Mono', monospace; font-size: 10px; color: var(--sub); width: 20px; text-align: right; }
-
-    /* ── EMPTY ── */
-    .empty {
-      flex: 1; display: flex; flex-direction: column; align-items: center;
-      justify-content: center; gap: 12px; padding: 40px; text-align: center; color: var(--sub);
-    }
-    .empty-ico { font-size: 32px; opacity: .2; }
-    .empty-t { font-size: 18px; font-weight: 700; color: var(--dim); }
-    .empty-s { font-family: 'Instrument Mono', monospace; font-size: 11px; line-height: 1.6; }
-  </style>
+.src-row{display:flex;align-items:center;gap:10px;padding:0 20px 10px}
+.sn{font-size:11px;color:var(--sub);width:95px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st{flex:1;height:3px;background:var(--s3);border-radius:2px;overflow:hidden}
+.sf{height:100%;background:var(--lime);border-radius:2px;transition:width 1.4s}
+.sc{font-family:'DM Mono',monospace;font-size:10px;color:var(--sub);width:20px;text-align:right}
+</style>
 </head>
 <body>
+
+<div class="top">
+  <div style="display:flex;align-items:center">
+    <div class="logo">TS<em>.</em>jobs</div>
+    <div class="logo-sub">Command Center</div>
+  </div>
+  <div class="top-right">
+    <div class="search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#66788a" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="q" type="text" placeholder="Search roles, companies…" oninput="render()">
+    </div>
+    <div class="chips">
+      <span class="chip on"  data-f="all" onclick="sf('all',this)">All</span>
+      <span class="chip"     data-f="new" onclick="sf('new',this)">New</span>
+      <span class="chip a"   data-f="hot" onclick="sf('hot',this)">Hot</span>
+      <span class="chip c"   data-f="ai"  onclick="sf('ai',this)">AI</span>
+      <span class="chip"     data-f="adj" onclick="sf('adj',this)">Adjacent</span>
+    </div>
+    <button class="run" onclick="window.open('https://github.com/tshorrock/job-tracker/actions','_blank')">↻ Run Now</button>
+  </div>
+</div>
+
 <div class="page">
 
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <div style="display:flex;align-items:center">
-      <div class="logo">TS<em>.</em>jobs</div>
-      <div class="logo-sub">Command Center</div>
+  <div class="stats">
+    <div class="stat lime">
+      <div class="stat-lbl">New Today</div>
+      <div class="stat-n lime" id="s0">—</div>
+      <div class="stat-hint">Since last run</div>
     </div>
-    <div class="controls">
-      <div class="search">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8896aa" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input id="q" type="text" placeholder="Search roles, companies…" oninput="render()">
-      </div>
-      <div class="chips">
-        <span class="chip on"  data-f="all" onclick="setF('all',this)">All</span>
-        <span class="chip"     data-f="new" onclick="setF('new',this)">New</span>
-        <span class="chip c"   data-f="hot" onclick="setF('hot',this)">Hot</span>
-        <span class="chip s"   data-f="ai"  onclick="setF('ai',this)">AI</span>
-        <span class="chip"     data-f="adj" onclick="setF('adj',this)">Adjacent</span>
-      </div>
-      <button class="run-btn" onclick="window.open('https://github.com/tshorrock/job-tracker/actions','_blank')">↻ Run Now</button>
+    <div class="stat amber">
+      <div class="stat-lbl">High Match</div>
+      <div class="stat-n amber" id="s1">—</div>
+      <div class="stat-hint">Score 7+ / 10</div>
+    </div>
+    <div class="stat mint">
+      <div class="stat-lbl">Total Tracked</div>
+      <div class="stat-n mint" id="s2">—</div>
+      <div class="stat-hint">Rolling 300</div>
+    </div>
+    <div class="stat coral">
+      <div class="stat-lbl">Showing</div>
+      <div class="stat-n coral" id="s3">—</div>
+      <div class="stat-hint">After filters</div>
+    </div>
+    <div class="stat dim">
+      <div class="stat-lbl">Sources</div>
+      <div class="stat-n" id="s4" style="color:#fff">8</div>
+      <div class="stat-hint">Live feeds</div>
     </div>
   </div>
 
-  <!-- BENTO -->
-  <div class="bento">
+  <div class="status-row">
+    <div class="status-pill">
+      <span class="dot"></span>
+      <span class="status-txt" id="run-status">Checking…</span>
+      <span class="status-time" id="run-time"></span>
+    </div>
+    <button class="dismiss-all" onclick="clearDismissed()">↺ Restore dismissed</button>
+  </div>
 
-    <!-- STATS ROW -->
-    <div class="stats-row">
-      <div class="stat lime">
-        <div class="stat-lbl">New Today</div>
-        <div class="stat-n lime" id="s0">—</div>
-        <div class="stat-hint">Since last run</div>
-      </div>
-      <div class="stat coral">
-        <div class="stat-lbl">High Match</div>
-        <div class="stat-n coral" id="s1">—</div>
-        <div class="stat-hint">Score 7+/10</div>
-      </div>
-      <div class="stat sky">
-        <div class="stat-lbl">Total Tracked</div>
-        <div class="stat-n sky" id="s2">—</div>
-        <div class="stat-hint">Rolling 300</div>
-      </div>
-      <div class="stat lav">
-        <div class="stat-lbl">Showing</div>
-        <div class="stat-n" style="color:var(--lav)" id="s3">—</div>
-        <div class="stat-hint">After filters</div>
+  <div class="main">
+    <div class="job-grid" id="jgrid">
+      <div class="empty">
+        <div class="empty-ico">◈</div>
+        <div class="empty-t">Loading…</div>
+        <div class="empty-s">fetching data/jobs.json</div>
       </div>
     </div>
 
-    <!-- STATUS -->
-    <div class="status-card">
-      <div class="status-lbl">System Status</div>
-      <div class="status-dot">
-        <span class="dot"></span>
-        <span class="status-val" id="run-status">Checking…</span>
-      </div>
-      <div class="status-time" id="run-time">—</div>
-    </div>
-
-    <!-- JOBS PANEL -->
-    <div class="jobs-panel">
-      <div class="panel-hdr">
-        <span class="panel-title">Matching Roles</span>
-        <span class="panel-count" id="rcount">—</span>
-      </div>
-      <div class="jobs-scroll" id="jlist">
-        <div class="empty">
-          <div class="empty-ico">◈</div>
-          <div class="empty-t">No jobs yet</div>
-          <div class="empty-s">Add your ANTHROPIC_API_KEY secret in GitHub<br>then go to Actions → Daily Job Scraper → Run workflow</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT COL -->
-    <div class="right-col">
-
-      <!-- BOARDS -->
-      <div class="rpanel boards">
+    <div class="right">
+      <div class="rpanel">
         <div class="rpanel-hdr">
           <span class="rpanel-title">Manual Boards</span>
-          <span class="rpanel-sub">Check daily</span>
+          <span class="rpanel-sub">Check daily →</span>
         </div>
-        <div class="rpanel-scroll" id="boards"></div>
+        <div class="rpanel-body" id="boards"></div>
       </div>
-
-      <!-- SOURCES -->
       <div class="rpanel">
         <div class="rpanel-hdr">
           <span class="rpanel-title">Sources</span>
@@ -395,104 +303,111 @@
         </div>
         <div style="padding-top:10px" id="srcs"></div>
       </div>
-
     </div>
   </div>
+
 </div>
 
 <script>
-const TODAY = new Date().toISOString().slice(0,10);
-let jobs=[], meta={}, activeF='all';
-let dismissed = new Set(JSON.parse(localStorage.getItem('ts_dismissed')||'[]'));
+const TODAY=new Date().toISOString().slice(0,10);
+let jobs=[],meta={},filt='all';
+let dismissed=new Set(JSON.parse(localStorage.getItem('ts_d')||'[]'));
 
 const BOARDS=[
-  {name:'LinkedIn — CD Remote',        url:'https://www.linkedin.com/jobs/search/?keywords=creative+director+AI&f_WT=2&f_TPR=r86400'},
-  {name:'LinkedIn — Head of Creative', url:'https://www.linkedin.com/jobs/search/?keywords=head+of+creative+remote&f_WT=2'},
-  {name:'LinkedIn — VP Creative',      url:'https://www.linkedin.com/jobs/search/?keywords=vp+creative+remote&f_WT=2'},
-  {name:'Built In — Remote CD',        url:'https://builtin.com/jobs/remote/design-ux/search/creative-director'},
-  {name:'Remote Rocketship',           url:'https://www.remoterocketship.com/jobs/creative-director/'},
-  {name:'FlexJobs CD',                 url:'https://www.flexjobs.com/remote-jobs/creative-director'},
-  {name:'Wellfound (AngelList)',        url:'https://wellfound.com/role/r/creative-director'},
-  {name:'JustRemote Design',           url:'https://justremote.co/remote-design-jobs'},
-  {name:'Working Nomads',              url:'https://www.workingnomads.com/jobs?category=design'},
-  {name:'Roboflow — CD Role',          url:'https://jobs.ashbyhq.com/roboflow'},
-  {name:'Superside — AI CD',           url:'https://careers.superside.com/jobs/ai-creative-director'},
-  {name:'Curious Refuge AI Jobs',      url:'https://curiousrefuge.com/ai-jobs-board'},
-  {name:'The AI Job Board',            url:'https://theaijobboard.com'},
-  {name:'Contra — Fractional',         url:'https://contra.com/opportunities'},
-  {name:'Toptal Creative',             url:'https://www.toptal.com/creative'},
-  {name:'Daily Remote',                url:'https://dailyremote.com/remote-creative-director-jobs'},
-  {name:'Remote Circle',               url:'https://remotecircle.com'},
-  {name:'Hubstaff Talent',             url:'https://hubstafftalent.net/search/jobs?q=creative+director'},
+  {n:'LinkedIn — CD Remote',u:'https://www.linkedin.com/jobs/search/?keywords=creative+director+AI&f_WT=2&f_TPR=r86400'},
+  {n:'LinkedIn — Head of Creative',u:'https://www.linkedin.com/jobs/search/?keywords=head+of+creative+remote&f_WT=2'},
+  {n:'LinkedIn — VP Creative',u:'https://www.linkedin.com/jobs/search/?keywords=vp+creative+remote&f_WT=2'},
+  {n:'Built In — Remote CD',u:'https://builtin.com/jobs/remote/design-ux/search/creative-director'},
+  {n:'Remote Rocketship',u:'https://www.remoterocketship.com/jobs/creative-director/'},
+  {n:'FlexJobs CD',u:'https://www.flexjobs.com/remote-jobs/creative-director'},
+  {n:'Wellfound',u:'https://wellfound.com/role/r/creative-director'},
+  {n:'JustRemote Design',u:'https://justremote.co/remote-design-jobs'},
+  {n:'Working Nomads',u:'https://www.workingnomads.com/jobs?category=design'},
+  {n:'Roboflow — CD',u:'https://jobs.ashbyhq.com/roboflow'},
+  {n:'Superside — AI CD',u:'https://careers.superside.com/jobs/ai-creative-director'},
+  {n:'Curious Refuge AI Jobs',u:'https://curiousrefuge.com/ai-jobs-board'},
+  {n:'The AI Job Board',u:'https://theaijobboard.com'},
+  {n:'Contra — Fractional',u:'https://contra.com/opportunities'},
+  {n:'Toptal Creative',u:'https://www.toptal.com/creative'},
+  {n:'Daily Remote',u:'https://dailyremote.com/remote-creative-director-jobs'},
+  {n:'Remote Circle',u:'https://remotecircle.com'},
+  {n:'Hubstaff Talent',u:'https://hubstafftalent.net/search/jobs?q=creative+director'},
 ];
 
-const ADJ=['chief marketing officer','cmo','vp marketing','vp of marketing','head of marketing',
-  'ai producer','ai production director','creative strategist','brand strategist',
-  'head of content','vp content','chief content','creative consultant','fractional cdo',
-  'director of brand','vp brand'];
+const ADJ=['chief marketing','cmo','vp marketing','head of marketing','ai producer',
+  'ai production director','creative strategist','brand strategist','head of content',
+  'vp content','chief content','creative consultant','fractional cdo','director of brand','vp brand'];
 
-function isAdj(j){ return ADJ.some(k=>(j.title||'').toLowerCase().includes(k)); }
-function isNew(j){ return j.added&&j.added.startsWith(TODAY); }
-function isHot(j){ return (j.score||0)>=7; }
-function isAI(j) { return /ai|generative|midjourney|runway|sora/i.test((j.title||'')+(j.description||'')); }
+const isAdj=j=>ADJ.some(k=>(j.title||'').toLowerCase().includes(k));
+const isNew=j=>j.added&&j.added.startsWith(TODAY);
+const isHot=j=>(j.score||0)>=7;
+const isAI=j=>/ai|generative|midjourney|runway|sora/i.test((j.title||'')+(j.description||''));
 
 async function boot(){
   try{
     const[jr,mr]=await Promise.all([fetch('data/jobs.json'),fetch('data/meta.json')]);
-    jobs=await jr.json(); meta=await mr.json();
-  }catch(e){ jobs=[]; meta={updated:'never',new_count:0,total_count:0,boards:[]}; }
-  updateMeta(); render(); renderBoards(); renderSrcs();
+    jobs=await jr.json();meta=await mr.json();
+  }catch(e){jobs=[];meta={updated:'never',new_count:0,total_count:0,boards:[]};}
+  updateMeta();render();renderBoards();renderSrcs();
 }
 
 function updateMeta(){
   const ok=meta.updated&&meta.updated!=='never';
-  document.getElementById('run-status').textContent=ok?'Active · Running daily':'Not yet run';
+  document.getElementById('run-status').textContent=ok?'Active · Running daily':'Not yet run — trigger workflow';
   document.getElementById('run-time').textContent=ok
-    ?'Last: '+new Date(meta.updated).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})
-    :'Add ANTHROPIC_API_KEY secret → Run workflow';
+    ?'  Last: '+new Date(meta.updated).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'';
   document.getElementById('s0').textContent=meta.new_count||0;
   document.getElementById('s1').textContent=jobs.filter(j=>isHot(j)).length;
   document.getElementById('s2').textContent=meta.total_count||jobs.length||0;
 }
 
-function getFiltered(){
+function getF(){
   const q=(document.getElementById('q').value||'').toLowerCase();
   let r=[...jobs].filter(j=>!dismissed.has(j.id||''));
-  if(activeF==='new') r=r.filter(j=>isNew(j));
-  if(activeF==='hot') r=r.filter(j=>isHot(j));
-  if(activeF==='ai')  r=r.filter(j=>isAI(j));
-  if(activeF==='adj') r=r.filter(j=>isAdj(j));
-  if(q) r=r.filter(j=>(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q));
+  if(filt==='new')r=r.filter(j=>isNew(j));
+  if(filt==='hot')r=r.filter(j=>isHot(j));
+  if(filt==='ai') r=r.filter(j=>isAI(j));
+  if(filt==='adj')r=r.filter(j=>isAdj(j));
+  if(q)r=r.filter(j=>(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q));
   return r.sort((a,b)=>(b.score||0)-(a.score||0));
 }
 
 function dismiss(id,e){
-  e.preventDefault(); e.stopPropagation();
+  e.preventDefault();e.stopPropagation();
   dismissed.add(id);
-  localStorage.setItem('ts_dismissed',JSON.stringify([...dismissed]));
+  localStorage.setItem('ts_d',JSON.stringify([...dismissed]));
+  render();
+}
+
+function clearDismissed(){
+  dismissed.clear();
+  localStorage.removeItem('ts_d');
   render();
 }
 
 function render(){
-  const list=document.getElementById('jlist');
-  const arr=getFiltered();
-  document.getElementById('rcount').textContent=arr.length+' roles';
+  const grid=document.getElementById('jgrid');
+  const arr=getF();
   document.getElementById('s3').textContent=arr.length;
+  document.getElementById('rcount')?.(arr.length+' roles');
 
   if(!arr.length){
-    list.innerHTML=`<div class="empty">
+    grid.innerHTML=`<div class="empty">
       <div class="empty-ico">◇</div>
       <div class="empty-t">${jobs.length?'No matches':'No jobs yet'}</div>
-      <div class="empty-s">${jobs.length?'Try a different filter or clear dismissed jobs':'Trigger the GitHub Action to populate'}</div>
+      <div class="empty-s">${jobs.length?'Try a different filter':'Add ANTHROPIC_API_KEY secret in GitHub → Run workflow'}</div>
     </div>`;
     return;
   }
 
-  list.innerHTML=arr.map((j,i)=>{
-    const hot=isHot(j), adj=isAdj(j), ai=isAI(j), nw=isNew(j);
+  grid.innerHTML=`<div class="grid-hdr">
+    <div class="grid-title">Matching Roles</div>
+    <div class="grid-count">${arr.length} roles found</div>
+  </div>`+arr.map((j,i)=>{
     const sc=j.score||0;
-    const scoreClass=sc>=7?'high':sc>=4?'mid':'low';
-    const cls=hot?'hot':adj?'adj':'';
+    const scClass=sc>=7?'high':sc>=4?'mid':'low';
+    const hot=isHot(j),adj=isAdj(j),ai=isAI(j),nw=isNew(j);
+    const cls=hot?'hot':adj?'adj':nw?'new-j':'';
     const tags=[
       `<span class="tag t-src">${j.source||''}</span>`,
       nw?`<span class="tag t-new">new</span>`:'',
@@ -500,37 +415,35 @@ function render(){
       hot?`<span class="tag t-hot">hot</span>`:'',
       adj?`<span class="tag t-adj">adjacent</span>`:'',
     ].filter(Boolean).join('');
-    const reason=j.score_reason?`<div class="jcard-reason">${j.score_reason}</div>`:'';
+    const reason=j.score_reason?`<div class="jcard-reason">"${j.score_reason}"</div>`:'';
+    const jid=j.id||'';
 
-    return `<div class="jcard-wrap" style="animation-delay:${Math.min(i*.025,.4)}s">
-      <a class="jcard ${cls}" href="${j.url}" target="_blank" rel="noopener">
-        <div class="jcard-left">
+    return `<div class="jcard ${cls}" style="animation-delay:${Math.min(i*.04,.6)}s">
+      <div class="jcard-top">
+        <div>
           <div class="jcard-title">${j.title||'Untitled'}</div>
-          <div class="jcard-meta">
-            <span class="jcard-co">${j.company||'Unknown'}</span>
-            <span class="sep">·</span>${tags}
-          </div>
-          ${reason}
+          <div class="jcard-co">${j.company||'Unknown'}</div>
         </div>
-        <div class="jcard-right">
-          <div class="score-wrap">
-            <div class="score-num ${scoreClass}">${sc}<span style="font-size:13px;opacity:.5">/10</span></div>
-            <div class="score-lbl">MATCH</div>
-          </div>
-          <div class="open-btn">Open →</div>
+        <div style="text-align:right">
+          <div class="jcard-score ${scClass}">${sc}</div>
+          <div class="score-sub">/ 10</div>
         </div>
-      </a>
-      <button class="dismiss-btn" onclick="dismiss('${j.id||''}',event)" title="Dismiss">✕</button>
+      </div>
+      <div class="jcard-tags">${tags}</div>
+      ${reason}
+      <div class="jcard-actions">
+        <a class="open-btn" href="${j.url}" target="_blank" rel="noopener">Open Role →</a>
+        <button class="x-btn" onclick="dismiss('${jid}',event)" title="Dismiss">✕</button>
+      </div>
     </div>`;
   }).join('');
 }
 
 function renderBoards(){
-  const list=meta.boards?.length?meta.boards:BOARDS;
+  const list=meta.boards?.length?meta.boards:BOARDS.map(b=>({name:b.n,url:b.u}));
   document.getElementById('boards').innerHTML=list.map(b=>
     `<a class="blink" href="${b.url}" target="_blank" rel="noopener">
-      <span class="blink-name">${b.name}</span>
-      <span class="blink-arr">→</span>
+      <span class="bn">${b.name}</span><span class="ba">→</span>
     </a>`).join('');
 }
 
@@ -541,15 +454,15 @@ function renderSrcs(){
   const max=sorted[0]?.[1]||1;
   document.getElementById('srcs').innerHTML=sorted.length
     ?sorted.map(([s,n])=>`<div class="src-row">
-        <span class="src-name" title="${s}">${s}</span>
-        <div class="src-track"><div class="src-fill" style="width:${Math.round(n/max*100)}%"></div></div>
-        <span class="src-n">${n}</span>
+        <span class="sn" title="${s}">${s}</span>
+        <div class="st"><div class="sf" style="width:${Math.round(n/max*100)}%"></div></div>
+        <span class="sc">${n}</span>
       </div>`).join('')
-    :`<div class="src-row"><span class="src-name" style="color:var(--dim)">No data yet</span></div>`;
+    :`<div class="src-row"><span class="sn" style="color:var(--dim)">No data yet</span></div>`;
 }
 
-function setF(f,el){
-  activeF=f;
+function sf(f,el){
+  filt=f;
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');
   render();
