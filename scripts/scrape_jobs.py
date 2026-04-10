@@ -80,10 +80,12 @@ Creative Group Head at Havas (Volvo Canada). Deep AI tools expertise: Midjourney
 Higgsfield, ComfyUI, Claude Code. Currently in Toronto, moving to Costa Rica Aug 2026.
 
 Requirements (ALL must be met for a high score):
-- REMOTE WORK: Must be remote or remote-optional. Score 0 ONLY if the job explicitly 
-  requires on-site, hybrid with mandatory office days, or relocation. 
-  "Remote or hybrid" / "remote with occasional travel" is ACCEPTABLE — score normally.
-  Pure on-site or "must be in [city]" = score 0.
+- REMOTE WORK: The job must explicitly mention "remote" as an option. 
+  "Fully remote", "100% remote", "remote-first", "remote or hybrid" all pass.
+  "Hybrid or remote" passes. "Remote with occasional travel" passes.
+  If the posting does NOT mention remote at all = score 0.
+  If it says hybrid only with no remote option = score 0.
+  If it says on-site or in-office with no remote option = score 0.
 - EST or CST timezone overlap only. Score 0 if explicitly PST-only.
 - $150K+ USD. Score lower if salary listed and clearly below this.
 - Senior creative leadership level — CD, ACD, Head of, VP, Director minimum.
@@ -224,9 +226,16 @@ def parse_arbeitnow(text, src):
 
 def broad_match(job):
     title = (job.get("title") or "").lower()
-    # Hard exclude first
+    desc  = (job.get("description") or "").lower()
+
+    # Hard exclude by title first
     if any(kw in title for kw in HARD_EXCLUDES):
         return False
+
+    # Must explicitly mention "remote" somewhere in title or description
+    if "remote" not in title and "remote" not in desc:
+        return False
+
     # Must match at least one broad title keyword
     return any(kw in title for kw in BROAD_TITLES)
 
