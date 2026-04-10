@@ -1,531 +1,542 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Tracker</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        @font-face {
-            font-family: 'Cabinet Grotesk';
-            src: url('https://cdn.jsdelivr.net/gh/nicholasgillespie/font-cabinet-grotesk/fonts/CabinetGrotesk-Variable.woff2') format('woff2');
-            font-weight: 100 900;
-            font-display: swap;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TS · Job Command</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --ink:    #0a0c0f;
+      --ink2:   #12161e;
+      --ink3:   #1a2030;
+      --lime:   #c8f135;
+      --lime2:  rgba(200,241,53,0.12);
+      --coral:  #ff6b47;
+      --coral2: rgba(255,107,71,0.12);
+      --sky:    #5bc8f5;
+      --sky2:   rgba(91,200,245,0.12);
+      --lavender: #b8a9ff;
+      --lav2:   rgba(184,169,255,0.12);
+      --text:   #f0f4f8;
+      --muted:  #4a5868;
+      --muted2: #2a3848;
+      --border: rgba(255,255,255,0.07);
+      --border2:rgba(255,255,255,0.12);
+    }
 
-        :root {
-            --bg: #0a0c0f;
-            --card: #12151a;
-            --border: #1e2229;
-            --border-hover: #2a2f38;
-            --text: #c8cdd5;
-            --text-dim: #5a6170;
-            --text-bright: #eef0f3;
-            --lime: #b4f650;
-            --lime-dim: #3d5a1a;
-            --coral: #ff6b6b;
-            --coral-dim: #5a2222;
-            --sky: #5bbcff;
-            --sky-dim: #1a3d5a;
-            --mono: 'Instrument Mono', 'SF Mono', 'Fira Code', monospace;
-            --sans: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
+    html, body {
+      min-height: 100vh;
+      background: var(--ink);
+      color: var(--text);
+      font-family: 'Cabinet Grotesk', sans-serif;
+    }
 
-        body {
-            font-family: var(--sans);
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            line-height: 1.5;
-        }
+    /* ── GRAIN OVERLAY ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; pointer-events: none; z-index: 999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      opacity: .5;
+    }
 
-        .page { max-width: 1280px; margin: 0 auto; padding: 28px 24px; }
+    /* ── PAGE ── */
+    .page { max-width: 1280px; margin: 0 auto; padding: 28px 28px 48px; }
 
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+    /* ── TOPBAR ── */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+    }
+    .wordmark {
+      display: flex; align-items: baseline; gap: 0;
+      font-size: 22px; font-weight: 900; letter-spacing: -1.5px; color: #fff;
+    }
+    .wordmark span { color: var(--lime); }
+    .wm-sub {
+      font-family: 'Instrument Mono', monospace;
+      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--muted); margin-left: 12px; align-self: center;
+    }
 
-        .header h1 {
-            font-family: var(--sans);
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--text-bright);
-            letter-spacing: -0.5px;
-        }
+    .top-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
-        .header-meta {
-            font-family: var(--mono);
-            font-size: 12px;
-            color: var(--text-dim);
-        }
+    .search {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--ink2); border: 1px solid var(--border2);
+      border-radius: 10px; padding: 8px 14px; width: 240px;
+      transition: border-color .2s;
+    }
+    .search:focus-within { border-color: rgba(200,241,53,.5); }
+    .search input {
+      background: none; border: none; outline: none;
+      color: var(--text); font-family: 'Cabinet Grotesk',sans-serif;
+      font-size: 13px; width: 100%;
+    }
+    .search input::placeholder { color: var(--muted); }
 
-        /* Stat tiles row */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
+    .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .chip {
+      padding: 6px 14px; border-radius: 20px; cursor: pointer;
+      font-family: 'Instrument Mono', monospace;
+      font-size: 10px; letter-spacing: .5px; font-weight: 500;
+      border: 1px solid var(--border2); color: var(--muted);
+      background: var(--ink2); transition: all .15s; user-select: none;
+    }
+    .chip:hover { border-color: var(--lime); color: var(--lime); }
+    .chip.on { background: var(--lime2); border-color: rgba(200,241,53,.5); color: var(--lime); }
+    .chip.on.coral { background: var(--coral2); border-color: rgba(255,107,71,.5); color: var(--coral); }
+    .chip.on.sky   { background: var(--sky2);   border-color: rgba(91,200,245,.5);  color: var(--sky); }
 
-        .stat-tile {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 18px 20px;
-        }
+    .run-btn {
+      padding: 7px 16px; border-radius: 10px; cursor: pointer;
+      font-family: 'Instrument Mono', monospace; font-size: 10px; letter-spacing: 1px;
+      background: var(--lime); color: var(--ink); font-weight: 700;
+      border: none; transition: opacity .15s; text-transform: uppercase;
+    }
+    .run-btn:hover { opacity: .85; }
 
-        .stat-tile .value {
-            font-family: var(--sans);
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--text-bright);
-            line-height: 1;
-        }
+    /* ── BENTO GRID ── */
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 80px;
+      gap: 10px;
+    }
 
-        .stat-tile .label {
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 6px;
-        }
+    /* ── BASE CELL ── */
+    .cell {
+      background: var(--ink2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      transition: border-color .2s;
+    }
+    .cell:hover { border-color: var(--border2); }
 
-        .stat-tile.accent-lime .value { color: var(--lime); }
-        .stat-tile.accent-coral .value { color: var(--coral); }
-        .stat-tile.accent-sky .value { color: var(--sky); }
+    /* ── CELL SPANS ── */
+    .c-stat   { grid-column: span 3; grid-row: span 1; }
+    .c-meta   { grid-column: span 3; grid-row: span 1; }
+    .c-jobs   { grid-column: span 8; grid-row: span 7; }
+    .c-boards { grid-column: span 4; grid-row: span 4; }
+    .c-srcs   { grid-column: span 4; grid-row: span 3; }
 
-        /* Filters + search row */
-        .controls {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+    /* ── STAT CELLS ── */
+    .stat-cell {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px; height: 100%;
+    }
+    .stat-cell::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    }
+    .sc-lime::before   { background: linear-gradient(90deg, var(--lime), transparent); }
+    .sc-coral::before  { background: linear-gradient(90deg, var(--coral), transparent); }
+    .sc-sky::before    { background: linear-gradient(90deg, var(--sky), transparent); }
+    .sc-lav::before    { background: linear-gradient(90deg, var(--lavender), transparent); }
 
-        .filter-pill {
-            font-family: var(--mono);
-            font-size: 12px;
-            padding: 7px 16px;
-            border-radius: 100px;
-            border: 1px solid var(--border);
-            background: transparent;
-            color: var(--text-dim);
-            cursor: pointer;
-            transition: all 0.15s ease;
-            white-space: nowrap;
-        }
+    .stat-left { display: flex; flex-direction: column; gap: 3px; }
+    .stat-lbl {
+      font-family: 'Instrument Mono', monospace;
+      font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+    }
+    .stat-num {
+      font-size: 30px; font-weight: 900; letter-spacing: -2px; line-height: 1; color: #fff;
+    }
+    .stat-num.lime { color: var(--lime); }
+    .stat-num.coral { color: var(--coral); }
+    .stat-num.sky   { color: var(--sky); }
+    .stat-num.lav   { color: var(--lavender); }
+    .stat-hint { font-size: 10px; color: var(--muted); margin-top: 1px; }
+    .stat-icon { font-size: 26px; opacity: .08; }
 
-        .filter-pill:hover { border-color: var(--border-hover); color: var(--text); }
-        .filter-pill.active { background: var(--lime); border-color: var(--lime); color: #0a0c0f; font-weight: 700; }
+    /* ── META CELL (last run) ── */
+    .meta-cell {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 0 20px; height: 100%; gap: 3px;
+    }
+    .meta-lbl {
+      font-family: 'Instrument Mono', monospace;
+      font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+    }
+    .meta-val { font-size: 12px; color: var(--text); font-weight: 600; }
+    .meta-dot { display: flex; align-items: center; gap: 6px; }
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--lime); animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
 
-        .search-input {
-            flex: 1;
-            min-width: 180px;
-            margin-left: auto;
-            font-family: var(--mono);
-            font-size: 12px;
-            padding: 7px 14px;
-            border-radius: 100px;
-            border: 1px solid var(--border);
-            background: var(--card);
-            color: var(--text);
-            outline: none;
-            transition: border-color 0.15s;
-        }
+    /* ── JOBS CELL ── */
+    .jobs-cell {
+      display: flex; flex-direction: column; height: 100%;
+    }
+    .jobs-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px 12px; flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .jobs-title { font-size: 13px; font-weight: 700; color: #fff; }
+    .jobs-count {
+      font-family: 'Instrument Mono', monospace;
+      font-size: 10px; color: var(--muted);
+    }
+    .jobs-scroll { flex: 1; overflow-y: auto; padding: 10px 12px; gap: 6px; display: flex; flex-direction: column; }
+    .jobs-scroll::-webkit-scrollbar { width: 3px; }
+    .jobs-scroll::-webkit-scrollbar-thumb { background: var(--ink3); border-radius: 2px; }
 
-        .search-input:focus { border-color: var(--sky); }
-        .search-input::placeholder { color: var(--text-dim); }
+    /* ── JOB ROW ── */
+    .jrow {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 12px; border-radius: 10px;
+      background: var(--ink3); border: 1px solid transparent;
+      text-decoration: none; color: inherit;
+      transition: all .15s; position: relative;
+      animation: pop .25s ease both;
+    }
+    .jrow:hover { border-color: var(--border2); background: #1e2a3a; transform: translateX(2px); }
+    .jrow.hot { border-left: 2px solid var(--lime); }
+    .jrow.adj { border-left: 2px solid var(--lavender); }
+    @keyframes pop { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
 
-        /* Bento grid layout */
-        .bento {
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 12px;
-            align-items: start;
-        }
+    .jrow-left { flex: 1; min-width: 0; }
+    .jrow-title { font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+    .jrow-meta { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .jco { font-size: 11px; color: var(--muted); }
+    .jdot { color: var(--muted2); font-size: 9px; }
 
-        .panel {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            overflow: hidden;
-        }
+    .jtag {
+      font-family: 'Instrument Mono', monospace;
+      font-size: 8px; letter-spacing: .5px; text-transform: uppercase;
+      padding: 2px 5px; border-radius: 3px;
+    }
+    .jt-src { background: rgba(255,255,255,.05); color: var(--muted); }
+    .jt-new { background: rgba(200,241,53,.12); color: var(--lime); }
+    .jt-ai  { background: var(--sky2); color: var(--sky); }
+    .jt-hot { background: var(--coral2); color: var(--coral); }
+    .jt-adj { background: var(--lav2); color: var(--lavender); }
 
-        .panel-header {
-            font-family: var(--mono);
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-dim);
-            padding: 16px 20px 12px;
-            border-bottom: 1px solid var(--border);
-        }
+    .jrow-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+    .score-pips { display: flex; gap: 2px; }
+    .pip { width: 5px; height: 14px; border-radius: 2px; background: var(--muted2); }
+    .pip.on   { background: var(--lime); }
+    .pip.hot  { background: var(--coral); }
+    .pip.adj  { background: var(--lavender); }
+    .go-btn {
+      font-family: 'Instrument Mono', monospace; font-size: 8px; letter-spacing: 1px;
+      padding: 3px 8px; border-radius: 5px; white-space: nowrap;
+      background: rgba(200,241,53,.1); border: 1px solid rgba(200,241,53,.2);
+      color: var(--lime); transition: all .15s;
+    }
+    .jrow:hover .go-btn { background: var(--lime); color: var(--ink); }
 
-        /* Job list panel (left) */
-        .jobs-panel {
-            max-height: calc(100vh - 280px);
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-        }
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 10px; color: var(--muted); text-align: center; padding: 20px;
+    }
+    .empty-ico { font-size: 24px; opacity: .3; }
+    .empty-t { font-size: 14px; font-weight: 700; color: var(--muted2); }
+    .empty-s { font-family: 'Instrument Mono', monospace; font-size: 10px; }
 
-        .jobs-scroll {
-            flex: 1;
-            overflow-y: auto;
-            padding: 8px;
-        }
+    /* ── BOARDS CELL ── */
+    .boards-cell { display: flex; flex-direction: column; height: 100%; }
+    .panel-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 10px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .panel-title { font-size: 12px; font-weight: 700; color: #fff; }
+    .panel-sub { font-family: 'Instrument Mono', monospace; font-size: 9px; color: var(--muted); }
+    .boards-scroll { flex: 1; overflow-y: auto; padding: 6px 8px; }
+    .boards-scroll::-webkit-scrollbar { width: 3px; }
+    .boards-scroll::-webkit-scrollbar-thumb { background: var(--ink3); }
 
-        .jobs-scroll::-webkit-scrollbar { width: 6px; }
-        .jobs-scroll::-webkit-scrollbar-track { background: transparent; }
-        .jobs-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-        .jobs-scroll::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+    .brow {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 10px; border-radius: 8px;
+      text-decoration: none; transition: all .12s; cursor: pointer;
+    }
+    .brow:hover { background: var(--ink3); }
+    .brow:hover .brow-name { color: var(--lime); }
+    .brow:hover .brow-arrow { transform: translateX(3px); color: var(--lime); }
+    .brow-name { font-size: 11px; font-weight: 600; color: var(--muted); transition: color .12s; }
+    .brow-arrow { font-size: 9px; color: var(--muted2); transition: all .12s; }
 
-        .job-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 14px 12px;
-            border-radius: 10px;
-            transition: background 0.12s;
-            cursor: default;
-        }
-
-        .job-row:hover { background: rgba(255,255,255,0.025); }
-
-        .job-score {
-            font-family: var(--mono);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 6px;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .job-score.high { background: var(--lime-dim); color: var(--lime); }
-        .job-score.med { background: rgba(255,180,50,0.15); color: #ffb432; }
-        .job-score.low { background: rgba(255,255,255,0.04); color: var(--text-dim); }
-
-        .job-info { flex: 1; min-width: 0; }
-
-        .job-title-link {
-            font-family: var(--sans);
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-bright);
-            text-decoration: none;
-            line-height: 1.3;
-            display: block;
-        }
-
-        .job-title-link:hover { color: var(--sky); }
-
-        .job-sub {
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--text-dim);
-            margin-top: 3px;
-        }
-
-        .job-desc {
-            font-size: 13px;
-            color: var(--text-dim);
-            margin-top: 5px;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .tag-new {
-            font-family: var(--mono);
-            font-size: 9px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: var(--coral-dim);
-            color: var(--coral);
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-
-        /* Right column panels */
-        .right-col {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        /* Manual boards */
-        .boards-grid {
-            padding: 12px 16px 16px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .board-chip {
-            font-family: var(--mono);
-            font-size: 11px;
-            padding: 6px 12px;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            color: var(--sky);
-            text-decoration: none;
-            transition: all 0.12s;
-        }
-
-        .board-chip:hover { background: var(--sky-dim); border-color: var(--sky); }
-
-        /* Source breakdown */
-        .source-list {
-            padding: 12px 16px 16px;
-        }
-
-        .source-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 7px 0;
-        }
-
-        .source-row + .source-row { border-top: 1px solid var(--border); }
-
-        .source-name {
-            font-size: 13px;
-            color: var(--text);
-        }
-
-        .source-count {
-            font-family: var(--mono);
-            font-size: 12px;
-            color: var(--text-dim);
-            background: rgba(255,255,255,0.04);
-            padding: 2px 10px;
-            border-radius: 100px;
-        }
-
-        /* Bar chart */
-        .source-bar-wrap {
-            flex: 1;
-            margin: 0 12px;
-            height: 4px;
-            background: rgba(255,255,255,0.04);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .source-bar {
-            height: 100%;
-            background: var(--lime);
-            border-radius: 2px;
-            opacity: 0.6;
-        }
-
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 48px 20px;
-            color: var(--text-dim);
-        }
-
-        .empty-state h3 { font-size: 16px; color: var(--text); margin-bottom: 4px; }
-
-        /* Responsive */
-        @media (max-width: 860px) {
-            .bento { grid-template-columns: 1fr; }
-            .stats-row { grid-template-columns: repeat(2, 1fr); }
-            .jobs-panel { max-height: none; }
-        }
-
-        @media (max-width: 480px) {
-            .stats-row { grid-template-columns: 1fr 1fr; }
-            .page { padding: 16px 12px; }
-        }
-    </style>
+    /* ── SOURCES CELL ── */
+    .srcs-cell { display: flex; flex-direction: column; height: 100%; }
+    .srcs-body { flex: 1; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+    .src-row { display: flex; align-items: center; gap: 8px; }
+    .src-name { font-size: 10px; color: var(--muted); width: 90px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .src-track { flex: 1; height: 3px; background: var(--ink3); border-radius: 2px; overflow: hidden; }
+    .src-fill { height: 100%; background: var(--lime); border-radius: 2px; transition: width 1.2s ease; }
+    .src-n { font-family: 'Instrument Mono', monospace; font-size: 10px; color: var(--muted); width: 16px; text-align: right; }
+  </style>
 </head>
 <body>
-    <div class="page">
-        <div class="header">
-            <h1>Job Tracker</h1>
-            <div class="header-meta" id="header-meta">loading...</div>
+<div class="page">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:0">
+      <div class="wordmark">TS<span>.</span>jobs</div>
+      <div class="wm-sub">Command Center</div>
+    </div>
+    <div class="top-right">
+      <div class="search">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4a5868" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="q" type="text" placeholder="Search roles, companies…" oninput="render()">
+      </div>
+      <div class="chips">
+        <span class="chip on"    data-f="all"  onclick="filt('all',this)">All</span>
+        <span class="chip"       data-f="new"  onclick="filt('new',this)">New</span>
+        <span class="chip coral" data-f="hot"  onclick="filt('hot',this)">Hot</span>
+        <span class="chip sky"   data-f="ai"   onclick="filt('ai',this)">AI</span>
+        <span class="chip"       data-f="adj"  onclick="filt('adj',this)">Adjacent</span>
+      </div>
+      <button class="run-btn" onclick="window.open('https://github.com','_blank')">↻ Run Now</button>
+    </div>
+  </div>
+
+  <!-- BENTO -->
+  <div class="bento">
+
+    <!-- STAT: New Today -->
+    <div class="cell c-stat sc-lime">
+      <div class="stat-cell">
+        <div class="stat-left">
+          <div class="stat-lbl">New Today</div>
+          <div class="stat-num lime" id="s0">—</div>
+          <div class="stat-hint">Since last run</div>
         </div>
-
-        <div class="stats-row" id="stats-row">
-            <div class="stat-tile"><div class="value" id="st-total">--</div><div class="label">Total</div></div>
-            <div class="stat-tile accent-lime"><div class="value" id="st-high">--</div><div class="label">High Match</div></div>
-            <div class="stat-tile accent-coral"><div class="value" id="st-new">--</div><div class="label">New Today</div></div>
-            <div class="stat-tile accent-sky"><div class="value" id="st-sources">--</div><div class="label">Sources</div></div>
-        </div>
-
-        <div class="controls">
-            <button class="filter-pill active" data-filter="all">All</button>
-            <button class="filter-pill" data-filter="new">New</button>
-            <button class="filter-pill" data-filter="hot">Hot</button>
-            <button class="filter-pill" data-filter="ai">AI</button>
-            <button class="filter-pill" data-filter="adjacent">Adjacent</button>
-            <input type="text" class="search-input" id="search" placeholder="search...">
-        </div>
-
-        <div class="bento">
-            <div class="panel jobs-panel">
-                <div class="panel-header">Jobs <span id="jobs-count"></span></div>
-                <div class="jobs-scroll" id="jobs-list"></div>
-            </div>
-
-            <div class="right-col">
-                <div class="panel" id="boards-panel">
-                    <div class="panel-header">Manual Boards</div>
-                    <div class="boards-grid" id="boards-grid"></div>
-                </div>
-
-                <div class="panel" id="sources-panel">
-                    <div class="panel-header">Source Breakdown</div>
-                    <div class="source-list" id="source-list"></div>
-                </div>
-            </div>
-        </div>
+        <div class="stat-icon">◉</div>
+      </div>
     </div>
 
-    <script>
-        let jobs = [];
-        let meta = {};
-        let filter = 'all';
-        const AI_TERMS = ['ai ', 'ai-', 'artificial intelligence', 'generative', 'machine learning', 'llm', 'gpt', 'prompt'];
-        const ADJACENT_TERMS = ['art director', 'brand director', 'design director', 'marketing director', 'content director', 'cmo', 'vp marketing', 'head of marketing'];
+    <!-- STAT: High Match -->
+    <div class="cell c-stat sc-coral">
+      <div class="stat-cell">
+        <div class="stat-left">
+          <div class="stat-lbl">High Match</div>
+          <div class="stat-num coral" id="s1">—</div>
+          <div class="stat-hint">Score ≥ 5</div>
+        </div>
+        <div class="stat-icon">◆</div>
+      </div>
+    </div>
 
-        async function load() {
-            try {
-                const [jr, mr] = await Promise.all([fetch('data/jobs.json'), fetch('data/meta.json')]);
-                jobs = await jr.json();
-                meta = await mr.json();
-            } catch (e) {
-                document.getElementById('jobs-list').innerHTML = '<div class="empty-state"><h3>Waiting for first run</h3></div>';
-                return;
-            }
+    <!-- STAT: Total -->
+    <div class="cell c-stat sc-sky">
+      <div class="stat-cell">
+        <div class="stat-left">
+          <div class="stat-lbl">Total Tracked</div>
+          <div class="stat-num sky" id="s2">—</div>
+          <div class="stat-hint">Rolling 300</div>
+        </div>
+        <div class="stat-icon">◈</div>
+      </div>
+    </div>
 
-            const d = meta.last_run ? new Date(meta.last_run) : null;
-            document.getElementById('header-meta').textContent = d
-                ? `updated ${d.toLocaleDateString()} ${d.toLocaleTimeString()}`
-                : '';
+    <!-- META: Last run -->
+    <div class="cell c-meta">
+      <div class="meta-cell">
+        <div class="meta-lbl">System Status</div>
+        <div class="meta-dot"><span class="live-dot"></span><span class="meta-val" id="run-status">Checking…</span></div>
+        <div style="font-family:'Instrument Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;" id="run-time">—</div>
+      </div>
+    </div>
 
-            document.getElementById('st-total').textContent = jobs.length;
-            document.getElementById('st-high').textContent = jobs.filter(j => j.score >= 5).length;
-            document.getElementById('st-new').textContent = meta.new_count || 0;
-            document.getElementById('st-sources').textContent = (meta.sources || []).length;
+    <!-- JOBS (big) -->
+    <div class="cell c-jobs">
+      <div class="jobs-cell">
+        <div class="jobs-hdr">
+          <span class="jobs-title">Matching Roles</span>
+          <span class="jobs-count" id="rcount">—</span>
+        </div>
+        <div class="jobs-scroll" id="jlist">
+          <div class="empty-state">
+            <div class="empty-ico">⬡</div>
+            <div class="empty-t">No jobs yet</div>
+            <div class="empty-s">Go to GitHub Actions → Daily Job Scraper → Run workflow</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            renderBoards();
-            renderSources();
-            renderJobs();
-            bindControls();
-        }
+    <!-- BOARDS -->
+    <div class="cell c-boards">
+      <div class="boards-cell">
+        <div class="panel-hdr">
+          <span class="panel-title">Manual Boards</span>
+          <span class="panel-sub">Check daily</span>
+        </div>
+        <div class="boards-scroll" id="boards"></div>
+      </div>
+    </div>
 
-        function isNew(job) {
-            if (!meta.last_run) return false;
-            const idx = jobs.indexOf(job);
-            return idx < (meta.new_count || 0);
-        }
+    <!-- SOURCES -->
+    <div class="cell c-srcs">
+      <div class="srcs-cell">
+        <div class="panel-hdr">
+          <span class="panel-title">Sources</span>
+          <span class="panel-sub" id="src-last">Live feeds</span>
+        </div>
+        <div class="srcs-body" id="srcs"></div>
+      </div>
+    </div>
 
-        function isAI(job) {
-            const blob = (job.title + ' ' + job.description).toLowerCase();
-            return AI_TERMS.some(t => blob.includes(t));
-        }
+  </div>
+</div>
 
-        function isAdjacent(job) {
-            const blob = (job.title).toLowerCase();
-            return ADJACENT_TERMS.some(t => blob.includes(t));
-        }
+<script>
+const TODAY = new Date().toISOString().slice(0,10);
+let jobs=[], meta={}, activeF='all';
 
-        function renderJobs() {
-            const q = document.getElementById('search').value.toLowerCase();
-            let list = jobs;
+const BOARDS = [
+  {name:'LinkedIn — CD Remote',        url:'https://www.linkedin.com/jobs/search/?keywords=creative+director+AI&f_WT=2&f_TPR=r86400'},
+  {name:'LinkedIn — Head of Creative', url:'https://www.linkedin.com/jobs/search/?keywords=head+of+creative+remote&f_WT=2'},
+  {name:'Built In — Remote CD',        url:'https://builtin.com/jobs/remote/design-ux/search/creative-director'},
+  {name:'Remote Rocketship',           url:'https://www.remoterocketship.com/jobs/creative-director/'},
+  {name:'FlexJobs',                    url:'https://www.flexjobs.com/remote-jobs/creative-director'},
+  {name:'Wellfound (AngelList)',       url:'https://wellfound.com/role/r/creative-director'},
+  {name:'JustRemote Design',           url:'https://justremote.co/remote-design-jobs'},
+  {name:'Working Nomads',              url:'https://www.workingnomads.com/jobs?category=design'},
+  {name:'Roboflow — CD Role',          url:'https://jobs.ashbyhq.com/roboflow'},
+  {name:'Superside — AI CD',           url:'https://careers.superside.com/jobs/ai-creative-director'},
+  {name:'Curious Refuge AI Jobs',      url:'https://curiousrefuge.com/ai-jobs-board'},
+  {name:'The AI Job Board',            url:'https://theaijobboard.com'},
+  {name:'Contra — Fractional',         url:'https://contra.com/opportunities'},
+  {name:'Toptal Creative',             url:'https://www.toptal.com/creative'},
+  {name:'Daily Remote',                url:'https://dailyremote.com/remote-creative-director-jobs'},
+  {name:'Remote Circle',               url:'https://remotecircle.com'},
+];
 
-            if (filter === 'new') list = list.filter(isNew);
-            else if (filter === 'hot') list = list.filter(j => j.score >= 5);
-            else if (filter === 'ai') list = list.filter(isAI);
-            else if (filter === 'adjacent') list = list.filter(isAdjacent);
+// Adjacent role keywords — roles Travis would be great at but aren't traditional CDs
+const ADJ_KEYWORDS = [
+  'chief marketing officer','cmo','vp marketing','vp of marketing',
+  'head of marketing','director of marketing',
+  'ai producer','ai production director','ai content director',
+  'creative strategist','brand strategist','head of brand strategy',
+  'director of content','content director','vp content',
+  'head of content','chief content officer',
+  'creative consultant','fractional cdo',
+  'head of growth creative','growth creative',
+  'director of brand','vp brand',
+];
 
-            if (q) list = list.filter(j =>
-                j.title.toLowerCase().includes(q) ||
-                j.company.toLowerCase().includes(q) ||
-                j.source.toLowerCase().includes(q)
-            );
+function isAdj(j) {
+  const t = (j.title||'').toLowerCase();
+  return ADJ_KEYWORDS.some(k => t.includes(k));
+}
+function isNew(j) { return j.added && j.added.startsWith(TODAY); }
+function isHot(j) { return (j.score||0) >= 5; }
+function isAI(j)  { return /ai|generative|midjourney|runway|sora/i.test((j.title||'')+(j.description||'')); }
 
-            document.getElementById('jobs-count').textContent = `(${list.length})`;
+async function boot() {
+  try {
+    const [jr,mr] = await Promise.all([fetch('data/jobs.json'),fetch('data/meta.json')]);
+    jobs = await jr.json();
+    meta = await mr.json();
+  } catch(e) { jobs=[]; meta={updated:'never',new_count:0,total_count:0,boards:[]}; }
+  updateMeta(); render(); renderSrcs(); renderBoards();
+}
 
-            if (!list.length) {
-                document.getElementById('jobs-list').innerHTML = '<div class="empty-state"><h3>No matches</h3><p>Try a different filter</p></div>';
-                return;
-            }
+function updateMeta() {
+  const upd = meta.updated && meta.updated!=='never';
+  document.getElementById('run-status').textContent = upd ? 'Active · Running daily' : 'Not yet run';
+  document.getElementById('run-time').textContent   = upd
+    ? 'Last: ' + new Date(meta.updated).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})
+    : 'Go to GitHub Actions → Run workflow';
 
-            document.getElementById('jobs-list').innerHTML = list.map(job => {
-                const sc = job.score >= 5 ? 'high' : job.score >= 2 ? 'med' : 'low';
-                const newTag = isNew(job) ? '<span class="tag-new">NEW</span>' : '';
-                return `<div class="job-row">
-                    <span class="job-score ${sc}">${job.score}</span>
-                    <div class="job-info">
-                        <a href="${job.url}" target="_blank" rel="noopener" class="job-title-link">${job.title}${newTag}</a>
-                        <div class="job-sub">${job.company} / ${job.source}</div>
-                        ${job.description ? `<div class="job-desc">${job.description}</div>` : ''}
-                    </div>
-                </div>`;
-            }).join('');
-        }
+  const newN = meta.new_count||0;
+  const tot  = meta.total_count||jobs.length||0;
+  const hot  = jobs.filter(j=>isHot(j)).length;
 
-        function renderBoards() {
-            const boards = meta.manual_boards || [];
-            document.getElementById('boards-grid').innerHTML = boards.map(b =>
-                `<a href="${b.url}" target="_blank" rel="noopener" class="board-chip">${b.name}</a>`
-            ).join('');
-        }
+  document.getElementById('s0').textContent = newN;
+  document.getElementById('s1').textContent = hot;
+  document.getElementById('s2').textContent = tot;
+}
 
-        function renderSources() {
-            const counts = {};
-            jobs.forEach(j => { counts[j.source] = (counts[j.source] || 0) + 1; });
-            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-            const max = sorted.length ? sorted[0][1] : 1;
+function getJobs() {
+  const q = (document.getElementById('q').value||'').toLowerCase();
+  let r = [...jobs];
+  if(activeF==='new') r = r.filter(j=>isNew(j));
+  if(activeF==='hot') r = r.filter(j=>isHot(j));
+  if(activeF==='ai')  r = r.filter(j=>isAI(j));
+  if(activeF==='adj') r = r.filter(j=>isAdj(j));
+  if(q) r = r.filter(j=>(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q)||(j.description||'').toLowerCase().includes(q));
+  return r.sort((a,b)=>(b.score||0)-(a.score||0));
+}
 
-            document.getElementById('source-list').innerHTML = sorted.map(([name, count]) => {
-                const pct = Math.round((count / max) * 100);
-                return `<div class="source-row">
-                    <span class="source-name">${name}</span>
-                    <div class="source-bar-wrap"><div class="source-bar" style="width:${pct}%"></div></div>
-                    <span class="source-count">${count}</span>
-                </div>`;
-            }).join('');
-        }
+function render() {
+  const list = document.getElementById('jlist');
+  const arr  = getJobs();
+  document.getElementById('rcount').textContent = arr.length + ' roles';
 
-        function bindControls() {
-            document.querySelectorAll('.filter-pill').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    filter = btn.dataset.filter;
-                    renderJobs();
-                });
-            });
+  if(!arr.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-ico">◇</div><div class="empty-t">${jobs.length?'No matches':'No jobs yet'}</div><div class="empty-s">${jobs.length?'Try a different filter':'Trigger the GitHub Action first'}</div></div>`;
+    return;
+  }
 
-            let t;
-            document.getElementById('search').addEventListener('input', () => {
-                clearTimeout(t);
-                t = setTimeout(renderJobs, 150);
-            });
-        }
+  list.innerHTML = arr.map((j,i)=>{
+    const hot  = isHot(j);
+    const adj  = isAdj(j);
+    const ai   = isAI(j);
+    const newJ = isNew(j);
+    const cls  = hot ? 'hot' : adj ? 'adj' : '';
+    const sc   = Math.min(j.score||0,10);
+    const pips = Array.from({length:5},(_,k)=>{
+      const on = k < Math.round(sc/2);
+      return `<div class="pip ${on?(hot?'hot':adj?'adj':'on'):''}"></div>`;
+    }).join('');
 
-        load();
-    </script>
+    const tags = [
+      `<span class="jtag jt-src">${j.source||''}</span>`,
+      newJ ? `<span class="jtag jt-new">new</span>` : '',
+      ai   ? `<span class="jtag jt-ai">AI</span>`   : '',
+      hot  ? `<span class="jtag jt-hot">hot</span>` : '',
+      adj  ? `<span class="jtag jt-adj">adjacent</span>` : '',
+    ].filter(Boolean).join('');
+
+    return `<a class="jrow ${cls}" href="${j.url}" target="_blank" rel="noopener" style="animation-delay:${Math.min(i*.03,.5)}s">
+      <div class="jrow-left">
+        <div class="jrow-title">${j.title||'Untitled'}</div>
+        <div class="jrow-meta"><span class="jco">${j.company||'Unknown'}</span><span class="jdot">·</span>${tags}</div>
+      </div>
+      <div class="jrow-right">
+        <div class="score-pips">${pips}</div>
+        <div class="go-btn">Open →</div>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+function renderSrcs() {
+  const counts = {};
+  jobs.forEach(j=>{ counts[j.source||'Other']=(counts[j.source||'Other']||0)+1; });
+  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const max = sorted[0]?.[1]||1;
+  document.getElementById('srcs').innerHTML = sorted.length
+    ? sorted.map(([s,n])=>`<div class="src-row"><span class="src-name" title="${s}">${s}</span><div class="src-track"><div class="src-fill" style="width:${Math.round(n/max*100)}%"></div></div><span class="src-n">${n}</span></div>`).join('')
+    : `<div class="src-row"><span class="src-name" style="color:var(--muted2)">No data yet</span></div>`;
+}
+
+function renderBoards() {
+  const list = meta.boards?.length ? meta.boards : BOARDS;
+  document.getElementById('boards').innerHTML = list.map(b=>
+    `<a class="brow" href="${b.url}" target="_blank" rel="noopener"><span class="brow-name">${b.name}</span><span class="brow-arrow">→</span></a>`
+  ).join('');
+}
+
+function filt(f, el) {
+  activeF = f;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  render();
+}
+
+boot();
+</script>
 </body>
 </html>
