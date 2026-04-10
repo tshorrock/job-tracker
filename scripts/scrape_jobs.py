@@ -24,31 +24,52 @@ META_FILE  = Path("data/meta.json")
 
 # Broad first-pass title filter — wide net, Claude handles precision
 BROAD_TITLES = [
-    "creative director", "creative lead", "head of creative",
-    "head of brand", "brand director", "vp creative", "vp brand",
-    "vp marketing", "head of marketing", "chief marketing",
+    # Core CD
+    "creative director", "head of creative", "creative lead",
     "associate creative director", "group creative director",
-    "executive creative", "chief creative",
-    "ai director", "ai creative", "ai producer", "ai production",
-    "creative strategist", "brand strategist",
-    "head of content", "vp content", "chief content",
-    "director of creative", "director of brand",
+    "executive creative", "chief creative", "global creative director",
+    # Brand
+    "head of brand", "brand director", "vp brand", "director of brand",
+    "brand creative", "brand strategist",
+    # VP / C-suite creative
+    "vp creative", "vp of creative", "svp creative",
+    "chief marketing officer", "cmo",
+    "vp marketing", "vp of marketing", "head of marketing",
+    # AI / production
+    "ai director", "ai creative", "ai producer", "ai production director",
+    "generative creative",
+    # Strategy / content leadership
+    "creative strategist", "head of content", "vp content",
+    "chief content officer", "director of creative",
     "fractional creative", "fractional cdo",
-    "generative creative", "content director",
+    # Design leadership (senior only — graphic/brand CD level)
+    "design director",     # brand-side design director OK
+    "head of design",      # senior enough to be relevant
 ]
 
-# Hard excludes — never pass these to Claude regardless
+# Hard excludes — NEVER pass these through regardless of anything else
 HARD_EXCLUDES = [
+    # Engineering / tech
+    "engineer", "engineering", "developer", "software", "backend",
+    "frontend", "fullstack", "devops", "data scientist", "machine learning",
+    "infrastructure", "platform engineer", "security engineer",
+    # Wrong design disciplines
+    "product designer", "ux designer", "ui designer", "ui/ux",
+    "product design", "user experience designer", "interaction designer",
+    # Video / production (individual contributor, not director)
+    "video editor", "video producer", "motion designer", "animator",
+    "cinematographer", "videographer", "editor",
+    # Sales / business
     "account executive", "account manager", "account director",
-    "sales director", "sales manager", "sales executive",
-    "technical director", "engineering director",
-    "ux director", "product designer", "ui/ux",
-    "data director", "analytics director",
-    "finance director", "operations director",
-    "medical director", "clinical director",
-    "junior", "intern", "entry level",
-    "account management", "technical account",
-    "business development", "revenue manager",
+    "sales director", "sales manager", "business development",
+    "account management", "technical account", "revenue manager",
+    # Finance / ops / other
+    "finance director", "operations director", "medical director",
+    "clinical director", "data director", "analytics director",
+    "technical director",
+    # Junior
+    "junior", "intern", "entry level", "coordinator",
+    "assistant creative",
 ]
 
 # Travis's profile for Claude scoring
@@ -59,26 +80,33 @@ Creative Group Head at Havas (Volvo Canada). Deep AI tools expertise: Midjourney
 Higgsfield, ComfyUI, Claude Code. Currently in Toronto, moving to Costa Rica Aug 2026.
 
 Requirements (ALL must be met for a high score):
-- 100% FULLY REMOTE — non-negotiable. Score 0 immediately if the job mentions:
-  hybrid, on-site, in-office, occasional travel required, must be local, must relocate,
-  "remote with some travel", "remote-friendly", or ANY in-person requirement.
-- EST or CST timezone overlap only. Score 0 if PST-only.
-- $150K+ USD. Score low if salary listed and clearly below this.
-- Senior level minimum — CD, ACD, Head of, VP, Director. Not mid-level or below.
-- Creative/brand work — NOT UX, product design, engineering, or sales.
+- REMOTE WORK: Must be remote or remote-optional. Score 0 ONLY if the job explicitly 
+  requires on-site, hybrid with mandatory office days, or relocation. 
+  "Remote or hybrid" / "remote with occasional travel" is ACCEPTABLE — score normally.
+  Pure on-site or "must be in [city]" = score 0.
+- EST or CST timezone overlap only. Score 0 if explicitly PST-only.
+- $150K+ USD. Score lower if salary listed and clearly below this.
+- Senior creative leadership level — CD, ACD, Head of, VP, Director minimum.
+- Creative/brand work — NOT engineering, UX, product design, or sales.
 
-AUTOMATIC SCORE 0 — any of these disqualify immediately:
-- Hybrid, on-site, in-office, travel required, must be local
+Travis's strengths to match against:
+- 25 years brand, campaign, integrated creative (Toyota, TELUS, Diageo, Nissan, Volvo)
+- Proven at scale — 1000+ assets/month, 280+ dealerships, global accounts
+- Deep AI tools: Midjourney, Runway, Higgsfield, ComfyUI, Claude Code
+- TV production, OOH, digital, CRM, packaging — full integrated creative
+- Team builder and mentor — built departments from scratch
+
+AUTOMATIC SCORE 0:
+- Explicitly on-site or mandatory in-office (not just "office available")
 - PST-only timezone
-- Junior, intern, coordinator, or below ACD level
 - Engineering, sales, UX, product design, data roles
-- Salary clearly under $100K USD
+- Junior, intern, coordinator level
 
-Score 8-10: Perfect — senior creative leadership, 100% remote confirmed, right pay
-Score 5-7: Good — most criteria met, remote not explicitly stated but no red flags
-Score 3-4: Weak — interesting but remote unclear, level slightly off, or stretch role
-Score 1-2: Poor — wrong field, wrong level, likely not remote
-Score 0: Disqualified — hybrid/on-site, wrong field, junior, PST-only
+Score 8-10: Senior creative leadership, remote-friendly, right pay, strong Travis fit
+Score 5-7: Good fit, most criteria met, some ambiguity on pay or remote status
+Score 3-4: Interesting stretch — adjacent role or unclear requirements
+Score 1-2: Wrong field, wrong level, or likely on-site
+Score 0: Disqualified per above rules
 """
 
 # ─── SOURCES ───────────────────────────────────────────────────────────────────
