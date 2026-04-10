@@ -424,7 +424,7 @@ body{
       <span id="hdr-status">Loading…</span>
       <span class="sbar-time" id="hdr-time"></span>
     </div>
-    <button class="btn-primary" onclick="window.open('https://github.com/tshorrock/job-tracker/actions','_blank')" aria-label="Run job scraper">↻ Run Now</button>
+    <button class="btn-primary" onclick="triggerRun()" aria-label="Run job scraper">↻ Run Now</button>
   </div>
 </header>
 
@@ -545,6 +545,45 @@ body{
 const TODAY = new Date().toISOString().slice(0,10);
 let jobs = [], meta = {};
 let dismissed = new Set(JSON.parse(localStorage.getItem('ts_dismissed') || '[]'));
+
+// ── TRIGGER RUN ───────────────────────────────────────────────────────────
+async function triggerRun() {
+  const btn = document.querySelector('.btn-primary');
+  btn.textContent = '↻ Running…';
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+  try {
+    const r = await fetch('https://api.github.com/repos/tshorrock/job-tracker/actions/workflows/daily_scrape.yml/dispatches', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ref: 'main' })
+    });
+    if (r.status === 204 || r.status === 201 || r.ok) {
+      btn.textContent = '✓ Started!';
+      btn.style.background = 'var(--mint)';
+      setTimeout(() => {
+        btn.textContent = '↻ Run Now';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.background = '';
+      }, 3000);
+    } else {
+      // Needs auth — fall back to opening Actions page
+      window.open('https://github.com/tshorrock/job-tracker/actions/workflows/daily_scrape.yml','_blank');
+      btn.textContent = '↻ Run Now';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  } catch(e) {
+    window.open('https://github.com/tshorrock/job-tracker/actions/workflows/daily_scrape.yml','_blank');
+    btn.textContent = '↻ Run Now';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+}
 
 // ── BOOT ──────────────────────────────────────────────────────────────────
 async function boot() {
