@@ -42,19 +42,19 @@ ADJACENT_TITLES = [
     "creative lead", "head of growth creative",
 ]
 
-# Wildcard — unusual roles Claude will evaluate for Travis interest
+# Wildcard — no pre-filter, Claude evaluates everything that doesn't match core/adjacent
+# Just add some extra titles that could be interesting
 WILDCARD_TITLES = [
-    "chief storyteller", "head of culture",
-    "creative technologist", "experience director",
-    "director of imagination", "head of innovation",
-    "brand experience director", "creative producer",
-    "content director", "editorial director",
-    "director of strategy", "chief of staff",
-    "head of studio", "studio director",
-    "director of video", "head of video",
-    "narrative director", "world builder",
-    "creative entrepreneur", "head of partnerships",
-    "director of community", "head of community",
+    "chief storyteller", "head of culture", "creative technologist",
+    "experience director", "head of innovation", "brand experience",
+    "editorial director", "head of studio", "studio director",
+    "narrative director", "head of partnerships", "director of community",
+    "creative producer", "content director", "director of strategy",
+    # AI/tech creative roles
+    "ai filmmaker", "generative", "prompt engineer", "creative ai",
+    "head of ai", "ai content", "creative automation",
+    # Streaming/entertainment
+    "showrunner", "head of original", "creative development",
 ]
 
 ALL_BROAD = CORE_TITLES + ADJACENT_TITLES + WILDCARD_TITLES
@@ -78,33 +78,45 @@ HARD_EXCLUDES = [
 # ─── TRAVIS PROFILE FOR CLAUDE ─────────────────────────────────────────────────
 
 TRAVIS_PROFILE = """
-Travis Shorrock — Creative Director, 25+ years. Moving to Costa Rica Aug 2026.
-Background: National CD at T&Pm (Toyota Canada, TELUS 10yrs), CD at tms (Nissan NA, Diageo),
-Creative Group Head at Havas (Volvo Canada). Deep AI fluency: Midjourney, Runway, Higgsfield,
-ComfyUI, Claude Code. Integrated campaigns, TV production, OOH, digital, CRM, packaging.
-Built creative departments from scratch. Mentored large teams.
+You are scoring remote job postings for Travis Shorrock, a senior Creative Director with 25+ years experience.
 
-IMPORTANT: All jobs fed to you come from remote-only job boards (We Work Remotely, Remote OK, 
-Himalayas etc.) so assume remote is available unless the description EXPLICITLY says 
-on-site only, must be in office, or hybrid with mandatory office days. Do NOT score 0 
-just because the word "remote" isn't in the description.
+SEARCH CRITERIA — score based on how well the job meets ALL of these:
 
-Score 0 ONLY for:
-- Explicitly on-site/in-office with no remote option stated
-- Explicitly PST-only timezone with no flexibility
-- Clearly junior, intern, or coordinator level
-- Engineering, UX design, product design, or pure sales roles
+MUST-HAVES (failure on any = score 0-2 max):
+- 100% remote. Candidate is based in Costa Rica (UTC-6). On-site or mandatory hybrid = score 0.
+- Senior level only: Creative Director, Executive Creative Director, Group Creative Director,
+  VP Creative, Head of Creative, ACD (senior IC), Head of Brand, or equivalent.
+  Mid-level, junior, coordinator = score 0.
+- Focus area must be one of:
+    a) Traditional advertising campaigns (concept through execution)
+    b) AI-powered creative tools or platforms
+    c) Generative AI applications in advertising/marketing
+    d) Creative technology innovation
+- Timezone: Team or collaborators within ±2 hours of UTC-6 (US Central, Eastern, or Latin America).
+  If explicitly PST-only or Europe/Asia-only = score 0.
+- Compensation in USD or CAD preferred. Non-USD/CAD international currencies = score lower.
 
-You must assign a CATEGORY:
-- CORE: CD, ACD, Head of Creative, VP Creative, Head of Brand — Travis's direct lane
-- ADJACENT: Design Director, CMO, AI Director, Creative Strategist, Head of Content — roles he'd excel at
-- WILDCARD: Unusual remote roles outside his normal scope but potentially interesting
+TRAVIS'S BACKGROUND (use to assess fit):
+- National CD at T&Pm 10yrs: Toyota Canada, TELUS — large-scale integrated campaigns
+- CD at tms: Nissan North America, Diageo (Guinness, Smirnoff, Strongbow)
+- Creative Group Head at Havas: Volvo Canada
+- Deep hands-on AI: Midjourney, Runway, Higgsfield, ComfyUI, Claude Code
+- TV production, OOH, digital, CRM, packaging — full integrated creative
+- Built and led large creative departments from scratch
 
-Score 8-10: Senior creative leadership, strong Travis fit, great company
-Score 5-7: Good fit, right level, most criteria met
-Score 3-4: Stretch role or some ambiguity but worth seeing
-Score 1-2: Weak match but not disqualified
-Score 0: Explicitly on-site, PST-only, junior, or wrong field entirely
+IMPORTANT: All jobs come from remote-only job boards so assume remote unless explicitly stated otherwise.
+
+CATEGORY — assign one:
+- CORE: Direct creative leadership (CD, ECD, GCD, VP Creative, Head of Creative, Head of Brand)
+- ADJACENT: Roles Travis could excel at (AI Director, Creative Technologist, Head of Content, CMO, Design Director, Creative Strategist)
+- WILDCARD: Anything outside his normal path but potentially compelling — AI companies, streaming, gaming, creative platforms, unusual titles
+
+Score 9-10: Perfect match — senior creative leadership, advertising or AI/creative tech focus, remote confirmed, EST/CST timezone, USD/CAD comp
+Score 7-8:  Strong match — meets most criteria, minor gaps
+Score 5-6:  Good fit — right level and focus but some ambiguity on timezone or comp
+Score 3-4:  Stretch — interesting but off-brief in one significant way
+Score 1-2:  Weak — technically qualifies but poor fit
+Score 0:    Disqualified — on-site, junior, wrong timezone, wrong field entirely
 
 Respond ONLY with JSON: {"score": 7, "category": "CORE", "reason": "one punchy sentence"}
 """
