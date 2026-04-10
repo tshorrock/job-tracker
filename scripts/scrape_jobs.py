@@ -346,9 +346,14 @@ def process_jobs(raw_jobs):
     if new_jobs:
         new_jobs = score_with_claude(new_jobs)
 
-    # Drop score 0-2 (irrelevant) but keep all scored 3+
-    new_jobs = [j for j in new_jobs if (j.get("score") or 0) >= 3]
-    print(f"  → {len(new_jobs)} scored 3+ kept")
+    # Log all scores for debugging
+    for j in new_jobs:
+        print(f"     SCORE {j.get('score',0)}/10 [{j.get('category','?')}] {j.get('title','')[:50]}")
+        if j.get('score_reason'): print(f"       reason: {j['score_reason'][:80]}")
+
+    # Keep anything Claude scored 1+ (only drop explicit 0s — auto-disqualified)
+    new_jobs = [j for j in new_jobs if (j.get("score") or 0) >= 1]
+    print(f"  → {len(new_jobs)} scored 1+ kept")
 
     all_jobs = (new_jobs + existing)[:300]
     save_json(DATA_FILE, all_jobs)
