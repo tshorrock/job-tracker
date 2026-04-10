@@ -24,11 +24,26 @@ from urllib.parse import quote_plus
 # Configuration
 # ---------------------------------------------------------------------------
 
+# Title-level keywords: jobs whose TITLE contains these get scored highest
+TITLE_KEYWORDS = [
+    "creative director", "associate creative director",
+    "head of creative", "head of brand",
+    "vp creative", "executive creative director",
+    "chief creative officer",
+    "ai creative director", "ai producer", "ai production director",
+    "creative strategist",
+    "cmo", "vp marketing", "head of marketing",
+]
+
+# Broader keywords matched against title + description
 KEYWORDS_HIGH = [
     "creative director", "head of creative", "vp creative",
     "ai creative", "generative ai", "ai design", "ai art director",
     "creative lead", "executive creative director",
     "chief creative officer", "creative strategist",
+    "ai producer", "ai production director", "cmo",
+    "vp marketing", "head of marketing", "head of brand",
+    "associate creative director",
 ]
 
 KEYWORDS_MED = [
@@ -39,13 +54,22 @@ KEYWORDS_MED = [
 ]
 
 KEYWORDS_LOW = [
-    "creative", "design lead", "brand lead", "ux director",
+    "creative", "design lead", "brand lead",
     "marketing director", "ai", "generative",
 ]
 
 REMOTE_SIGNALS = [
     "remote", "anywhere", "distributed", "work from home",
     "wfh", "location independent", "global",
+]
+
+# Title-level excludes: if the job TITLE contains any of these, score = 0
+TITLE_EXCLUDES = [
+    "ux director", "product designer", "graphic designer",
+    "brand designer", "content producer", "ui/ux",
+    "account executive", "account manager",
+    "sales director", "sales manager", "sales representative",
+    "sales lead", "sales engineer",
 ]
 
 EXCLUDE_PATTERNS = [
@@ -159,14 +183,26 @@ def strip_html(text):
 
 def score_job(title, company, description):
     """Score a job 0-10 based on keyword relevance."""
+    title_lower = title.lower()
     blob = f"{title} {company} {description}".lower()
 
-    # Exclude non-relevant roles
+    # Title-level excludes: hard block
+    for exc in TITLE_EXCLUDES:
+        if exc in title_lower:
+            return 0
+
+    # General exclude patterns
     for pat in EXCLUDE_PATTERNS:
         if re.search(pat, blob):
             return 0
 
     score = 0
+
+    # Title-level keyword bonus (strongest signal)
+    for kw in TITLE_KEYWORDS:
+        if kw in title_lower:
+            score += 4
+            break  # one title match is enough
 
     for kw in KEYWORDS_HIGH:
         if kw in blob:
