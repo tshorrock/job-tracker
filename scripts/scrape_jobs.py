@@ -308,7 +308,154 @@ Description: {desc}"""
         scored.append(job)
     return scored
 
-def keyword_score(job):
+WILDCARD_PROFILE = """
+You are finding quirky, fun, unusual remote jobs for Travis Shorrock — a 25yr Creative Director 
+with deep AI skills, moving to Costa Rica. He wants to SEE these jobs for entertainment and 
+inspiration, not necessarily apply to all of them. Think: "would this make him smile to read?"
+
+WILDCARD CRITERIA — score on FUN + FEASIBILITY:
+- 100% remote, paid (no unpaid internships, no MLMs, no pure commission sales)
+- Fun, low-pressure, high creative freedom OR just genuinely weird/interesting
+- Could be full-time or part-time
+- NO: cold-call sales, data entry, MLM, high-pressure commission roles
+
+WHAT SCORES HIGH (7-10):
+- Creative consulting for unusual startups or niche industries
+- AI prompt artistry, AI creative tool beta testing, AI content creation
+- Voiceover, narration, on-camera presenting (remote)
+- Community hosting, creative facilitation, workshop leading
+- Travel content, lifestyle content creation
+- Brand consultant for weird/niche products
+- Creative director for gaming, animation, comics, toys
+- Writing for TV/film/streaming (story room, creative development)
+- Chief Storyteller, Head of Culture, Creative Futurist — unusual senior titles
+- Anything at the intersection of creativity + technology + fun
+
+WHAT SCORES LOW (1-3):
+- Standard corporate jobs he'd find boring
+- Anything requiring specific technical skills he doesn't have (coding, data science)
+- High-stress, high-accountability senior roles (he has those already in Core)
+
+WHAT SCORES 0:
+- On-site required
+- MLM, pyramid scheme, cold calling
+- Pure data entry or admin
+- Clearly fake or scammy
+
+Always assign category: WILDCARD
+
+Respond ONLY with JSON: {"score": 7, "category": "WILDCARD", "reason": "one punchy sentence that captures why this would make him smile"}
+"""
+
+# Wildcard-specific sources — broader, weirder feeds
+WILDCARD_SOURCES = [
+    {"name": "Remote OK",      "url": "https://remoteok.com/remote-jobs.json",              "type": "remoteok"},
+    {"name": "WWR All",        "url": "https://weworkremotely.com/remote-jobs.rss",          "type": "rss"},
+    {"name": "Remotive All",   "url": "https://remotive.com/api/remote-jobs?limit=100",      "type": "remotive"},
+    {"name": "Arbeitnow",      "url": "https://www.arbeitnow.com/api/job-board-api",         "type": "arbeitnow"},
+]
+
+# Wildcard broad filter — anything creative, content, AI, media, entertainment
+WILDCARD_BROAD = [
+    "storyteller", "narrator", "voice", "presenter", "host",
+    "content creator", "creative consultant", "brand consultant",
+    "community", "facilitator", "workshop", "coach",
+    "ai artist", "prompt", "generative", "creative technologist",
+    "game", "gaming", "animation", "comic", "toy",
+    "travel", "lifestyle", "culture", "futurist",
+    "creative development", "story", "writer", "script",
+    "creative lead", "creative producer", "creative manager",
+    "brand manager", "marketing manager", "campaign manager",
+    "social media", "creative strategist", "creative director",
+]
+
+# Wildcard hard excludes
+WILDCARD_EXCLUDES = [
+    "data entry", "cold call", "commission only", "mlm",
+    "pyramid", "insurance agent", "mortgage", "real estate agent",
+    "engineer", "developer", "software", "devops",
+    "junior", "intern", "entry level",
+]
+
+def wildcard_match(job):
+    title = (job.get("title") or "").lower()
+    desc  = (job.get("description") or "").lower()
+    if any(kw in title for kw in WILDCARD_EXCLUDES):
+        return False
+    if "remote" not in title and "remote" not in desc:
+        return False
+    return any(kw in title or kw in desc[:200] for kw in WILDCARD_BROAD)
+
+def fetch_wildcards():
+    """Separate pass for wildcard jobs — broader sources, different filter."""
+    parsers = {"rss": parse_rss, "remotive": parse_remotive,
+               "remoteok": parse_remoteok, "arbeitnow": parse_arbeitnow}
+    all_jobs = []
+    for src in WILDCARD_SOURCES:
+        print(f"  [wildcard] → {src['name']}")
+        content = fetch_url(src["url"])
+        if not content: continue
+        raw  = parsers.get(src["type"], lambda c,n: [])(content, src["name"])
+        # Exclude anything already caught by main filter
+        hits = [j for j in raw if wildcard_match(j) and not broad_match(j)]
+        if hits:
+            print(f"     {len(hits)} wildcard candidates")
+            for h in hits[:5]: print(f"     ? {h['title'][:55]} @ {h['company']}")
+        all_jobs.extend(hits)
+    return all_jobs
+
+def score_wildcards(jobs):
+    """Score wildcard jobs with the fun/quirky prompt."""
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if not api_key:
+        for job in jobs:
+            job["score"] = 4
+            job["category"] = "WILDCARD"
+            job["score_method"] = "keyword"
+        return jobs
+
+    scored = []
+    for job in jobs:
+        prompt = f"""{WILDCARD_PROFILE}
+
+JOB:
+Title: {job.get('title','')}
+Company: {job.get('company','')}
+Description: {(job.get('description') or '')[:400]}"""
+
+        try:
+            req = urllib.request.Request(
+                "https://api.anthropic.com/v1/messages",
+                headers={
+                    "x-api-key": api_key,
+                    "anthropic-version": "2023-06-01",
+                    "content-type": "application/json",
+                },
+                data=json.dumps({
+                    "model": "claude-haiku-4-5-20251001",
+                    "max_tokens": 120,
+                    "messages": [{"role": "user", "content": prompt}]
+                }).encode()
+            )
+            with urllib.request.urlopen(req, timeout=20) as r:
+                data = json.loads(r.read())
+            text = data["content"][0]["text"].strip()
+            result = json.loads(re.search(r'\{.*\}', text, re.DOTALL).group())
+            job["score"]        = int(result.get("score", 4))
+            job["category"]     = "WILDCARD"
+            job["score_reason"] = result.get("reason", "")
+            job["score_method"] = "claude"
+            if job["score"] >= 5:
+                print(f"     🃏 {job['score']}/10 — {job['title'][:50]}")
+                print(f"        {job['score_reason'][:80]}")
+            time.sleep(0.3)
+        except Exception as e:
+            print(f"     ⚠ wildcard scoring failed: {e}")
+            job["score"] = 3
+            job["category"] = "WILDCARD"
+            job["score_method"] = "keyword_fallback"
+        scored.append(job)
+    return scored
     text = f"{job.get('title','')} {job.get('description','')}".lower()
     score = 0
     for pts, kws in {
@@ -355,10 +502,11 @@ def save_json(path, data):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     Path(path).write_text(json.dumps(data, indent=2, default=str))
 
-def process_jobs(raw_jobs):
+def process_jobs(raw_jobs, wild_jobs=None):
     seen     = set(load_json(SEEN_FILE, []))
     existing = load_json(DATA_FILE, [])
 
+    # Deduplicate core/adjacent
     new_jobs = []
     for job in raw_jobs:
         jid = make_id(job["title"], job["company"])
@@ -368,30 +516,43 @@ def process_jobs(raw_jobs):
         seen.add(jid)
         new_jobs.append(job)
 
-    print(f"\n  → {len(new_jobs)} new to score...")
+    # Deduplicate wildcards
+    new_wilds = []
+    for job in (wild_jobs or []):
+        jid = make_id(job["title"], job["company"])
+        if jid in seen: continue
+        job["id"]    = jid
+        job["added"] = datetime.now(timezone.utc).isoformat()
+        seen.add(jid)
+        new_wilds.append(job)
+
+    print(f"\n  → {len(new_jobs)} new core/adjacent to score...")
     if new_jobs:
         new_jobs = score_with_claude(new_jobs)
 
-    # Log all scores for debugging
-    for j in new_jobs:
+    print(f"\n  → {len(new_wilds)} new wildcards to score...")
+    if new_wilds:
+        new_wilds = score_wildcards(new_wilds)
+
+    # Log scores
+    for j in new_jobs + new_wilds:
         print(f"     SCORE {j.get('score',0)}/10 [{j.get('category','?')}] {j.get('title','')[:50]}")
-        if j.get('score_reason'): print(f"       reason: {j['score_reason'][:80]}")
 
-    # Keep anything Claude scored 1+ (only drop explicit 0s — auto-disqualified)
-    new_jobs = [j for j in new_jobs if (j.get("score") or 0) >= 1]
-    print(f"  → {len(new_jobs)} scored 1+ kept")
+    # Keep scored 1+
+    all_new = [j for j in (new_jobs + new_wilds) if (j.get("score") or 0) >= 1]
+    print(f"  → {len(all_new)} total kept")
 
-    all_jobs = (new_jobs + existing)[:300]
+    all_jobs = (all_new + existing)[:300]
     save_json(DATA_FILE, all_jobs)
     save_json(SEEN_FILE, list(seen))
     save_json(META_FILE, {
         "updated":     datetime.now(timezone.utc).isoformat(),
-        "new_count":   len(new_jobs),
+        "new_count":   len(all_new),
         "total_count": len(all_jobs),
         "boards":      [{"name": n, "url": u} for n, u in MANUAL_BOARDS],
     })
-    print(f"  ✓ {len(new_jobs)} new · {len(all_jobs)} total")
-    return new_jobs, all_jobs
+    print(f"  ✓ {len(all_new)} new · {len(all_jobs)} total")
+    return all_new, all_jobs
 
 # ─── EMAIL ────────────────────────────────────────────────────────────────────
 
@@ -473,11 +634,18 @@ if __name__ == "__main__":
     print(f"Travis Shorrock Job Scraper — 3-Lane Edition")
     print(f"{datetime.now().strftime('%Y-%m-%d %H:%M UTC')}")
     print("="*55)
-    print("\n[1/3] Fetching...")
+
+    print("\n[1/4] Fetching core + adjacent jobs...")
     raw = fetch_all()
-    print(f"\n  → {len(raw)} total broad matches")
-    print("\n[2/3] Scoring with Claude...")
-    new_jobs, all_jobs = process_jobs(raw)
-    print("\n[3/3] Emailing...")
+    print(f"\n  → {len(raw)} total matches")
+
+    print("\n[2/4] Fetching wildcard jobs...")
+    wild_raw = fetch_wildcards()
+    print(f"\n  → {len(wild_raw)} wildcard candidates")
+
+    print("\n[3/4] Scoring everything with Claude...")
+    new_jobs, all_jobs = process_jobs(raw, wild_raw)
+
+    print("\n[4/4] Emailing...")
     send_email(new_jobs, all_jobs)
     print("\n✅ Done.")
