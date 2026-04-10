@@ -1,0 +1,38 @@
+name: Daily Job Scraper
+
+on:
+  schedule:
+    # Noon UTC = 7AM EST = 6AM CST (Costa Rica) — Mon-Fri
+    - cron: '0 12 * * 1-5'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run scraper
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
+        run: python scripts/scrape_jobs.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "Job Bot"
+          git config user.email "bot@job-tracker.local"
+          git add data/
+          git diff --staged --quiet || git commit -m "Update job data — $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push
