@@ -83,18 +83,20 @@ You are scoring remote job postings for Travis Shorrock, a senior Creative Direc
 SEARCH CRITERIA — score based on how well the job meets ALL of these:
 
 MUST-HAVES (failure on any = score 0-2 max):
-- 100% remote. Candidate is based in Costa Rica (UTC-6). On-site or mandatory hybrid = score 0.
+- 100% remote. No on-site, no mandatory office days.
 - Senior level only: Creative Director, Executive Creative Director, Group Creative Director,
   VP Creative, Head of Creative, ACD (senior IC), Head of Brand, or equivalent.
   Mid-level, junior, coordinator = score 0.
 - Focus area must be one of:
     a) Traditional advertising campaigns (concept through execution)
-    b) AI-powered creative tools or platforms
-    c) Generative AI applications in advertising/marketing
-    d) Creative technology innovation
-- Timezone: Team or collaborators within ±2 hours of UTC-6 (US Central, Eastern, or Latin America).
-  If explicitly PST-only or Europe/Asia-only = score 0.
-- Compensation in USD or CAD preferred. Non-USD/CAD international currencies = score lower.
+    b) Brand identity, brand strategy, or brand design
+    c) AI-powered creative tools or platforms
+    d) Generative AI applications in advertising/marketing
+    e) Creative technology innovation
+- Timezone: Team must be primarily US Eastern or Central time (EST/CST).
+  PST-heavy teams are borderline (2hrs off) — score lower but don't disqualify.
+  European or Asian timezones = score 0. Latin America is fine.
+- Compensation in USD or CAD. Other currencies = score lower.
 
 TRAVIS'S BACKGROUND (use to assess fit):
 - National CD at T&Pm 10yrs: Toyota Canada, TELUS — large-scale integrated campaigns
