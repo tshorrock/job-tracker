@@ -767,9 +767,22 @@ function renderCol(listId, cntId, metricId, cat, accent) {
     </div>`;
     return;
   }
-  el.innerHTML = arr.map((j, i) =>
-    `<div style="animation-delay:${Math.min(i * 0.05, 0.5)}s">${makeCard(j, accent)}</div>`
-  ).join('');
+  el.innerHTML = (() => {
+    const newJobs = arr.filter(j => isNew(j));
+    const oldJobs = arr.filter(j => !isNew(j));
+    let html = '';
+    if (newJobs.length) {
+      html += `<div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--teal);padding:4px 4px 8px;opacity:0.8;">● New Today</div>`;
+      html += newJobs.map((j,i) => `<div style="animation-delay:${Math.min(i*.05,.4)}s">${makeCard(j,accent)}</div>`).join('');
+    }
+    if (oldJobs.length) {
+      if (newJobs.length) {
+        html += `<div style="display:flex;align-items:center;gap:10px;margin:14px 4px 10px;"><div style="flex:1;height:1px;background:var(--border)"></div><span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--t4);white-space:nowrap">Earlier</span><div style="flex:1;height:1px;background:var(--border)"></div></div>`;
+      }
+      html += oldJobs.map((j,i) => `<div style="animation-delay:${Math.min(i*.03,.4)}s;opacity:0.75">${makeCard(j,accent)}</div>`).join('');
+    }
+    return html;
+  })();
 }
 
 function render() {
