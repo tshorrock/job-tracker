@@ -3,406 +3,698 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TS · Jobs</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>TS · Job Command</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+/* ── BRIEF COMPLIANCE ──────────────────────────────────────────────────────────
+   Background Base:  #0D0D0D → #1A1A1A
+   Card Surface:     #242424 → #2D2D2D
+   Border:           #3D3D3D
+   Primary Accent:   #00E5CC (Teal)
+   Secondary Accent: #B983FF (Electric Purple)
+   Alert:            #FF6B35 (Neon Orange)
+   Success:          #4ADE80 (Mint Green)
+   Text Max:         #E5E5E5 (never pure white)
+   Numbers:          48–64px / 700
+   Cards:            16px radius, 24px padding, 20–24px gap
+   Motion:           Cards lift 4px on hover, buttons scale, count-up on load
+────────────────────────────────────────────────────────────────────────────── */
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
 :root{
-  --bg:#0b0d11;
-  --s1:#121520;
-  --s2:#181c28;
-  --s3:#1e2334;
-  --lime:#d4f244;
-  --ld:rgba(212,242,68,.10);
-  --amber:#f0a500;
-  --ad:rgba(240,165,0,.10);
-  --lav:#a78bfa;
-  --lavd:rgba(167,139,250,.10);
-  --coral:#ff5533;
-  --cd:rgba(255,85,51,.10);
-  --mint:#00d4a4;
-  --md:rgba(0,212,164,.10);
-  --text:#edf1f7;
-  --sub:#66788a;
-  --dim:#2a3348;
-  --bdr:rgba(255,255,255,.07);
-  --bdr2:rgba(255,255,255,.13);
+  /* Brief color system */
+  --bg:       #0D0D0D;
+  --bg2:      #111111;
+  --card:     #1A1A1A;
+  --card2:    #242424;
+  --card3:    #2D2D2D;
+  --border:   rgba(61,61,61,0.8);
+  --border2:  rgba(61,61,61,1);
+  --teal:     #00E5CC;
+  --teal-glow:rgba(0,229,204,0.12);
+  --teal-dim: rgba(0,229,204,0.08);
+  --purple:   #B983FF;
+  --purple-d: rgba(185,131,255,0.10);
+  --orange:   #FF6B35;
+  --orange-d: rgba(255,107,53,0.10);
+  --mint:     #4ADE80;
+  --mint-d:   rgba(74,222,128,0.10);
+  --amber:    #F59E0B;
+  --amber-d:  rgba(245,158,11,0.10);
+  --err:      #EF4444;
+  /* Brief typography */
+  --t1:  #E5E5E5;
+  --t2:  #A3A3A3;
+  --t3:  #737373;
+  --t4:  #525252;
 }
-html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
 
-/* TOPBAR */
-.top{
+html{background:var(--bg);scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--t1);
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  min-height:100vh;
+}
+
+/* ── HEADER (64px, sticky, blur on scroll) ───────────────────────────────── */
+.header{
+  height:64px;
   display:flex;align-items:center;justify-content:space-between;
-  padding:18px 28px;border-bottom:1px solid var(--bdr);
+  padding:0 32px;
+  background:rgba(13,13,13,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
   position:sticky;top:0;z-index:100;
-  background:rgba(11,13,17,.95);backdrop-filter:blur(16px);
-  gap:14px;flex-wrap:wrap;
+  gap:20px;
 }
-.logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:900;letter-spacing:-1.5px;color:#fff}
-.logo em{font-style:normal;color:var(--lime)}
-.logo-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--sub);margin-left:10px}
-.top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{
+  font-size:20px;font-weight:800;letter-spacing:-0.04em;color:var(--t1);
+  display:flex;align-items:center;gap:2px;
+  flex-shrink:0;
+}
+.logo-dot{color:var(--teal)}
+.logo-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--t4);margin-left:14px;align-self:center;
+}
+
+/* Search — 44px height per brief */
 .search{
-  display:flex;align-items:center;gap:8px;background:var(--s1);
-  border:1px solid var(--bdr2);border-radius:10px;padding:8px 14px;width:240px;
-  transition:border-color .2s;
+  display:flex;align-items:center;gap:10px;
+  height:44px;
+  background:#1E1E1E;
+  border:1px solid #3D3D3D;
+  border-radius:12px;
+  padding:0 16px;
+  width:280px;
+  transition:border-color 150ms ease-out, box-shadow 150ms ease-out;
 }
-.search:focus-within{border-color:rgba(212,242,68,.4)}
-.search input{background:none;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;width:100%}
-.search input::placeholder{color:var(--sub)}
-.run{
-  padding:8px 18px;border-radius:10px;border:none;cursor:pointer;
-  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;font-weight:700;
-  text-transform:uppercase;background:var(--lime);color:#0b0d11;transition:opacity .15s;
+.search:focus-within{
+  border-color:var(--teal);
+  box-shadow:0 0 0 3px rgba(0,229,204,0.12);
 }
-.run:hover{opacity:.85}
-
-/* PAGE */
-.page{padding:22px 28px 60px;max-width:1600px;margin:0 auto}
-
-/* STAT STRIP */
-.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:14px}
-.stat{
-  background:var(--s1);border:1px solid var(--bdr);border-radius:14px;
-  padding:20px 22px;position:relative;overflow:hidden;
+.search input{
+  background:none;border:none;outline:none;
+  color:var(--t1);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:14px;width:100%;
 }
-.stat::after{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.stat.lime::after{background:var(--lime)}
-.stat.amber::after{background:var(--amber)}
-.stat.lav::after{background:var(--lav)}
-.stat.coral::after{background:var(--coral)}
-.stat.mint::after{background:var(--mint)}
-.stat.dim::after{background:var(--dim)}
-.stat-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--sub);margin-bottom:8px}
-.stat-n{font-family:'Syne',sans-serif;font-size:44px;font-weight:900;letter-spacing:-3px;line-height:1;color:#fff}
-.stat-n.lime{color:var(--lime)}.stat-n.amber{color:var(--amber)}.stat-n.lav{color:var(--lav)}
-.stat-n.coral{color:var(--coral)}.stat-n.mint{color:var(--mint)}
-.stat-hint{font-size:11px;color:var(--sub);margin-top:5px}
+.search input::placeholder{color:var(--t4)}
 
-/* STATUS */
-.status-row{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
-.spill{
-  display:flex;align-items:center;gap:8px;background:var(--s1);
-  border:1px solid var(--bdr);border-radius:20px;padding:7px 16px;
+.header-right{display:flex;align-items:center;gap:10px}
+
+/* Status indicator — 8px dot, glow per brief */
+.status-pill{
+  display:flex;align-items:center;gap:8px;
+  background:var(--card2);border:1px solid var(--border2);
+  border-radius:20px;padding:6px 14px;
+  font-size:12px;font-weight:500;color:var(--t2);
 }
-.dot{width:7px;height:7px;border-radius:50%;background:var(--lime);animation:blink 2s infinite;flex-shrink:0}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.stxt{font-size:13px;font-weight:600;color:#fff}
-.stime{font-family:'DM Mono',monospace;font-size:10px;color:var(--sub);margin-left:4px}
-.restore{
-  margin-left:auto;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;
-  text-transform:uppercase;padding:6px 14px;border-radius:8px;cursor:pointer;
-  background:var(--cd);border:1px solid rgba(255,85,51,.25);color:var(--coral);transition:all .15s;
+.sdot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--mint);flex-shrink:0;
+  box-shadow:0 0 0 2px rgba(74,222,128,0.4);
+  animation:pulse 2s ease-in-out infinite;
 }
-.restore:hover{background:var(--coral);color:#fff}
+.sdot.inactive{background:var(--t4);box-shadow:none;animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-/* THREE COLUMN LAYOUT */
-.cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:start}
+/* Primary button */
+.btn-primary{
+  height:38px;padding:0 18px;border-radius:10px;border:none;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  background:var(--teal);color:#0D0D0D;
+  transition:transform 150ms ease-out, filter 150ms ease-out;
+}
+.btn-primary:hover{filter:brightness(1.1);transform:scale(1.02)}
+.btn-primary:active{transform:scale(0.98)}
 
-/* COLUMN HEADER */
+/* ── PAGE ────────────────────────────────────────────────────────────────── */
+.page{
+  max-width:1480px;margin:0 auto;
+  padding:32px 32px 80px;
+}
+
+/* ── METRIC STRIP ────────────────────────────────────────────────────────── */
+/* Brief: Metric Numbers 48–64px / 700, label 12px gray, delta 14px */
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:20px;
+  margin-bottom:28px;
+}
+.metric{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:24px;
+  position:relative;overflow:hidden;
+  transition:transform 250ms ease-out, border-color 150ms ease-out;
+}
+.metric:hover{transform:translateY(-4px);border-color:var(--border2)}
+.metric::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+}
+.metric.teal::before{background:var(--teal)}
+.metric.purple::before{background:var(--purple)}
+.metric.orange::before{background:var(--orange)}
+.metric.mint::before{background:var(--mint)}
+.metric.amber::before{background:var(--amber)}
+.metric.muted::before{background:var(--border2)}
+
+.metric-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--t3);margin-bottom:12px;
+}
+.metric-num{
+  font-size:52px;font-weight:700;letter-spacing:-0.04em;
+  line-height:1;color:var(--t1);
+}
+.metric-num.teal{color:var(--teal)}
+.metric-num.purple{color:var(--purple)}
+.metric-num.orange{color:var(--orange)}
+.metric-num.mint{color:var(--mint)}
+.metric-num.amber{color:var(--amber)}
+.metric-sub{font-size:13px;color:var(--t3);margin-top:8px}
+
+/* ── STATUS BAR ──────────────────────────────────────────────────────────── */
+.statusbar{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:28px;flex-wrap:wrap;
+}
+.sbar-pill{
+  display:flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:8px 16px;
+  font-size:13px;font-weight:500;
+}
+.sbar-time{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--t3);margin-left:2px;
+}
+.restore-btn{
+  margin-left:auto;
+  background:var(--orange-d);border:1px solid rgba(255,107,53,0.25);
+  color:var(--orange);border-radius:8px;padding:7px 14px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;
+  text-transform:uppercase;cursor:pointer;
+  transition:background 150ms, color 150ms;
+}
+.restore-btn:hover{background:var(--orange);color:#0D0D0D}
+
+/* ── THREE COLUMN LAYOUT ─────────────────────────────────────────────────── */
+.cols{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:20px;
+  align-items:start;
+}
+
+/* ── COLUMN PANEL ────────────────────────────────────────────────────────── */
+.col{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+}
+.col.col-core{border-top:2px solid var(--teal)}
+.col.col-adj{border-top:2px solid var(--purple)}
+.col.col-wild{border-top:2px solid var(--orange)}
+
 .col-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 20px 14px;border-bottom:1px solid var(--bdr);flex-shrink:0;
+  padding:22px 24px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
 }
-.col-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:900;letter-spacing:-.5px}
-.col-title.lime{color:var(--lime)}
-.col-title.amber{color:var(--amber)}
-.col-title.lav{color:var(--lav)}
-.col-tag{
-  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;
-  text-transform:uppercase;padding:3px 8px;border-radius:4px;
+.col-hdr-left{}
+.col-title{
+  font-size:20px;font-weight:800;
+  letter-spacing:-0.03em;line-height:1.2;
 }
-.col-tag.lime{background:var(--ld);color:var(--lime)}
-.col-tag.amber{background:var(--ad);color:var(--amber)}
-.col-tag.lav{background:var(--lavd);color:var(--lav)}
-.col-count{font-family:'DM Mono',monospace;font-size:10px;color:var(--sub)}
-
-/* COLUMN PANEL */
-.col-panel{
-  background:var(--s1);border:1px solid var(--bdr);border-radius:14px;
-  overflow:hidden;display:flex;flex-direction:column;
+.col-title.teal{color:var(--teal)}
+.col-title.purple{color:var(--purple)}
+.col-title.orange{color:var(--orange)}
+.col-desc{font-size:12px;color:var(--t3);margin-top:5px;line-height:1.4}
+.col-hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.col-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.1em;text-transform:uppercase;
+  padding:3px 9px;border-radius:4px;
 }
-.col-panel.lime{border-top:3px solid var(--lime)}
-.col-panel.amber{border-top:3px solid var(--amber)}
-.col-panel.lav{border-top:3px solid var(--lav)}
+.col-badge.teal{background:var(--teal-dim);color:var(--teal)}
+.col-badge.purple{background:var(--purple-d);color:var(--purple)}
+.col-badge.orange{background:var(--orange-d);color:var(--orange)}
+.col-count{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--t4);
+}
 
-.col-body{padding:10px 10px;display:flex;flex-direction:column;gap:8px}
+.col-body{padding:14px;display:flex;flex-direction:column;gap:10px}
 
-/* JOB CARD */
+/* ── JOB CARD ────────────────────────────────────────────────────────────── */
+/* Brief: 16px radius, 24px padding, lift 4px + glow on hover */
 .jcard{
-  background:var(--s2);border:1px solid var(--bdr);border-radius:10px;
-  padding:16px 18px;display:flex;flex-direction:column;gap:10px;
-  transition:all .15s;animation:fadeUp .3s ease both;
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+  display:flex;flex-direction:column;gap:12px;
+  animation:fadeUp 0.3s ease both;
+  transition:transform 250ms ease-out, border-color 150ms ease-out, box-shadow 250ms ease-out;
 }
-.jcard:hover{background:var(--s3);border-color:var(--bdr2)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-
-.jcard-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.jtitle{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;letter-spacing:-.3px;line-height:1.25;flex:1}
-.jscore{
-  font-family:'Syne',sans-serif;font-size:28px;font-weight:900;
-  letter-spacing:-2px;line-height:1;flex-shrink:0;
+.jcard:hover{
+  transform:translateY(-4px);
+  border-color:var(--border2);
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
 }
-.jscore.h{color:var(--lime)}.jscore.m{color:var(--amber)}.jscore.l{color:var(--sub)}
-.ssub{font-family:'DM Mono',monospace;font-size:8px;color:var(--sub);text-align:right;margin-top:1px}
-
-.jco{font-size:12px;color:var(--sub)}
-.jtags{display:flex;flex-wrap:wrap;gap:4px}
-.tag{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.5px;text-transform:uppercase;padding:2px 6px;border-radius:3px}
-.t-src{background:rgba(255,255,255,.04);color:var(--sub)}
-.t-new{background:var(--md);color:var(--mint)}
-.t-ai{background:var(--ld);color:var(--lime)}
-.jreason{font-size:11px;color:var(--sub);line-height:1.5;font-style:italic}
-
-.jactions{display:flex;align-items:center;gap:6px;margin-top:2px}
-.obtn{
-  flex:1;text-align:center;padding:8px 0;border-radius:7px;
-  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;font-weight:700;
-  text-transform:uppercase;text-decoration:none;transition:all .15s;
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
 }
-.obtn.lime{background:var(--ld);border:1px solid rgba(212,242,68,.2);color:var(--lime)}
-.obtn.lime:hover{background:var(--lime);color:#0b0d11}
-.obtn.amber{background:var(--ad);border:1px solid rgba(240,165,0,.2);color:var(--amber)}
-.obtn.amber:hover{background:var(--amber);color:#0b0d11}
-.obtn.lav{background:var(--lavd);border:1px solid rgba(167,139,250,.2);color:var(--lav)}
-.obtn.lav:hover{background:var(--lav);color:#0b0d11}
-.xbtn{
-  width:32px;height:32px;border-radius:7px;border:1px solid var(--bdr2);
-  background:var(--s3);color:var(--sub);font-size:12px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;
-}
-.xbtn:hover{background:var(--cd);border-color:rgba(255,85,51,.3);color:var(--coral)}
 
-/* EMPTY */
+.jcard-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+
+.jcard-title{
+  font-size:15px;font-weight:700;
+  color:var(--t1);letter-spacing:-0.02em;line-height:1.3;
+  flex:1;
+}
+.jcard-score-wrap{text-align:right;flex-shrink:0}
+/* Brief: Metric Numbers 48–64px — scaled down for card context */
+.jcard-score{
+  font-size:36px;font-weight:700;
+  letter-spacing:-0.04em;line-height:1;
+}
+.jcard-score.high{color:var(--teal)}
+.jcard-score.mid{color:var(--amber)}
+.jcard-score.low{color:var(--t4)}
+.jcard-score-lbl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--t4);margin-top:2px;
+}
+
+.jcard-co{font-size:13px;color:var(--t3)}
+
+.jtags{display:flex;flex-wrap:wrap;gap:5px}
+.jtag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;
+}
+.jtag-src{background:rgba(61,61,61,0.6);color:var(--t4)}
+.jtag-new{background:var(--mint-d);color:var(--mint)}
+.jtag-ai{background:var(--teal-dim);color:var(--teal)}
+
+.jreason{
+  font-size:12px;color:var(--t3);
+  line-height:1.5;font-style:italic;
+  border-left:2px solid var(--border2);
+  padding-left:10px;
+}
+
+.jcard-actions{display:flex;align-items:center;gap:8px;margin-top:2px}
+
+/* Secondary button style from brief */
+.open-btn{
+  flex:1;text-align:center;padding:9px;border-radius:9px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:0.08em;font-weight:600;text-transform:uppercase;
+  text-decoration:none;
+  transition:transform 150ms ease-out, filter 150ms ease-out, background 150ms;
+  border:1px solid;
+}
+.open-btn.teal{
+  background:var(--teal-dim);
+  border-color:rgba(0,229,204,0.25);
+  color:var(--teal);
+}
+.open-btn.teal:hover{background:var(--teal);color:#0D0D0D;transform:scale(1.02)}
+.open-btn.teal:active{transform:scale(0.98)}
+.open-btn.purple{
+  background:var(--purple-d);
+  border-color:rgba(185,131,255,0.25);
+  color:var(--purple);
+}
+.open-btn.purple:hover{background:var(--purple);color:#0D0D0D;transform:scale(1.02)}
+.open-btn.purple:active{transform:scale(0.98)}
+.open-btn.orange{
+  background:var(--orange-d);
+  border-color:rgba(255,107,53,0.25);
+  color:var(--orange);
+}
+.open-btn.orange:hover{background:var(--orange);color:#0D0D0D;transform:scale(1.02)}
+.open-btn.orange:active{transform:scale(0.98)}
+
+/* Tertiary — dismiss */
+.x-btn{
+  width:36px;height:36px;border-radius:8px;
+  background:transparent;border:1px solid var(--border2);
+  color:var(--t4);font-size:13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  transition:background 150ms, border-color 150ms, color 150ms, transform 150ms;
+}
+.x-btn:hover{
+  background:rgba(239,68,68,0.12);
+  border-color:rgba(239,68,68,0.35);
+  color:var(--err);
+  transform:scale(1.05);
+}
+
+/* ── EMPTY STATES ────────────────────────────────────────────────────────── */
 .col-empty{
-  padding:40px 20px;text-align:center;display:flex;flex-direction:column;
-  align-items:center;gap:10px;color:var(--sub);
+  padding:40px 24px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
 }
-.col-empty-ico{font-family:'Syne',sans-serif;font-size:32px;font-weight:900;color:var(--dim)}
-.col-empty-t{font-size:14px;font-weight:600;color:var(--dim)}
-.col-empty-s{font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;color:var(--sub)}
+.col-empty-n{
+  font-size:48px;font-weight:700;color:var(--border2);
+  letter-spacing:-0.04em;line-height:1;
+}
+.col-empty-t{font-size:15px;font-weight:600;color:var(--t4)}
+.col-empty-s{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--t4);line-height:1.7;
+}
+
+/* ── FOCUS STATES (brief: custom 2px accent outline) ─────────────────────── */
+:focus-visible{
+  outline:2px solid var(--teal);
+  outline-offset:2px;
+  border-radius:4px;
+}
+
+/* ── REDUCED MOTION ──────────────────────────────────────────────────────── */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────────────── */
+@media(max-width:1200px){
+  .metrics{grid-template-columns:repeat(3,1fr)}
+  .cols{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .cols{grid-template-columns:1fr}
+  .header{padding:0 20px}
+  .page{padding:20px 20px 60px}
+  .logo-sub{display:none}
+}
 </style>
 </head>
 <body>
 
-<div class="top">
+<!-- HEADER — 64px, sticky blur -->
+<header class="header">
   <div style="display:flex;align-items:center">
-    <div class="logo">TS<em>.</em>jobs</div>
+    <div class="logo">TS<span class="logo-dot">.</span>jobs</div>
     <div class="logo-sub">Command Center</div>
   </div>
-  <div class="top-right">
-    <div class="search">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#66788a" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="q" type="text" placeholder="Search all roles…" oninput="render()">
-    </div>
-    <button class="run" onclick="window.open('https://github.com/tshorrock/job-tracker/actions','_blank')">↻ Run Now</button>
+  <div class="search" role="search">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#525252" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="q" type="text" placeholder="Search all roles…" oninput="render()" aria-label="Search jobs">
   </div>
-</div>
+  <div class="header-right">
+    <div class="status-pill">
+      <span class="sdot inactive" id="sdot" aria-hidden="true"></span>
+      <span id="hdr-status">Loading…</span>
+      <span class="sbar-time" id="hdr-time"></span>
+    </div>
+    <button class="btn-primary" onclick="window.open('https://github.com/tshorrock/job-tracker/actions','_blank')" aria-label="Run job scraper">↻ Run Now</button>
+  </div>
+</header>
 
-<div class="page">
+<main class="page">
 
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat lime">
-      <div class="stat-lbl">New Today</div>
-      <div class="stat-n lime" id="s0">—</div>
-      <div class="stat-hint">Since last run</div>
+  <!-- METRIC STRIP — 52px numbers, brief spec -->
+  <div class="metrics" role="region" aria-label="Summary statistics">
+    <div class="metric teal">
+      <div class="metric-label">New Today</div>
+      <div class="metric-num teal" id="m0" aria-live="polite">—</div>
+      <div class="metric-sub">Since last run</div>
     </div>
-    <div class="stat lime">
-      <div class="stat-lbl">Core Roles</div>
-      <div class="stat-n lime" id="s-core">—</div>
-      <div class="stat-hint">CD / Head of Creative</div>
+    <div class="metric teal">
+      <div class="metric-label">Core Roles</div>
+      <div class="metric-num teal" id="m-core">—</div>
+      <div class="metric-sub">CD · Head of Creative</div>
     </div>
-    <div class="stat amber">
-      <div class="stat-lbl">Adjacent</div>
-      <div class="stat-n amber" id="s-adj">—</div>
-      <div class="stat-hint">Design / CMO / AI</div>
+    <div class="metric purple">
+      <div class="metric-label">Adjacent</div>
+      <div class="metric-num purple" id="m-adj">—</div>
+      <div class="metric-sub">Design Dir · CMO · AI</div>
     </div>
-    <div class="stat lav">
-      <div class="stat-lbl">Wildcard</div>
-      <div class="stat-n lav" id="s-wild">—</div>
-      <div class="stat-hint">Unexpected finds</div>
+    <div class="metric orange">
+      <div class="metric-label">Wildcard</div>
+      <div class="metric-num orange" id="m-wild">—</div>
+      <div class="metric-sub">Unexpected finds</div>
     </div>
-    <div class="stat mint">
-      <div class="stat-lbl">Total</div>
-      <div class="stat-n mint" id="s2">—</div>
-      <div class="stat-hint">In database</div>
+    <div class="metric mint">
+      <div class="metric-label">Total Tracked</div>
+      <div class="metric-num mint" id="m-total">—</div>
+      <div class="metric-sub">Rolling 300</div>
     </div>
-    <div class="stat dim">
-      <div class="stat-lbl">Sources</div>
-      <div class="stat-n" style="color:#fff">11</div>
-      <div class="stat-hint">Live feeds</div>
+    <div class="metric muted">
+      <div class="metric-label">Live Sources</div>
+      <div class="metric-num" style="color:var(--t1)">11</div>
+      <div class="metric-sub">Feeds active</div>
     </div>
   </div>
 
-  <!-- STATUS ROW -->
-  <div class="status-row">
-    <div class="spill">
-      <span class="dot"></span>
-      <span class="stxt" id="run-status">Checking…</span>
-      <span class="stime" id="run-time"></span>
+  <!-- STATUS BAR -->
+  <div class="statusbar">
+    <div class="sbar-pill">
+      <span class="sdot inactive" id="sdot2" aria-hidden="true"></span>
+      <span id="status-txt" style="color:var(--t2)">Checking…</span>
+      <span class="sbar-time" id="status-time"></span>
     </div>
-    <button class="restore" onclick="clearD()">↺ Restore dismissed</button>
+    <button class="restore-btn" onclick="clearD()" aria-label="Restore dismissed jobs">↺ Restore dismissed</button>
   </div>
 
   <!-- THREE COLUMNS -->
-  <div class="cols">
+  <div class="cols" role="main">
 
     <!-- CORE -->
-    <div class="col-panel lime">
+    <section class="col col-core" aria-labelledby="col-core-title">
       <div class="col-hdr">
-        <div>
-          <div class="col-title lime">Core</div>
-          <div style="font-size:11px;color:var(--sub);margin-top:3px">CD · ACD · Head of Creative · VP</div>
+        <div class="col-hdr-left">
+          <div class="col-title teal" id="col-core-title">Core</div>
+          <div class="col-desc">Creative Director · ACD · Head of Creative · VP Creative · Head of Brand</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-          <span class="col-tag lime">Your lane</span>
-          <span class="col-count" id="c-core">—</span>
+        <div class="col-hdr-right">
+          <span class="col-badge teal">Your lane</span>
+          <span class="col-count" id="cnt-core">— roles</span>
         </div>
       </div>
       <div class="col-body" id="list-core">
-        <div class="col-empty"><div class="col-empty-ico">◈</div><div class="col-empty-t">Loading…</div></div>
+        <div class="col-empty">
+          <div class="col-empty-n">—</div>
+          <div class="col-empty-t">Loading…</div>
+        </div>
       </div>
-    </div>
+    </section>
 
     <!-- ADJACENT -->
-    <div class="col-panel amber">
+    <section class="col col-adj" aria-labelledby="col-adj-title">
       <div class="col-hdr">
-        <div>
-          <div class="col-title amber">Adjacent</div>
-          <div style="font-size:11px;color:var(--sub);margin-top:3px">Design Dir · CMO · AI Director · Strategist</div>
+        <div class="col-hdr-left">
+          <div class="col-title purple" id="col-adj-title">Adjacent</div>
+          <div class="col-desc">Design Director · CMO · AI Director · Creative Strategist · Head of Content</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-          <span class="col-tag amber">You'd crush it</span>
-          <span class="col-count" id="c-adj">—</span>
+        <div class="col-hdr-right">
+          <span class="col-badge purple">You'd crush it</span>
+          <span class="col-count" id="cnt-adj">— roles</span>
         </div>
       </div>
       <div class="col-body" id="list-adj">
-        <div class="col-empty"><div class="col-empty-ico">◈</div><div class="col-empty-t">Loading…</div></div>
+        <div class="col-empty">
+          <div class="col-empty-n">—</div>
+          <div class="col-empty-t">Loading…</div>
+        </div>
       </div>
-    </div>
+    </section>
 
     <!-- WILDCARD -->
-    <div class="col-panel lav">
+    <section class="col col-wild" aria-labelledby="col-wild-title">
       <div class="col-hdr">
-        <div>
-          <div class="col-title lav">Wildcard</div>
-          <div style="font-size:11px;color:var(--sub);margin-top:3px">Unexpected · Unusual · Might love it</div>
+        <div class="col-hdr-left">
+          <div class="col-title orange" id="col-wild-title">Wildcard</div>
+          <div class="col-desc">Unexpected · Unusual · Remote roles Claude thinks you'd find interesting</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-          <span class="col-tag lav">Who knows</span>
-          <span class="col-count" id="c-wild">—</span>
+        <div class="col-hdr-right">
+          <span class="col-badge orange">Who knows</span>
+          <span class="col-count" id="cnt-wild">— roles</span>
         </div>
       </div>
       <div class="col-body" id="list-wild">
-        <div class="col-empty"><div class="col-empty-ico">◈</div><div class="col-empty-t">Loading…</div></div>
+        <div class="col-empty">
+          <div class="col-empty-n">—</div>
+          <div class="col-empty-t">Loading…</div>
+        </div>
       </div>
-    </div>
+    </section>
 
   </div>
-</div>
+</main>
 
 <script>
-const TODAY=new Date().toISOString().slice(0,10);
-let jobs=[],meta={};
-let dismissed=new Set(JSON.parse(localStorage.getItem('ts_d')||'[]'));
+// ── DATA ──────────────────────────────────────────────────────────────────
+const TODAY = new Date().toISOString().slice(0,10);
+let jobs = [], meta = {};
+let dismissed = new Set(JSON.parse(localStorage.getItem('ts_dismissed') || '[]'));
 
-async function boot(){
-  try{
-    const[jr,mr]=await Promise.all([fetch('data/jobs.json'),fetch('data/meta.json')]);
-    jobs=await jr.json(); meta=await mr.json();
-  }catch(e){jobs=[];meta={updated:'never',new_count:0,total_count:0};}
-  updateMeta(); render();
-}
-
-function updateMeta(){
-  const ok=meta.updated&&meta.updated!=='never';
-  document.getElementById('run-status').textContent=ok?'Active · Running daily':'Not yet run';
-  document.getElementById('run-time').textContent=ok
-    ?'  Last: '+new Date(meta.updated).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'';
-  document.getElementById('s0').textContent=meta.new_count||0;
-  document.getElementById('s2').textContent=meta.total_count||jobs.length||0;
-}
-
-const isNew=j=>j.added&&j.added.startsWith(TODAY);
-const isAI=j=>/ai|generative|midjourney|runway|sora/i.test((j.title||'')+(j.description||''));
-
-function getQ(){return(document.getElementById('q').value||'').toLowerCase()}
-
-function filterCol(cat){
-  const q=getQ();
-  let r=jobs.filter(j=>!dismissed.has(j.id||'')&&(j.category||'CORE')===cat);
-  if(q)r=r.filter(j=>(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q));
-  return r.sort((a,b)=>(b.score||0)-(a.score||0));
-}
-
-function dismiss(id,e){
-  e.preventDefault();e.stopPropagation();
-  dismissed.add(id);
-  localStorage.setItem('ts_d',JSON.stringify([...dismissed]));
+// ── BOOT ──────────────────────────────────────────────────────────────────
+async function boot() {
+  try {
+    const [jr, mr] = await Promise.all([fetch('data/jobs.json'), fetch('data/meta.json')]);
+    jobs = await jr.json();
+    meta = await mr.json();
+  } catch(e) {
+    jobs = []; meta = { updated:'never', new_count:0, total_count:0 };
+  }
+  updateMeta();
+  countUp();
   render();
 }
 
-function clearD(){
-  dismissed.clear();localStorage.removeItem('ts_d');render();
+// ── COUNT-UP ANIMATION (brief: 1–2s duration) ─────────────────────────────
+function countUp() {
+  const targets = {
+    'm0':     meta.new_count || 0,
+    'm-core': jobs.filter(j => j.category === 'CORE').length,
+    'm-adj':  jobs.filter(j => j.category === 'ADJACENT').length,
+    'm-wild': jobs.filter(j => j.category === 'WILDCARD').length,
+    'm-total':meta.total_count || jobs.length || 0,
+  };
+  Object.entries(targets).forEach(([id, target]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const duration = 1200;
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      el.textContent = Math.round(ease * target);
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
 }
 
-function makeCard(j,color){
-  const sc=j.score||0;
-  const scClass=sc>=7?'h':sc>=4?'m':'l';
-  const ai=isAI(j),nw=isNew(j);
-  const tags=[
-    `<span class="tag t-src">${j.source||''}</span>`,
-    nw?`<span class="tag t-new">new</span>`:'',
-    ai?`<span class="tag t-ai">AI</span>`:'',
+// ── META ──────────────────────────────────────────────────────────────────
+function updateMeta() {
+  const ok = meta.updated && meta.updated !== 'never';
+  const statusTxt = ok ? 'Active · Running daily' : 'Not yet run';
+  const timeTxt   = ok
+    ? 'Last: ' + new Date(meta.updated).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})
+    : '';
+
+  ['sdot','sdot2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { if (ok) el.classList.remove('inactive'); else el.classList.add('inactive'); }
+  });
+  document.getElementById('hdr-status').textContent = statusTxt;
+  document.getElementById('hdr-time').textContent   = ok ? '  ' + timeTxt : '';
+  document.getElementById('status-txt').textContent  = statusTxt;
+  document.getElementById('status-time').textContent = timeTxt;
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────
+const isNew = j => j.added && j.added.startsWith(TODAY);
+const isAI  = j => /ai|generative|midjourney|runway|sora/i.test((j.title||'')+(j.description||''));
+
+function getCol(cat) {
+  const q = (document.getElementById('q').value || '').toLowerCase();
+  let r = jobs.filter(j => !dismissed.has(j.id || '') && (j.category || 'CORE') === cat);
+  if (q) r = r.filter(j =>
+    (j.title || '').toLowerCase().includes(q) ||
+    (j.company || '').toLowerCase().includes(q)
+  );
+  return r.sort((a, b) => (b.score || 0) - (a.score || 0));
+}
+
+function dismiss(id, e) {
+  e.preventDefault(); e.stopPropagation();
+  dismissed.add(id);
+  localStorage.setItem('ts_dismissed', JSON.stringify([...dismissed]));
+  render();
+}
+
+function clearD() {
+  dismissed.clear();
+  localStorage.removeItem('ts_dismissed');
+  render();
+}
+
+// ── CARD TEMPLATE ─────────────────────────────────────────────────────────
+function makeCard(j, accent) {
+  const sc = j.score || 0;
+  const scClass = sc >= 7 ? 'high' : sc >= 4 ? 'mid' : 'low';
+  const tags = [
+    `<span class="jtag jtag-src" aria-label="Source: ${j.source||''}">${j.source||''}</span>`,
+    isNew(j) ? `<span class="jtag jtag-new">New</span>` : '',
+    isAI(j)  ? `<span class="jtag jtag-ai">AI</span>` : '',
   ].filter(Boolean).join('');
-  const reason=j.score_reason?`<div class="jreason">"${j.score_reason}"</div>`:'';
-  const jid=j.id||'';
-  return `<div class="jcard">
+  const reason = j.score_reason
+    ? `<div class="jreason" aria-label="Match reason">"${j.score_reason}"</div>`
+    : '';
+  const jid = j.id || '';
+
+  return `<article class="jcard" aria-label="${j.title||'Job'} at ${j.company||'Unknown'}">
     <div class="jcard-head">
-      <div class="jtitle">${j.title||'Untitled'}</div>
-      <div style="text-align:right">
-        <div class="jscore ${scClass}">${sc}</div>
-        <div class="ssub">/ 10</div>
+      <div class="jcard-title">${j.title || 'Untitled'}</div>
+      <div class="jcard-score-wrap">
+        <div class="jcard-score ${scClass}" aria-label="Score ${sc} out of 10">${sc}</div>
+        <div class="jcard-score-lbl">/ 10</div>
       </div>
     </div>
-    <div class="jco">${j.company||'Unknown'}</div>
+    <div class="jcard-co">${j.company || 'Unknown'}</div>
     <div class="jtags">${tags}</div>
     ${reason}
-    <div class="jactions">
-      <a class="obtn ${color}" href="${j.url}" target="_blank" rel="noopener">Open →</a>
-      <button class="xbtn" onclick="dismiss('${jid}',event)">✕</button>
+    <div class="jcard-actions">
+      <a class="open-btn ${accent}" href="${j.url}" target="_blank" rel="noopener" aria-label="Open ${j.title||'job'} listing">Open Role →</a>
+      <button class="x-btn" onclick="dismiss('${jid}',event)" aria-label="Dismiss this job">✕</button>
     </div>
-  </div>`;
+  </article>`;
 }
 
-function renderCol(id,countId,cat,color){
-  const el=document.getElementById(id);
-  const arr=filterCol(cat);
-  document.getElementById(countId).textContent=arr.length+' roles';
+// ── RENDER ────────────────────────────────────────────────────────────────
+function renderCol(listId, cntId, metricId, cat, accent) {
+  const el  = document.getElementById(listId);
+  const cnt = document.getElementById(cntId);
+  const met = document.getElementById(metricId);
+  const arr = getCol(cat);
 
-  if(cat==='CORE') document.getElementById('s-core').textContent=jobs.filter(j=>j.category==='CORE').length;
-  if(cat==='ADJACENT') document.getElementById('s-adj').textContent=jobs.filter(j=>j.category==='ADJACENT').length;
-  if(cat==='WILDCARD') document.getElementById('s-wild').textContent=jobs.filter(j=>j.category==='WILDCARD').length;
+  if (cnt) cnt.textContent = arr.length + ' role' + (arr.length !== 1 ? 's' : '');
+  if (met) met.textContent = arr.length;
 
-  if(!arr.length){
-    const msgs={
-      CORE:`<div class="col-empty"><div class="col-empty-ico">◇</div><div class="col-empty-t">No core roles yet</div><div class="col-empty-s">Run the scraper to populate<br>or check manual boards →</div></div>`,
-      ADJACENT:`<div class="col-empty"><div class="col-empty-ico">◇</div><div class="col-empty-t">No adjacent roles yet</div><div class="col-empty-s">These will appear after<br>the first AI-scored run</div></div>`,
-      WILDCARD:`<div class="col-empty"><div class="col-empty-ico">◇</div><div class="col-empty-t">No wildcards yet</div><div class="col-empty-s">Claude will surface these<br>on the next run — stay tuned</div></div>`,
+  if (!arr.length) {
+    const msgs = {
+      CORE:     ['◈', 'No core roles yet', 'Run the scraper or check manual boards'],
+      ADJACENT: ['◇', 'No adjacent roles yet', 'These populate on the next scored run'],
+      WILDCARD: ['◉', 'No wildcards yet', 'Claude will surface these — stay tuned'],
     };
-    el.innerHTML=msgs[cat]||'';
+    const [ico, t, s] = msgs[cat] || ['—', 'Empty', ''];
+    el.innerHTML = `<div class="col-empty">
+      <div class="col-empty-n">${ico}</div>
+      <div class="col-empty-t">${t}</div>
+      <div class="col-empty-s">${s}</div>
+    </div>`;
     return;
   }
-  el.innerHTML=arr.map((j,i)=>
-    `<div style="animation-delay:${Math.min(i*.04,.5)}s">${makeCard(j,color)}</div>`
+  el.innerHTML = arr.map((j, i) =>
+    `<div style="animation-delay:${Math.min(i * 0.05, 0.5)}s">${makeCard(j, accent)}</div>`
   ).join('');
 }
 
-function render(){
-  renderCol('list-core','c-core','CORE','lime');
-  renderCol('list-adj','c-adj','ADJACENT','amber');
-  renderCol('list-wild','c-wild','WILDCARD','lav');
+function render() {
+  renderCol('list-core', 'cnt-core', 'm-core', 'CORE',     'teal');
+  renderCol('list-adj',  'cnt-adj',  'm-adj',  'ADJACENT', 'purple');
+  renderCol('list-wild', 'cnt-wild', 'm-wild', 'WILDCARD', 'orange');
 }
 
 boot();
