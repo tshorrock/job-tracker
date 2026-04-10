@@ -29,13 +29,18 @@ CORE_TITLES = [
     "brand creative director", "brand director",
     "vp brand", "director of brand", "director of creative",
     "global creative director",
+    # Design leadership (brand/visual — not UX/UI)
+    "head of design", "vp of design", "vp design",
+    "director of design", "svp design", "evp design",
+    "chief design officer", "cdo",
+    "head of visual design", "head of graphic design",
 ]
 
 ADJACENT_TITLES = [
-    "design director", "head of design",
-    "graphic design director", "creative strategist",
-    "brand strategist", "head of marketing",
-    "vp marketing", "vp of marketing", "chief marketing officer", "cmo",
+    "design director", "graphic design director",
+    "creative strategist", "brand strategist",
+    "head of marketing", "vp marketing", "vp of marketing",
+    "chief marketing officer", "cmo",
     "head of content", "vp content", "chief content officer",
     "ai director", "ai creative", "ai producer", "ai production director",
     "generative creative", "fractional cdo",
@@ -85,7 +90,10 @@ SEARCH CRITERIA — score based on how well the job meets ALL of these:
 MUST-HAVES (failure on any = score 0-2 max):
 - 100% remote. No on-site, no mandatory office days.
 - Senior level only: Creative Director, Executive Creative Director, Group Creative Director,
-  VP Creative, Head of Creative, ACD (senior IC), Head of Brand, or equivalent.
+  VP Creative, Head of Creative, ACD (senior IC), Head of Brand, VP Design, Head of Design,
+  Director of Design, Chief Design Officer — or equivalent senior roles.
+  IMPORTANT: Design leadership is fine IF it's brand, visual, or graphic design.
+  UX Director, UI Director, Product Designer, Head of UX = score 0. Not his world.
   Mid-level, junior, coordinator = score 0.
 - Focus area must be one of:
     a) Traditional advertising campaigns (concept through execution)
