@@ -59,21 +59,26 @@ Creative Group Head at Havas (Volvo Canada). Deep AI tools expertise: Midjourney
 Higgsfield, ComfyUI, Claude Code. Currently in Toronto, moving to Costa Rica Aug 2026.
 
 Requirements (ALL must be met for a high score):
-- 100% fully remote — no hybrid, no occasional travel, no on-site
-- EST or CST timezone overlap (max 2hrs off Costa Rica/CST)
-- $150K+ USD salary (was earning $230K CAD)
-- Senior leadership level — not mid-level, not junior
-- Creative/brand work — not UX, not product design, not engineering
+- 100% FULLY REMOTE — non-negotiable. Score 0 immediately if the job mentions:
+  hybrid, on-site, in-office, occasional travel required, must be local, must relocate,
+  "remote with some travel", "remote-friendly", or ANY in-person requirement.
+- EST or CST timezone overlap only. Score 0 if PST-only.
+- $150K+ USD. Score low if salary listed and clearly below this.
+- Senior level minimum — CD, ACD, Head of, VP, Director. Not mid-level or below.
+- Creative/brand work — NOT UX, product design, engineering, or sales.
 
-Ideal roles: Creative Director, Head of Creative, VP Creative, ACD, Head of Brand,
-AI Creative Director, AI Production Director, Fractional CDO, VP Marketing (creative-led),
-Head of Content (creative-led), Creative Strategist (senior).
+AUTOMATIC SCORE 0 — any of these disqualify immediately:
+- Hybrid, on-site, in-office, travel required, must be local
+- PST-only timezone
+- Junior, intern, coordinator, or below ACD level
+- Engineering, sales, UX, product design, data roles
+- Salary clearly under $100K USD
 
-Score 8-10: Perfect fit — senior creative leadership, fully remote, right pay, AI angle
-Score 5-7: Good fit — most criteria met, minor gaps (pay unclear, timezone edge case)  
-Score 3-4: Weak fit — interesting but wrong level, unclear remote, or off-brand
-Score 1-2: Poor fit — wrong field, wrong level, or clearly not remote
-Score 0: Irrelevant — engineering, sales, UX, junior, on-site
+Score 8-10: Perfect — senior creative leadership, 100% remote confirmed, right pay
+Score 5-7: Good — most criteria met, remote not explicitly stated but no red flags
+Score 3-4: Weak — interesting but remote unclear, level slightly off, or stretch role
+Score 1-2: Poor — wrong field, wrong level, likely not remote
+Score 0: Disqualified — hybrid/on-site, wrong field, junior, PST-only
 """
 
 # ─── SOURCES ───────────────────────────────────────────────────────────────────
