@@ -102,7 +102,7 @@
     .bento {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      grid-auto-rows: 110px;
+      grid-auto-rows: 100px;
       gap: 10px;
     }
 
@@ -120,9 +120,9 @@
     /* ── CELL SPANS ── */
     .c-stat   { grid-column: span 3; grid-row: span 1; }
     .c-meta   { grid-column: span 3; grid-row: span 1; }
-    .c-jobs   { grid-column: span 8; grid-row: span 6; }
-    .c-boards { grid-column: span 4; grid-row: span 4; }
-    .c-srcs   { grid-column: span 4; grid-row: span 2; }
+    .c-jobs   { grid-column: span 8; grid-row: span 8; }
+    .c-boards { grid-column: span 4; grid-row: span 5; }
+    .c-srcs   { grid-column: span 4; grid-row: span 3; }
 
     /* ── STAT CELLS ── */
     .stat-cell {
@@ -143,7 +143,7 @@
       font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
     }
     .stat-num {
-      font-size: 48px; font-weight: 900; letter-spacing: -2px; line-height: 1; color: #fff;
+      font-size: 42px; font-weight: 900; letter-spacing: -2px; line-height: 1; color: #fff;
     }
     .stat-num.lime { color: var(--lime); }
     .stat-num.coral { color: var(--coral); }
