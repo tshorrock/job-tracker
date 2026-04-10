@@ -1,1 +1,89 @@
-{}
+{
+  "last_run": "2026-04-10T16:21:32.009816+00:00",
+  "new_count": 214,
+  "total_count": 214,
+  "sources": [
+    "We Work Remotely",
+    "Remote OK (Design)",
+    "Remote OK (Marketing)",
+    "Himalayas",
+    "Remotive",
+    "Jobicy",
+    "Arbeitnow",
+    "Authentic Jobs"
+  ],
+  "manual_boards": [
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=creative%20director%20remote&f_WT=2"
+    },
+    {
+      "name": "Built In",
+      "url": "https://builtin.com/jobs/remote/design?search=creative+director"
+    },
+    {
+      "name": "FlexJobs",
+      "url": "https://www.flexjobs.com/search?search=creative+director&tele_level%5B%5D=All+Telecommuting"
+    },
+    {
+      "name": "Wellfound",
+      "url": "https://wellfound.com/role/r/creative-director"
+    },
+    {
+      "name": "Dribbble",
+      "url": "https://dribbble.com/jobs?keyword=creative+director&location=Anywhere"
+    },
+    {
+      "name": "Working Not Working",
+      "url": "https://workingnotworking.com/jobs?q=creative+director"
+    },
+    {
+      "name": "AIGA",
+      "url": "https://designjobs.aiga.org/#/jobs?keywords=creative+director"
+    },
+    {
+      "name": "The Muse",
+      "url": "https://www.themuse.com/search?keyword=creative+director&work-flexibility=remote"
+    },
+    {
+      "name": "Contra",
+      "url": "https://contra.com/opportunity?query=creative+director"
+    },
+    {
+      "name": "Toptal",
+      "url": "https://www.toptal.com/designers"
+    },
+    {
+      "name": "Roboflow",
+      "url": "https://roboflow.com/careers"
+    },
+    {
+      "name": "Superside",
+      "url": "https://careers.superside.com/"
+    },
+    {
+      "name": "Curious Refuge",
+      "url": "https://www.curiousrefuge.com/ai-jobs"
+    },
+    {
+      "name": "Creatively",
+      "url": "https://creatively.life/jobs?q=creative+director"
+    },
+    {
+      "name": "We Work Remotely (manual)",
+      "url": "https://weworkremotely.com/remote-jobs/search?term=creative+director"
+    },
+    {
+      "name": "Remote.co",
+      "url": "https://remote.co/remote-jobs/search/?search_keywords=creative+director"
+    },
+    {
+      "name": "JustRemote",
+      "url": "https://justremote.co/remote-design-jobs"
+    },
+    {
+      "name": "Pangian",
+      "url": "https://pangian.com/job-travel-remote/?search=creative+director"
+    }
+  ]
+}
