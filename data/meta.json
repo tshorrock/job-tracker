@@ -1,15 +1,19 @@
 {
-  "updated": "2026-04-10T17:14:09.881280+00:00",
-  "new_count": 4,
+  "updated": "2026-04-10T17:26:12.875861+00:00",
+  "new_count": 0,
   "total_count": 219,
   "boards": [
     {
       "name": "LinkedIn \u2014 CD Remote",
-      "url": "https://www.linkedin.com/jobs/search/?keywords=creative+director+AI&f_WT=2&f_TPR=r86400&location=United+States"
+      "url": "https://www.linkedin.com/jobs/search/?keywords=creative+director+AI&f_WT=2&f_TPR=r86400"
     },
     {
       "name": "LinkedIn \u2014 Head of Creative",
-      "url": "https://www.linkedin.com/jobs/search/?keywords=head+of+creative+remote&f_WT=2&f_TPR=r86400"
+      "url": "https://www.linkedin.com/jobs/search/?keywords=head+of+creative+remote&f_WT=2"
+    },
+    {
+      "name": "LinkedIn \u2014 VP Creative",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=vp+creative+remote&f_WT=2"
     },
     {
       "name": "Built In \u2014 Remote CD",
@@ -32,15 +36,15 @@
       "url": "https://justremote.co/remote-design-jobs"
     },
     {
-      "name": "Working Nomads Design",
+      "name": "Working Nomads",
       "url": "https://www.workingnomads.com/jobs?category=design"
     },
     {
-      "name": "Roboflow \u2014 CD Open Role",
+      "name": "Roboflow \u2014 CD Role",
       "url": "https://jobs.ashbyhq.com/roboflow"
     },
     {
-      "name": "Superside \u2014 AI CD Role",
+      "name": "Superside \u2014 AI CD",
       "url": "https://careers.superside.com/jobs/ai-creative-director"
     },
     {
@@ -60,10 +64,6 @@
       "url": "https://www.toptal.com/creative"
     },
     {
-      "name": "Hubstaff Talent",
-      "url": "https://hubstafftalent.net/search/jobs?q=creative+director"
-    },
-    {
       "name": "Daily Remote",
       "url": "https://dailyremote.com/remote-creative-director-jobs"
     },
@@ -72,8 +72,8 @@
       "url": "https://remotecircle.com"
     },
     {
-      "name": "Remote.co",
-      "url": "https://remote.co/remote-jobs/design/"
+      "name": "Hubstaff Talent",
+      "url": "https://hubstafftalent.net/search/jobs?q=creative+director"
     }
   ]
 }
