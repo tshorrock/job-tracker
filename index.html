@@ -4,290 +4,298 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TS · Job Command</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --ink:    #0a0c0f;
-      --ink2:   #12161e;
-      --ink3:   #1a2030;
-      --lime:   #c8f135;
-      --lime2:  rgba(200,241,53,0.12);
-      --coral:  #ff6b47;
-      --coral2: rgba(255,107,71,0.12);
-      --sky:    #5bc8f5;
-      --sky2:   rgba(91,200,245,0.12);
-      --lavender: #b8a9ff;
-      --lav2:   rgba(184,169,255,0.12);
-      --text:   #f0f4f8;
-      --muted:  #4a5868;
-      --muted2: #2a3848;
-      --border: rgba(255,255,255,0.07);
-      --border2:rgba(255,255,255,0.12);
+      --bg:      #0c0e14;
+      --card:    #13161f;
+      --card2:   #1a1e2a;
+      --card3:   #1f2435;
+      --lime:    #c8f135;
+      --lime-d:  rgba(200,241,53,0.10);
+      --coral:   #ff5f3d;
+      --coral-d: rgba(255,95,61,0.10);
+      --sky:     #41c8f0;
+      --sky-d:   rgba(65,200,240,0.10);
+      --lav:     #a78bfa;
+      --lav-d:   rgba(167,139,250,0.10);
+      --red:     #ff4060;
+      --text:    #e8eef6;
+      --sub:     #8896aa;
+      --dim:     #3a4558;
+      --border:  rgba(255,255,255,0.06);
+      --border2: rgba(255,255,255,0.11);
     }
 
-    html, body {
-      min-height: 100vh;
-      background: var(--ink);
+    html { background: var(--bg); }
+    body {
+      background: var(--bg);
       color: var(--text);
       font-family: 'Cabinet Grotesk', sans-serif;
-    }
-
-    /* ── GRAIN OVERLAY ── */
-    body::after {
-      content: '';
-      position: fixed; inset: 0; pointer-events: none; z-index: 999;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-      opacity: .5;
+      min-height: 100vh;
+      font-size: 15px;
     }
 
     /* ── PAGE ── */
-    .page { max-width: 1280px; margin: 0 auto; padding: 28px 28px 48px; }
+    .page { max-width: 1440px; margin: 0 auto; padding: 24px 24px 60px; }
 
     /* ── TOPBAR ── */
     .topbar {
       display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+      margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
     }
-    .wordmark {
-      display: flex; align-items: baseline; gap: 0;
-      font-size: 22px; font-weight: 900; letter-spacing: -1.5px; color: #fff;
-    }
-    .wordmark span { color: var(--lime); }
-    .wm-sub {
+    .logo { font-size: 20px; font-weight: 900; letter-spacing: -1px; color: #fff; }
+    .logo em { font-style: normal; color: var(--lime); }
+    .logo-sub {
       font-family: 'Instrument Mono', monospace;
       font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--muted); margin-left: 12px; align-self: center;
+      color: var(--sub); margin-left: 10px;
     }
 
-    .top-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
     .search {
       display: flex; align-items: center; gap: 8px;
-      background: var(--ink2); border: 1px solid var(--border2);
-      border-radius: 10px; padding: 8px 14px; width: 240px;
-      transition: border-color .2s;
+      background: var(--card); border: 1px solid var(--border2);
+      border-radius: 10px; padding: 9px 14px; width: 260px;
     }
-    .search:focus-within { border-color: rgba(200,241,53,.5); }
+    .search:focus-within { border-color: rgba(200,241,53,.4); }
     .search input {
       background: none; border: none; outline: none;
-      color: var(--text); font-family: 'Cabinet Grotesk',sans-serif;
-      font-size: 13px; width: 100%;
+      color: var(--text); font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 14px; width: 100%;
     }
-    .search input::placeholder { color: var(--muted); }
+    .search input::placeholder { color: var(--sub); }
 
-    .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .chips { display: flex; gap: 6px; }
     .chip {
-      padding: 6px 14px; border-radius: 20px; cursor: pointer;
-      font-family: 'Instrument Mono', monospace;
-      font-size: 10px; letter-spacing: .5px; font-weight: 500;
-      border: 1px solid var(--border2); color: var(--muted);
-      background: var(--ink2); transition: all .15s; user-select: none;
+      padding: 7px 16px; border-radius: 20px; cursor: pointer;
+      font-family: 'Instrument Mono', monospace; font-size: 11px;
+      letter-spacing: .5px; border: 1px solid var(--border2);
+      color: var(--sub); background: var(--card); transition: all .15s;
+      user-select: none;
     }
     .chip:hover { border-color: var(--lime); color: var(--lime); }
-    .chip.on { background: var(--lime2); border-color: rgba(200,241,53,.5); color: var(--lime); }
-    .chip.on.coral { background: var(--coral2); border-color: rgba(255,107,71,.5); color: var(--coral); }
-    .chip.on.sky   { background: var(--sky2);   border-color: rgba(91,200,245,.5);  color: var(--sky); }
+    .chip.on { background: var(--lime-d); border-color: rgba(200,241,53,.4); color: var(--lime); }
+    .chip.on.c { background: var(--coral-d); border-color: rgba(255,95,61,.4); color: var(--coral); }
+    .chip.on.s { background: var(--sky-d); border-color: rgba(65,200,240,.4); color: var(--sky); }
 
     .run-btn {
-      padding: 7px 16px; border-radius: 10px; cursor: pointer;
-      font-family: 'Instrument Mono', monospace; font-size: 10px; letter-spacing: 1px;
-      background: var(--lime); color: var(--ink); font-weight: 700;
-      border: none; transition: opacity .15s; text-transform: uppercase;
+      padding: 8px 18px; border-radius: 10px; border: none; cursor: pointer;
+      font-family: 'Instrument Mono', monospace; font-size: 11px; letter-spacing: 1px;
+      font-weight: 700; text-transform: uppercase;
+      background: var(--lime); color: #0c0e14; transition: opacity .15s;
     }
     .run-btn:hover { opacity: .85; }
 
     /* ── BENTO GRID ── */
     .bento {
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      grid-auto-rows: 110px;
+      grid-template-columns: 1fr 1fr 1fr 380px;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+      min-height: calc(100vh - 120px);
+    }
+
+    /* ── STAT CARDS (top row) ── */
+    .stats-row {
+      grid-column: 1 / 4;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
       gap: 10px;
     }
 
-    /* ── BASE CELL ── */
-    .cell {
-      background: var(--ink2);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      position: relative;
-      transition: border-color .2s;
+    .stat {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px 28px;
+      position: relative; overflow: hidden;
     }
-    .cell:hover { border-color: var(--border2); }
-
-    /* ── CELL SPANS ── */
-    .c-stat   { grid-column: span 3; grid-row: span 1; }
-    .c-meta   { grid-column: span 3; grid-row: span 1; }
-    .c-jobs   { grid-column: span 8; grid-row: span 6; }
-    .c-boards { grid-column: span 4; grid-row: span 4; }
-    .c-srcs   { grid-column: span 4; grid-row: span 2; }
-
-    /* ── STAT CELLS ── */
-    .stat-cell {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 20px; height: 100%;
+    .stat::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
     }
-    .stat-cell::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    }
-    .sc-lime::before   { background: linear-gradient(90deg, var(--lime), transparent); }
-    .sc-coral::before  { background: linear-gradient(90deg, var(--coral), transparent); }
-    .sc-sky::before    { background: linear-gradient(90deg, var(--sky), transparent); }
-    .sc-lav::before    { background: linear-gradient(90deg, var(--lavender), transparent); }
+    .stat.lime::before  { background: linear-gradient(90deg, var(--lime), transparent); }
+    .stat.coral::before { background: linear-gradient(90deg, var(--coral), transparent); }
+    .stat.sky::before   { background: linear-gradient(90deg, var(--sky), transparent); }
+    .stat.lav::before   { background: linear-gradient(90deg, var(--lav), transparent); }
 
-    .stat-left { display: flex; flex-direction: column; gap: 3px; }
     .stat-lbl {
       font-family: 'Instrument Mono', monospace;
-      font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--sub); margin-bottom: 10px;
     }
-    .stat-num {
-      font-size: 48px; font-weight: 900; letter-spacing: -2px; line-height: 1; color: #fff;
+    .stat-n {
+      font-size: 52px; font-weight: 900; letter-spacing: -3px; line-height: 1; color: #fff;
     }
-    .stat-num.lime { color: var(--lime); }
-    .stat-num.coral { color: var(--coral); }
-    .stat-num.sky   { color: var(--sky); }
-    .stat-num.lav   { color: var(--lavender); }
-    .stat-hint { font-size: 10px; color: var(--muted); margin-top: 1px; }
-    .stat-icon { font-size: 26px; opacity: .08; }
+    .stat-n.lime  { color: var(--lime); }
+    .stat-n.coral { color: var(--coral); }
+    .stat-n.sky   { color: var(--sky); }
+    .stat-hint { font-size: 12px; color: var(--sub); margin-top: 8px; }
 
-    /* ── META CELL (last run) ── */
-    .meta-cell {
-      display: flex; flex-direction: column; justify-content: center;
-      padding: 0 20px; height: 100%; gap: 3px;
+    /* ── STATUS CARD ── */
+    .status-card {
+      grid-column: 4;
+      grid-row: 1;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px 28px;
+      display: flex; flex-direction: column; justify-content: center; gap: 8px;
     }
-    .meta-lbl {
+    .status-lbl {
       font-family: 'Instrument Mono', monospace;
-      font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--sub);
     }
-    .meta-val { font-size: 12px; color: var(--text); font-weight: 600; }
-    .meta-dot { display: flex; align-items: center; gap: 6px; }
-    .live-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--lime); animation: blink 2s infinite;
-    }
+    .status-dot { display: flex; align-items: center; gap: 8px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); animation: blink 2s infinite; flex-shrink: 0; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+    .status-val { font-size: 16px; font-weight: 700; color: #fff; }
+    .status-time { font-family: 'Instrument Mono', monospace; font-size: 11px; color: var(--sub); }
 
-    /* ── JOBS CELL ── */
-    .jobs-cell {
-      display: flex; flex-direction: column; height: 100%;
+    /* ── JOBS PANEL ── */
+    .jobs-panel {
+      grid-column: 1 / 4;
+      grid-row: 2;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      display: flex; flex-direction: column;
     }
-    .jobs-hdr {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 20px 12px; flex-shrink: 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .jobs-title { font-size: 13px; font-weight: 700; color: #fff; }
-    .jobs-count {
-      font-family: 'Instrument Mono', monospace;
-      font-size: 10px; color: var(--muted);
-    }
-    .jobs-scroll { flex: 1; overflow-y: auto; padding: 10px 12px; gap: 6px; display: flex; flex-direction: column; }
-    .jobs-scroll::-webkit-scrollbar { width: 3px; }
-    .jobs-scroll::-webkit-scrollbar-thumb { background: var(--ink3); border-radius: 2px; }
-
-    /* ── JOB ROW ── */
-    .jrow {
-      display: flex; align-items: center; gap: 12px;
-      padding: 11px 12px; border-radius: 10px;
-      background: var(--ink3); border: 1px solid transparent;
-      text-decoration: none; color: inherit;
-      transition: all .15s; position: relative;
-      animation: pop .25s ease both;
-    }
-    .jrow:hover { border-color: var(--border2); background: #1e2a3a; transform: translateX(2px); }
-    .jrow.hot { border-left: 2px solid var(--lime); }
-    .jrow.adj { border-left: 2px solid var(--lavender); }
-    @keyframes pop { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
-
-    .dismiss-btn {
-      flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-      color: var(--muted); font-size: 12px; line-height: 1;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: all .15s; opacity: 0; z-index: 10;
-      font-family: monospace;
-    }
-    .jrow-wrap:hover .dismiss-btn { opacity: 1; }
-    .dismiss-btn:hover { background: rgba(255,77,109,0.2); border-color: rgba(255,77,109,0.4); color: #ff4d6d; }
-
-    .jrow-wrap {
-      display: flex; align-items: center; gap: 8px;
-      border-radius: 10px; position: relative;
-    }
-
-    .jrow-left { flex: 1; min-width: 0; }
-    .jrow-title { font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
-    .jrow-meta { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
-    .jco { font-size: 11px; color: var(--muted); }
-    .jdot { color: var(--muted2); font-size: 9px; }
-
-    .jtag {
-      font-family: 'Instrument Mono', monospace;
-      font-size: 8px; letter-spacing: .5px; text-transform: uppercase;
-      padding: 2px 5px; border-radius: 3px;
-    }
-    .jt-src { background: rgba(255,255,255,.05); color: var(--muted); }
-    .jt-new { background: rgba(200,241,53,.12); color: var(--lime); }
-    .jt-ai  { background: var(--sky2); color: var(--sky); }
-    .jt-hot { background: var(--coral2); color: var(--coral); }
-    .jt-adj { background: var(--lav2); color: var(--lavender); }
-
-    .jrow-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
-    .score-pips { display: flex; gap: 2px; }
-    .pip { width: 5px; height: 14px; border-radius: 2px; background: var(--muted2); }
-    .pip.on   { background: var(--lime); }
-    .pip.hot  { background: var(--coral); }
-    .pip.adj  { background: var(--lavender); }
-    .go-btn {
-      font-family: 'Instrument Mono', monospace; font-size: 8px; letter-spacing: 1px;
-      padding: 3px 8px; border-radius: 5px; white-space: nowrap;
-      background: rgba(200,241,53,.1); border: 1px solid rgba(200,241,53,.2);
-      color: var(--lime); transition: all .15s;
-    }
-    .jrow:hover .go-btn { background: var(--lime); color: var(--ink); }
-
-    /* ── EMPTY STATE ── */
-    .empty-state {
-      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 10px; color: var(--muted); text-align: center; padding: 20px;
-    }
-    .empty-ico { font-size: 24px; opacity: .3; }
-    .empty-t { font-size: 14px; font-weight: 700; color: var(--muted2); }
-    .empty-s { font-family: 'Instrument Mono', monospace; font-size: 10px; }
-
-    /* ── BOARDS CELL ── */
-    .boards-cell { display: flex; flex-direction: column; height: 100%; }
     .panel-hdr {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 16px 10px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+      padding: 20px 24px 16px; border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
     }
-    .panel-title { font-size: 12px; font-weight: 700; color: #fff; }
-    .panel-sub { font-family: 'Instrument Mono', monospace; font-size: 9px; color: var(--muted); }
-    .boards-scroll { flex: 1; overflow-y: auto; padding: 6px 8px; }
-    .boards-scroll::-webkit-scrollbar { width: 3px; }
-    .boards-scroll::-webkit-scrollbar-thumb { background: var(--ink3); }
+    .panel-title { font-size: 15px; font-weight: 700; color: #fff; }
+    .panel-count { font-family: 'Instrument Mono', monospace; font-size: 11px; color: var(--sub); }
+    .jobs-scroll {
+      flex: 1; overflow-y: auto; padding: 12px 16px;
+      scrollbar-width: thin; scrollbar-color: var(--card3) transparent;
+    }
+    .jobs-scroll::-webkit-scrollbar { width: 4px; }
+    .jobs-scroll::-webkit-scrollbar-thumb { background: var(--card3); border-radius: 2px; }
 
-    .brow {
+    /* ── JOB CARD ── */
+    .jcard-wrap { display: flex; align-items: stretch; gap: 0; margin-bottom: 8px; }
+
+    .jcard {
+      flex: 1;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 18px 20px;
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 12px 0 0 12px;
+      text-decoration: none; color: inherit;
+      transition: all .15s;
+      animation: fadeIn .3s ease both;
+    }
+    .jcard:hover { background: var(--card3); border-color: var(--border2); }
+    .jcard.hot { border-left: 3px solid var(--lime); }
+    .jcard.adj { border-left: 3px solid var(--lav); }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+
+    .jcard-left { flex: 1; min-width: 0; }
+    .jcard-title {
+      font-size: 16px; font-weight: 700; color: #fff;
+      margin-bottom: 6px; line-height: 1.3;
+    }
+    .jcard-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .jcard-co { font-size: 13px; color: var(--sub); }
+    .sep { color: var(--dim); font-size: 10px; }
+
+    .tag {
+      font-family: 'Instrument Mono', monospace;
+      font-size: 9px; letter-spacing: .5px; text-transform: uppercase;
+      padding: 3px 7px; border-radius: 4px;
+    }
+    .t-src  { background: rgba(255,255,255,.05); color: var(--sub); }
+    .t-new  { background: var(--lime-d); color: var(--lime); }
+    .t-ai   { background: var(--sky-d); color: var(--sky); }
+    .t-hot  { background: var(--coral-d); color: var(--coral); }
+    .t-adj  { background: var(--lav-d); color: var(--lav); }
+
+    .jcard-reason {
+      font-size: 12px; color: var(--sub); margin-top: 6px;
+      font-style: italic; line-height: 1.4;
+    }
+
+    .jcard-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; }
+    .score-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .score-num {
+      font-family: 'Instrument Mono', monospace;
+      font-size: 22px; font-weight: 700; line-height: 1;
+    }
+    .score-num.high { color: var(--lime); }
+    .score-num.mid  { color: var(--coral); }
+    .score-num.low  { color: var(--sub); }
+    .score-lbl { font-family: 'Instrument Mono', monospace; font-size: 8px; color: var(--dim); letter-spacing: 1px; }
+    .open-btn {
+      font-family: 'Instrument Mono', monospace; font-size: 10px; letter-spacing: 1px;
+      padding: 6px 12px; border-radius: 7px; white-space: nowrap;
+      background: var(--lime-d); border: 1px solid rgba(200,241,53,.25);
+      color: var(--lime); transition: all .15s;
+    }
+    .jcard:hover .open-btn { background: var(--lime); color: #0c0e14; }
+
+    .dismiss-btn {
+      flex-shrink: 0;
+      width: 40px; border-radius: 0 12px 12px 0;
+      background: var(--card2); border: 1px solid var(--border);
+      border-left: none;
+      color: var(--dim); font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s; opacity: 0;
+    }
+    .jcard-wrap:hover .dismiss-btn { opacity: 1; }
+    .dismiss-btn:hover { background: rgba(255,64,96,.15); color: var(--red); border-color: rgba(255,64,96,.3); }
+
+    /* ── RIGHT COLUMN ── */
+    .right-col {
+      grid-column: 4;
+      grid-row: 2;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .rpanel {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .rpanel.boards { flex: 1; min-height: 0; }
+
+    .rpanel-hdr {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 8px 10px; border-radius: 8px;
-      text-decoration: none; transition: all .12s; cursor: pointer;
+      padding: 16px 20px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0;
     }
-    .brow:hover { background: var(--ink3); }
-    .brow:hover .brow-name { color: var(--lime); }
-    .brow:hover .brow-arrow { transform: translateX(3px); color: var(--lime); }
-    .brow-name { font-size: 11px; font-weight: 600; color: var(--muted); transition: color .12s; }
-    .brow-arrow { font-size: 9px; color: var(--muted2); transition: all .12s; }
+    .rpanel-title { font-size: 13px; font-weight: 700; color: #fff; }
+    .rpanel-sub { font-family: 'Instrument Mono', monospace; font-size: 10px; color: var(--sub); }
 
-    /* ── SOURCES CELL ── */
-    .srcs-cell { display: flex; flex-direction: column; height: 100%; }
-    .srcs-body { flex: 1; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; justify-content: center; }
-    .src-row { display: flex; align-items: center; gap: 8px; }
-    .src-name { font-size: 10px; color: var(--muted); width: 90px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .src-track { flex: 1; height: 3px; background: var(--ink3); border-radius: 2px; overflow: hidden; }
-    .src-fill { height: 100%; background: var(--lime); border-radius: 2px; transition: width 1.2s ease; }
-    .src-n { font-family: 'Instrument Mono', monospace; font-size: 10px; color: var(--muted); width: 16px; text-align: right; }
+    .rpanel-scroll { flex: 1; overflow-y: auto; padding: 6px 8px; }
+    .rpanel-scroll::-webkit-scrollbar { width: 3px; }
+    .rpanel-scroll::-webkit-scrollbar-thumb { background: var(--card3); }
+
+    .blink {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px; border-radius: 8px; cursor: pointer;
+      text-decoration: none; transition: background .12s;
+    }
+    .blink:hover { background: var(--card2); }
+    .blink:hover .blink-name { color: var(--lime); }
+    .blink:hover .blink-arr { color: var(--lime); transform: translateX(3px); }
+    .blink-name { font-size: 13px; font-weight: 600; color: var(--sub); transition: color .12s; }
+    .blink-arr { font-size: 11px; color: var(--dim); transition: all .12s; }
+
+    .src-row { display: flex; align-items: center; gap: 10px; padding: 0 20px 10px; }
+    .src-name { font-size: 11px; color: var(--sub); width: 100px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .src-track { flex: 1; height: 3px; background: var(--card3); border-radius: 2px; overflow: hidden; }
+    .src-fill { height: 100%; background: var(--lime); border-radius: 2px; transition: width 1.2s; }
+    .src-n { font-family: 'Instrument Mono', monospace; font-size: 10px; color: var(--sub); width: 20px; text-align: right; }
+
+    /* ── EMPTY ── */
+    .empty {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 12px; padding: 40px; text-align: center; color: var(--sub);
+    }
+    .empty-ico { font-size: 32px; opacity: .2; }
+    .empty-t { font-size: 18px; font-weight: 700; color: var(--dim); }
+    .empty-s { font-family: 'Instrument Mono', monospace; font-size: 11px; line-height: 1.6; }
   </style>
 </head>
 <body>
@@ -295,127 +303,116 @@
 
   <!-- TOPBAR -->
   <div class="topbar">
-    <div style="display:flex;align-items:center;gap:0">
-      <div class="wordmark">TS<span>.</span>jobs</div>
-      <div class="wm-sub">Command Center</div>
+    <div style="display:flex;align-items:center">
+      <div class="logo">TS<em>.</em>jobs</div>
+      <div class="logo-sub">Command Center</div>
     </div>
-    <div class="top-right">
+    <div class="controls">
       <div class="search">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4a5868" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8896aa" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input id="q" type="text" placeholder="Search roles, companies…" oninput="render()">
       </div>
       <div class="chips">
-        <span class="chip on"    data-f="all"  onclick="filt('all',this)">All</span>
-        <span class="chip"       data-f="new"  onclick="filt('new',this)">New</span>
-        <span class="chip coral" data-f="hot"  onclick="filt('hot',this)">Hot</span>
-        <span class="chip sky"   data-f="ai"   onclick="filt('ai',this)">AI</span>
-        <span class="chip"       data-f="adj"  onclick="filt('adj',this)">Adjacent</span>
+        <span class="chip on"  data-f="all" onclick="setF('all',this)">All</span>
+        <span class="chip"     data-f="new" onclick="setF('new',this)">New</span>
+        <span class="chip c"   data-f="hot" onclick="setF('hot',this)">Hot</span>
+        <span class="chip s"   data-f="ai"  onclick="setF('ai',this)">AI</span>
+        <span class="chip"     data-f="adj" onclick="setF('adj',this)">Adjacent</span>
       </div>
-      <button class="run-btn" onclick="window.open('https://github.com','_blank')">↻ Run Now</button>
+      <button class="run-btn" onclick="window.open('https://github.com/tshorrock/job-tracker/actions','_blank')">↻ Run Now</button>
     </div>
   </div>
 
   <!-- BENTO -->
   <div class="bento">
 
-    <!-- STAT: New Today -->
-    <div class="cell c-stat sc-lime">
-      <div class="stat-cell">
-        <div class="stat-left">
-          <div class="stat-lbl">New Today</div>
-          <div class="stat-num lime" id="s0">—</div>
-          <div class="stat-hint">Since last run</div>
-        </div>
-        <div class="stat-icon">◉</div>
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat lime">
+        <div class="stat-lbl">New Today</div>
+        <div class="stat-n lime" id="s0">—</div>
+        <div class="stat-hint">Since last run</div>
+      </div>
+      <div class="stat coral">
+        <div class="stat-lbl">High Match</div>
+        <div class="stat-n coral" id="s1">—</div>
+        <div class="stat-hint">Score 7+/10</div>
+      </div>
+      <div class="stat sky">
+        <div class="stat-lbl">Total Tracked</div>
+        <div class="stat-n sky" id="s2">—</div>
+        <div class="stat-hint">Rolling 300</div>
+      </div>
+      <div class="stat lav">
+        <div class="stat-lbl">Showing</div>
+        <div class="stat-n" style="color:var(--lav)" id="s3">—</div>
+        <div class="stat-hint">After filters</div>
       </div>
     </div>
 
-    <!-- STAT: High Match -->
-    <div class="cell c-stat sc-coral">
-      <div class="stat-cell">
-        <div class="stat-left">
-          <div class="stat-lbl">High Match</div>
-          <div class="stat-num coral" id="s1">—</div>
-          <div class="stat-hint">Score ≥ 5</div>
-        </div>
-        <div class="stat-icon">◆</div>
+    <!-- STATUS -->
+    <div class="status-card">
+      <div class="status-lbl">System Status</div>
+      <div class="status-dot">
+        <span class="dot"></span>
+        <span class="status-val" id="run-status">Checking…</span>
       </div>
+      <div class="status-time" id="run-time">—</div>
     </div>
 
-    <!-- STAT: Total -->
-    <div class="cell c-stat sc-sky">
-      <div class="stat-cell">
-        <div class="stat-left">
-          <div class="stat-lbl">Total Tracked</div>
-          <div class="stat-num sky" id="s2">—</div>
-          <div class="stat-hint">Rolling 300</div>
-        </div>
-        <div class="stat-icon">◈</div>
+    <!-- JOBS PANEL -->
+    <div class="jobs-panel">
+      <div class="panel-hdr">
+        <span class="panel-title">Matching Roles</span>
+        <span class="panel-count" id="rcount">—</span>
       </div>
-    </div>
-
-    <!-- META: Last run -->
-    <div class="cell c-meta">
-      <div class="meta-cell">
-        <div class="meta-lbl">System Status</div>
-        <div class="meta-dot"><span class="live-dot"></span><span class="meta-val" id="run-status">Checking…</span></div>
-        <div style="font-family:'Instrument Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;" id="run-time">—</div>
-      </div>
-    </div>
-
-    <!-- JOBS (big) -->
-    <div class="cell c-jobs">
-      <div class="jobs-cell">
-        <div class="jobs-hdr">
-          <span class="jobs-title">Matching Roles</span>
-          <span class="jobs-count" id="rcount">—</span>
-        </div>
-        <div class="jobs-scroll" id="jlist">
-          <div class="empty-state">
-            <div class="empty-ico">⬡</div>
-            <div class="empty-t">No jobs yet</div>
-            <div class="empty-s">Go to GitHub Actions → Daily Job Scraper → Run workflow</div>
-          </div>
+      <div class="jobs-scroll" id="jlist">
+        <div class="empty">
+          <div class="empty-ico">◈</div>
+          <div class="empty-t">No jobs yet</div>
+          <div class="empty-s">Add your ANTHROPIC_API_KEY secret in GitHub<br>then go to Actions → Daily Job Scraper → Run workflow</div>
         </div>
       </div>
     </div>
 
-    <!-- BOARDS -->
-    <div class="cell c-boards">
-      <div class="boards-cell">
-        <div class="panel-hdr">
-          <span class="panel-title">Manual Boards</span>
-          <span class="panel-sub">Check daily</span>
-        </div>
-        <div class="boards-scroll" id="boards"></div>
-      </div>
-    </div>
+    <!-- RIGHT COL -->
+    <div class="right-col">
 
-    <!-- SOURCES -->
-    <div class="cell c-srcs">
-      <div class="srcs-cell">
-        <div class="panel-hdr">
-          <span class="panel-title">Sources</span>
-          <span class="panel-sub" id="src-last">Live feeds</span>
+      <!-- BOARDS -->
+      <div class="rpanel boards">
+        <div class="rpanel-hdr">
+          <span class="rpanel-title">Manual Boards</span>
+          <span class="rpanel-sub">Check daily</span>
         </div>
-        <div class="srcs-body" id="srcs"></div>
+        <div class="rpanel-scroll" id="boards"></div>
       </div>
-    </div>
 
+      <!-- SOURCES -->
+      <div class="rpanel">
+        <div class="rpanel-hdr">
+          <span class="rpanel-title">Sources</span>
+          <span class="rpanel-sub">Live feeds</span>
+        </div>
+        <div style="padding-top:10px" id="srcs"></div>
+      </div>
+
+    </div>
   </div>
 </div>
 
 <script>
 const TODAY = new Date().toISOString().slice(0,10);
 let jobs=[], meta={}, activeF='all';
+let dismissed = new Set(JSON.parse(localStorage.getItem('ts_dismissed')||'[]'));
 
-const BOARDS = [
+const BOARDS=[
   {name:'LinkedIn — CD Remote',        url:'https://www.linkedin.com/jobs/search/?keywords=creative+director+AI&f_WT=2&f_TPR=r86400'},
   {name:'LinkedIn — Head of Creative', url:'https://www.linkedin.com/jobs/search/?keywords=head+of+creative+remote&f_WT=2'},
+  {name:'LinkedIn — VP Creative',      url:'https://www.linkedin.com/jobs/search/?keywords=vp+creative+remote&f_WT=2'},
   {name:'Built In — Remote CD',        url:'https://builtin.com/jobs/remote/design-ux/search/creative-director'},
   {name:'Remote Rocketship',           url:'https://www.remoterocketship.com/jobs/creative-director/'},
-  {name:'FlexJobs',                    url:'https://www.flexjobs.com/remote-jobs/creative-director'},
-  {name:'Wellfound (AngelList)',       url:'https://wellfound.com/role/r/creative-director'},
+  {name:'FlexJobs CD',                 url:'https://www.flexjobs.com/remote-jobs/creative-director'},
+  {name:'Wellfound (AngelList)',        url:'https://wellfound.com/role/r/creative-director'},
   {name:'JustRemote Design',           url:'https://justremote.co/remote-design-jobs'},
   {name:'Working Nomads',              url:'https://www.workingnomads.com/jobs?category=design'},
   {name:'Roboflow — CD Role',          url:'https://jobs.ashbyhq.com/roboflow'},
@@ -426,146 +423,133 @@ const BOARDS = [
   {name:'Toptal Creative',             url:'https://www.toptal.com/creative'},
   {name:'Daily Remote',                url:'https://dailyremote.com/remote-creative-director-jobs'},
   {name:'Remote Circle',               url:'https://remotecircle.com'},
+  {name:'Hubstaff Talent',             url:'https://hubstafftalent.net/search/jobs?q=creative+director'},
 ];
 
-// Adjacent role keywords — roles Travis would be great at but aren't traditional CDs
-const ADJ_KEYWORDS = [
-  'chief marketing officer','cmo','vp marketing','vp of marketing',
-  'head of marketing','director of marketing',
-  'ai producer','ai production director','ai content director',
-  'creative strategist','brand strategist','head of brand strategy',
-  'director of content','content director','vp content',
-  'head of content','chief content officer',
-  'creative consultant','fractional cdo',
-  'head of growth creative','growth creative',
-  'director of brand','vp brand',
-];
+const ADJ=['chief marketing officer','cmo','vp marketing','vp of marketing','head of marketing',
+  'ai producer','ai production director','creative strategist','brand strategist',
+  'head of content','vp content','chief content','creative consultant','fractional cdo',
+  'director of brand','vp brand'];
 
-function isAdj(j) {
-  const t = (j.title||'').toLowerCase();
-  return ADJ_KEYWORDS.some(k => t.includes(k));
-}
-function isNew(j) { return j.added && j.added.startsWith(TODAY); }
-function isHot(j) { return (j.score||0) >= 5; }
-function isAI(j)  { return /ai|generative|midjourney|runway|sora/i.test((j.title||'')+(j.description||'')); }
+function isAdj(j){ return ADJ.some(k=>(j.title||'').toLowerCase().includes(k)); }
+function isNew(j){ return j.added&&j.added.startsWith(TODAY); }
+function isHot(j){ return (j.score||0)>=7; }
+function isAI(j) { return /ai|generative|midjourney|runway|sora/i.test((j.title||'')+(j.description||'')); }
 
-async function boot() {
-  try {
-    const [jr,mr] = await Promise.all([fetch('data/jobs.json'),fetch('data/meta.json')]);
-    jobs = await jr.json();
-    meta = await mr.json();
-  } catch(e) { jobs=[]; meta={updated:'never',new_count:0,total_count:0,boards:[]}; }
-  updateMeta(); render(); renderSrcs(); renderBoards();
+async function boot(){
+  try{
+    const[jr,mr]=await Promise.all([fetch('data/jobs.json'),fetch('data/meta.json')]);
+    jobs=await jr.json(); meta=await mr.json();
+  }catch(e){ jobs=[]; meta={updated:'never',new_count:0,total_count:0,boards:[]}; }
+  updateMeta(); render(); renderBoards(); renderSrcs();
 }
 
-function updateMeta() {
-  const upd = meta.updated && meta.updated!=='never';
-  document.getElementById('run-status').textContent = upd ? 'Active · Running daily' : 'Not yet run';
-  document.getElementById('run-time').textContent   = upd
-    ? 'Last: ' + new Date(meta.updated).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})
-    : 'Go to GitHub Actions → Run workflow';
-
-  const newN = meta.new_count||0;
-  const tot  = meta.total_count||jobs.length||0;
-  const hot  = jobs.filter(j=>isHot(j)).length;
-
-  document.getElementById('s0').textContent = newN;
-  document.getElementById('s1').textContent = hot;
-  document.getElementById('s2').textContent = tot;
+function updateMeta(){
+  const ok=meta.updated&&meta.updated!=='never';
+  document.getElementById('run-status').textContent=ok?'Active · Running daily':'Not yet run';
+  document.getElementById('run-time').textContent=ok
+    ?'Last: '+new Date(meta.updated).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})
+    :'Add ANTHROPIC_API_KEY secret → Run workflow';
+  document.getElementById('s0').textContent=meta.new_count||0;
+  document.getElementById('s1').textContent=jobs.filter(j=>isHot(j)).length;
+  document.getElementById('s2').textContent=meta.total_count||jobs.length||0;
 }
 
-let dismissed = new Set(JSON.parse(localStorage.getItem('ts_dismissed') || '[]'));
-
-function dismiss(id, e) {
-  e.preventDefault(); e.stopPropagation();
-  dismissed.add(id);
-  localStorage.setItem('ts_dismissed', JSON.stringify([...dismissed]));
-  render();
-}
-
-function getJobs() {
-  const q = (document.getElementById('q').value||'').toLowerCase();
-  let r = [...jobs].filter(j => !dismissed.has(j.id || make_id(j.title, j.company)));
-  if(activeF==='new') r = r.filter(j=>isNew(j));
-  if(activeF==='hot') r = r.filter(j=>isHot(j));
-  if(activeF==='ai')  r = r.filter(j=>isAI(j));
-  if(activeF==='adj') r = r.filter(j=>isAdj(j));
-  if(q) r = r.filter(j=>(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q)||(j.description||'').toLowerCase().includes(q));
+function getFiltered(){
+  const q=(document.getElementById('q').value||'').toLowerCase();
+  let r=[...jobs].filter(j=>!dismissed.has(j.id||''));
+  if(activeF==='new') r=r.filter(j=>isNew(j));
+  if(activeF==='hot') r=r.filter(j=>isHot(j));
+  if(activeF==='ai')  r=r.filter(j=>isAI(j));
+  if(activeF==='adj') r=r.filter(j=>isAdj(j));
+  if(q) r=r.filter(j=>(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q));
   return r.sort((a,b)=>(b.score||0)-(a.score||0));
 }
 
-function make_id(title, company) {
-  // Simple client-side ID matching server-side logic
-  return (title||'').toLowerCase().trim().slice(0,20) + (company||'').toLowerCase().trim().slice(0,20);
+function dismiss(id,e){
+  e.preventDefault(); e.stopPropagation();
+  dismissed.add(id);
+  localStorage.setItem('ts_dismissed',JSON.stringify([...dismissed]));
+  render();
 }
 
-function render() {
-  const list = document.getElementById('jlist');
-  const arr  = getJobs();
-  document.getElementById('rcount').textContent = arr.length + ' roles';
+function render(){
+  const list=document.getElementById('jlist');
+  const arr=getFiltered();
+  document.getElementById('rcount').textContent=arr.length+' roles';
+  document.getElementById('s3').textContent=arr.length;
 
-  if(!arr.length) {
-    list.innerHTML = `<div class="empty-state"><div class="empty-ico">◇</div><div class="empty-t">${jobs.length?'No matches':'No jobs yet'}</div><div class="empty-s">${jobs.length?'Try a different filter':'Trigger the GitHub Action first'}</div></div>`;
+  if(!arr.length){
+    list.innerHTML=`<div class="empty">
+      <div class="empty-ico">◇</div>
+      <div class="empty-t">${jobs.length?'No matches':'No jobs yet'}</div>
+      <div class="empty-s">${jobs.length?'Try a different filter or clear dismissed jobs':'Trigger the GitHub Action to populate'}</div>
+    </div>`;
     return;
   }
 
-  list.innerHTML = arr.map((j,i)=>{
-    const hot  = isHot(j);
-    const adj  = isAdj(j);
-    const ai   = isAI(j);
-    const newJ = isNew(j);
-    const cls  = hot ? 'hot' : adj ? 'adj' : '';
-    const sc   = Math.min(j.score||0,10);
-    const pips = Array.from({length:5},(_,k)=>{
-      const on = k < Math.round(sc/2);
-      return `<div class="pip ${on?(hot?'hot':adj?'adj':'on'):''}"></div>`;
-    }).join('');
-
-    const tags = [
-      `<span class="jtag jt-src">${j.source||''}</span>`,
-      newJ ? `<span class="jtag jt-new">new</span>` : '',
-      ai   ? `<span class="jtag jt-ai">AI</span>`   : '',
-      hot  ? `<span class="jtag jt-hot">hot</span>` : '',
-      adj  ? `<span class="jtag jt-adj">adjacent</span>` : '',
+  list.innerHTML=arr.map((j,i)=>{
+    const hot=isHot(j), adj=isAdj(j), ai=isAI(j), nw=isNew(j);
+    const sc=j.score||0;
+    const scoreClass=sc>=7?'high':sc>=4?'mid':'low';
+    const cls=hot?'hot':adj?'adj':'';
+    const tags=[
+      `<span class="tag t-src">${j.source||''}</span>`,
+      nw?`<span class="tag t-new">new</span>`:'',
+      ai?`<span class="tag t-ai">AI</span>`:'',
+      hot?`<span class="tag t-hot">hot</span>`:'',
+      adj?`<span class="tag t-adj">adjacent</span>`:'',
     ].filter(Boolean).join('');
+    const reason=j.score_reason?`<div class="jcard-reason">${j.score_reason}</div>`:'';
 
-    const jid = j.id || (j.title+j.company).toLowerCase().replace(/\s/g,'').slice(0,32);
-
-    return `<div class="jrow-wrap" style="animation-delay:${Math.min(i*.03,.5)}s">
-      <a class="jrow ${cls}" href="${j.url}" target="_blank" rel="noopener" style="flex:1">
-        <div class="jrow-left">
-          <div class="jrow-title">${j.title||'Untitled'}</div>
-          <div class="jrow-meta"><span class="jco">${j.company||'Unknown'}</span><span class="jdot">·</span>${tags}</div>
+    return `<div class="jcard-wrap" style="animation-delay:${Math.min(i*.025,.4)}s">
+      <a class="jcard ${cls}" href="${j.url}" target="_blank" rel="noopener">
+        <div class="jcard-left">
+          <div class="jcard-title">${j.title||'Untitled'}</div>
+          <div class="jcard-meta">
+            <span class="jcard-co">${j.company||'Unknown'}</span>
+            <span class="sep">·</span>${tags}
+          </div>
+          ${reason}
         </div>
-        <div class="jrow-right">
-          <div class="score-pips">${pips}</div>
-          <div class="go-btn">Open →</div>
+        <div class="jcard-right">
+          <div class="score-wrap">
+            <div class="score-num ${scoreClass}">${sc}<span style="font-size:13px;opacity:.5">/10</span></div>
+            <div class="score-lbl">MATCH</div>
+          </div>
+          <div class="open-btn">Open →</div>
         </div>
       </a>
-      <button class="dismiss-btn" onclick="dismiss('${jid}',event)" title="Remove this job">✕</button>
+      <button class="dismiss-btn" onclick="dismiss('${j.id||''}',event)" title="Dismiss">✕</button>
     </div>`;
   }).join('');
 }
 
-function renderSrcs() {
-  const counts = {};
-  jobs.forEach(j=>{ counts[j.source||'Other']=(counts[j.source||'Other']||0)+1; });
-  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  const max = sorted[0]?.[1]||1;
-  document.getElementById('srcs').innerHTML = sorted.length
-    ? sorted.map(([s,n])=>`<div class="src-row"><span class="src-name" title="${s}">${s}</span><div class="src-track"><div class="src-fill" style="width:${Math.round(n/max*100)}%"></div></div><span class="src-n">${n}</span></div>`).join('')
-    : `<div class="src-row"><span class="src-name" style="color:var(--muted2)">No data yet</span></div>`;
+function renderBoards(){
+  const list=meta.boards?.length?meta.boards:BOARDS;
+  document.getElementById('boards').innerHTML=list.map(b=>
+    `<a class="blink" href="${b.url}" target="_blank" rel="noopener">
+      <span class="blink-name">${b.name}</span>
+      <span class="blink-arr">→</span>
+    </a>`).join('');
 }
 
-function renderBoards() {
-  const list = meta.boards?.length ? meta.boards : BOARDS;
-  document.getElementById('boards').innerHTML = list.map(b=>
-    `<a class="brow" href="${b.url}" target="_blank" rel="noopener"><span class="brow-name">${b.name}</span><span class="brow-arrow">→</span></a>`
-  ).join('');
+function renderSrcs(){
+  const counts={};
+  jobs.forEach(j=>{counts[j.source||'Other']=(counts[j.source||'Other']||0)+1;});
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const max=sorted[0]?.[1]||1;
+  document.getElementById('srcs').innerHTML=sorted.length
+    ?sorted.map(([s,n])=>`<div class="src-row">
+        <span class="src-name" title="${s}">${s}</span>
+        <div class="src-track"><div class="src-fill" style="width:${Math.round(n/max*100)}%"></div></div>
+        <span class="src-n">${n}</span>
+      </div>`).join('')
+    :`<div class="src-row"><span class="src-name" style="color:var(--dim)">No data yet</span></div>`;
 }
 
-function filt(f, el) {
-  activeF = f;
+function setF(f,el){
+  activeF=f;
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');
   render();
