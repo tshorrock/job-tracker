@@ -84,23 +84,27 @@ Creative Group Head at Havas (Volvo Canada). Deep AI fluency: Midjourney, Runway
 ComfyUI, Claude Code. Integrated campaigns, TV production, OOH, digital, CRM, packaging.
 Built creative departments from scratch. Mentored large teams.
 
-Hard requirements for any score above 0:
-- Must explicitly mention REMOTE as an option (fully remote, remote-first, remote or hybrid)
-  If no mention of remote = SCORE 0 immediately
-- EST or CST timezone. PST only = SCORE 0
-- Senior level. Junior/coordinator = SCORE 0
-- NOT engineering, UX, product design, sales
+IMPORTANT: All jobs fed to you come from remote-only job boards (We Work Remotely, Remote OK, 
+Himalayas etc.) so assume remote is available unless the description EXPLICITLY says 
+on-site only, must be in office, or hybrid with mandatory office days. Do NOT score 0 
+just because the word "remote" isn't in the description.
 
-You must also assign a CATEGORY:
-- CORE: Direct CD/creative leadership roles (CD, ACD, Head of Creative, VP Creative, Head of Brand)
-- ADJACENT: Senior creative-adjacent roles Travis could excel at (Design Director, CMO, AI Director, Creative Strategist, Head of Content, Graphic Design Director)
-- WILDCARD: Unusual, unexpected, or surprising remote roles that don't fit neat categories but Travis might find genuinely interesting or fun — think outside the box, things he'd never consider but might love
+Score 0 ONLY for:
+- Explicitly on-site/in-office with no remote option stated
+- Explicitly PST-only timezone with no flexibility
+- Clearly junior, intern, or coordinator level
+- Engineering, UX design, product design, or pure sales roles
 
-Score 8-10: Senior creative leadership, remote confirmed, strong Travis fit, exciting company
-Score 5-7: Good fit, most criteria met, some ambiguity
-Score 3-4: Interesting stretch, adjacent skills, unclear requirements  
-Score 1-2: Wrong fit, probably not remote, or very weak match
-Score 0: Auto-disqualify — no remote mention, PST only, UX/engineering/sales/junior
+You must assign a CATEGORY:
+- CORE: CD, ACD, Head of Creative, VP Creative, Head of Brand — Travis's direct lane
+- ADJACENT: Design Director, CMO, AI Director, Creative Strategist, Head of Content — roles he'd excel at
+- WILDCARD: Unusual remote roles outside his normal scope but potentially interesting
+
+Score 8-10: Senior creative leadership, strong Travis fit, great company
+Score 5-7: Good fit, right level, most criteria met
+Score 3-4: Stretch role or some ambiguity but worth seeing
+Score 1-2: Weak match but not disqualified
+Score 0: Explicitly on-site, PST-only, junior, or wrong field entirely
 
 Respond ONLY with JSON: {"score": 7, "category": "CORE", "reason": "one punchy sentence"}
 """
