@@ -570,6 +570,7 @@ async function triggerRun() {
         btn.style.opacity = '1';
         btn.style.background = '';
       }, 3000);
+      setTimeout(() => { boot(); }, 90000);
     } else {
       // Needs auth — fall back to opening Actions page
       window.open('https://github.com/tshorrock/job-tracker/actions/workflows/daily_scrape.yml','_blank');
@@ -588,7 +589,7 @@ async function triggerRun() {
 // ── BOOT ──────────────────────────────────────────────────────────────────
 async function boot() {
   try {
-    const [jr, mr] = await Promise.all([fetch('data/jobs.json'), fetch('data/meta.json')]);
+    const [jr, mr] = await Promise.all([fetch('data/jobs.json?t=' + Date.now()), fetch('data/meta.json?t=' + Date.now())]);
     jobs = await jr.json();
     meta = await mr.json();
   } catch(e) {
@@ -597,6 +598,7 @@ async function boot() {
   updateMeta();
   countUp();
   render();
+  setTimeout(() => { boot(); }, 60000);
 }
 
 // ── COUNT-UP ANIMATION (brief: 1–2s duration) ─────────────────────────────
