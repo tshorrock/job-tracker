@@ -1,89 +1,79 @@
 {
-  "last_run": "2026-04-10T17:09:45.076619+00:00",
-  "new_count": 1,
-  "total_count": 215,
-  "sources": [
-    "We Work Remotely",
-    "Remote OK (Design)",
-    "Remote OK (Marketing)",
-    "Himalayas",
-    "Remotive",
-    "Jobicy",
-    "Arbeitnow",
-    "Authentic Jobs"
-  ],
-  "manual_boards": [
+  "updated": "2026-04-10T17:14:09.881280+00:00",
+  "new_count": 4,
+  "total_count": 219,
+  "boards": [
     {
-      "name": "LinkedIn",
-      "url": "https://www.linkedin.com/jobs/search/?keywords=creative%20director%20remote&f_WT=2"
+      "name": "LinkedIn \u2014 CD Remote",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=creative+director+AI&f_WT=2&f_TPR=r86400&location=United+States"
     },
     {
-      "name": "Built In",
-      "url": "https://builtin.com/jobs/remote/design?search=creative+director"
+      "name": "LinkedIn \u2014 Head of Creative",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=head+of+creative+remote&f_WT=2&f_TPR=r86400"
     },
     {
-      "name": "FlexJobs",
-      "url": "https://www.flexjobs.com/search?search=creative+director&tele_level%5B%5D=All+Telecommuting"
+      "name": "Built In \u2014 Remote CD",
+      "url": "https://builtin.com/jobs/remote/design-ux/search/creative-director"
     },
     {
-      "name": "Wellfound",
+      "name": "Remote Rocketship",
+      "url": "https://www.remoterocketship.com/jobs/creative-director/"
+    },
+    {
+      "name": "FlexJobs CD",
+      "url": "https://www.flexjobs.com/remote-jobs/creative-director"
+    },
+    {
+      "name": "Wellfound (AngelList)",
       "url": "https://wellfound.com/role/r/creative-director"
     },
     {
-      "name": "Dribbble",
-      "url": "https://dribbble.com/jobs?keyword=creative+director&location=Anywhere"
-    },
-    {
-      "name": "Working Not Working",
-      "url": "https://workingnotworking.com/jobs?q=creative+director"
-    },
-    {
-      "name": "AIGA",
-      "url": "https://designjobs.aiga.org/#/jobs?keywords=creative+director"
-    },
-    {
-      "name": "The Muse",
-      "url": "https://www.themuse.com/search?keyword=creative+director&work-flexibility=remote"
-    },
-    {
-      "name": "Contra",
-      "url": "https://contra.com/opportunity?query=creative+director"
-    },
-    {
-      "name": "Toptal",
-      "url": "https://www.toptal.com/designers"
-    },
-    {
-      "name": "Roboflow",
-      "url": "https://roboflow.com/careers"
-    },
-    {
-      "name": "Superside",
-      "url": "https://careers.superside.com/"
-    },
-    {
-      "name": "Curious Refuge",
-      "url": "https://www.curiousrefuge.com/ai-jobs"
-    },
-    {
-      "name": "Creatively",
-      "url": "https://creatively.life/jobs?q=creative+director"
-    },
-    {
-      "name": "We Work Remotely (manual)",
-      "url": "https://weworkremotely.com/remote-jobs/search?term=creative+director"
-    },
-    {
-      "name": "Remote.co",
-      "url": "https://remote.co/remote-jobs/search/?search_keywords=creative+director"
-    },
-    {
-      "name": "JustRemote",
+      "name": "JustRemote Design",
       "url": "https://justremote.co/remote-design-jobs"
     },
     {
-      "name": "Pangian",
-      "url": "https://pangian.com/job-travel-remote/?search=creative+director"
+      "name": "Working Nomads Design",
+      "url": "https://www.workingnomads.com/jobs?category=design"
+    },
+    {
+      "name": "Roboflow \u2014 CD Open Role",
+      "url": "https://jobs.ashbyhq.com/roboflow"
+    },
+    {
+      "name": "Superside \u2014 AI CD Role",
+      "url": "https://careers.superside.com/jobs/ai-creative-director"
+    },
+    {
+      "name": "Curious Refuge AI Jobs",
+      "url": "https://curiousrefuge.com/ai-jobs-board"
+    },
+    {
+      "name": "The AI Job Board",
+      "url": "https://theaijobboard.com"
+    },
+    {
+      "name": "Contra \u2014 Fractional",
+      "url": "https://contra.com/opportunities"
+    },
+    {
+      "name": "Toptal Creative",
+      "url": "https://www.toptal.com/creative"
+    },
+    {
+      "name": "Hubstaff Talent",
+      "url": "https://hubstafftalent.net/search/jobs?q=creative+director"
+    },
+    {
+      "name": "Daily Remote",
+      "url": "https://dailyremote.com/remote-creative-director-jobs"
+    },
+    {
+      "name": "Remote Circle",
+      "url": "https://remotecircle.com"
+    },
+    {
+      "name": "Remote.co",
+      "url": "https://remote.co/remote-jobs/design/"
     }
   ]
 }
