@@ -1,130 +1,124 @@
 #!/usr/bin/env python3
 """
 Travis Shorrock — AI-Powered Job Scraper
-Runs daily via GitHub Actions (7AM EST, Mon-Fri).
-
-Two-pass system:
-  Pass 1: Broad keyword fetch from all sources (catches everything)
-  Pass 2: Claude scores each job 0-10 for Travis specifically
-  
-Cost: ~$0.05-0.10/day max. Claude only scores jobs that pass basic title filter.
+Three category lanes:
+  CORE     — CD, ACD, Head of Creative, Brand Director, VP Creative
+  ADJACENT — Graphic Design Director, Creative Strategist, CMO, AI Director, etc.
+  WILDCARD — Unusual remote roles Claude thinks Travis would find interesting
 """
 
-import json, os, re, hashlib, smtplib, urllib.request, urllib.parse, time
+import json, os, re, hashlib, smtplib, urllib.request, time
 from datetime import datetime, timezone
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pathlib import Path
 
-# ─── CONFIG ────────────────────────────────────────────────────────────────────
-
 DATA_FILE  = Path("data/jobs.json")
 SEEN_FILE  = Path("data/seen_ids.json")
 META_FILE  = Path("data/meta.json")
 
-# Broad first-pass title filter — wide net, Claude handles precision
-BROAD_TITLES = [
-    # Core CD
-    "creative director", "head of creative", "creative lead",
-    "associate creative director", "group creative director",
-    "executive creative", "chief creative", "global creative director",
-    # Brand
-    "head of brand", "brand director", "vp brand", "director of brand",
-    "brand creative", "brand strategist",
-    # VP / C-suite creative
-    "vp creative", "vp of creative", "svp creative",
-    "chief marketing officer", "cmo",
-    "vp marketing", "vp of marketing", "head of marketing",
-    # AI / production
-    "ai director", "ai creative", "ai producer", "ai production director",
-    "generative creative",
-    # Strategy / content leadership
-    "creative strategist", "head of content", "vp content",
-    "chief content officer", "director of creative",
-    "fractional creative", "fractional cdo",
-    # Design leadership (senior only — graphic/brand CD level)
-    "design director",     # brand-side design director OK
-    "head of design",      # senior enough to be relevant
+# ─── BROAD TITLE FILTER (wide net — Claude handles precision) ──────────────────
+
+CORE_TITLES = [
+    "creative director", "head of creative", "associate creative director",
+    "group creative director", "executive creative director",
+    "vp creative", "vp of creative", "svp creative", "evp creative",
+    "chief creative officer", "cco",
+    "fractional creative director", "ai creative director",
+    "head of brand", "head of brand design", "head of brand creative",
+    "brand creative director", "brand director",
+    "vp brand", "director of brand", "director of creative",
+    "global creative director",
 ]
 
-# Hard excludes — NEVER pass these through regardless of anything else
+ADJACENT_TITLES = [
+    "design director", "head of design",
+    "graphic design director", "creative strategist",
+    "brand strategist", "head of marketing",
+    "vp marketing", "vp of marketing", "chief marketing officer", "cmo",
+    "head of content", "vp content", "chief content officer",
+    "ai director", "ai creative", "ai producer", "ai production director",
+    "generative creative", "fractional cdo",
+    "creative lead", "head of growth creative",
+]
+
+# Wildcard — unusual roles Claude will evaluate for Travis interest
+WILDCARD_TITLES = [
+    "chief storyteller", "head of culture",
+    "creative technologist", "experience director",
+    "director of imagination", "head of innovation",
+    "brand experience director", "creative producer",
+    "content director", "editorial director",
+    "director of strategy", "chief of staff",
+    "head of studio", "studio director",
+    "director of video", "head of video",
+    "narrative director", "world builder",
+    "creative entrepreneur", "head of partnerships",
+    "director of community", "head of community",
+]
+
+ALL_BROAD = CORE_TITLES + ADJACENT_TITLES + WILDCARD_TITLES
+
+# Hard excludes — never pass through regardless
 HARD_EXCLUDES = [
-    # Engineering / tech
     "engineer", "engineering", "developer", "software", "backend",
     "frontend", "fullstack", "devops", "data scientist", "machine learning",
-    "infrastructure", "platform engineer", "security engineer",
-    # Wrong design disciplines
+    "security engineer", "platform engineer",
     "product designer", "ux designer", "ui designer", "ui/ux",
-    "product design", "user experience designer", "interaction designer",
-    # Video / production (individual contributor, not director)
+    "user experience designer", "interaction designer",
     "video editor", "video producer", "motion designer", "animator",
-    "cinematographer", "videographer", "editor",
-    # Sales / business
-    "account executive", "account manager", "account director",
-    "sales director", "sales manager", "business development",
-    "account management", "technical account", "revenue manager",
-    # Finance / ops / other
+    "cinematographer", "videographer",
+    "account executive", "account manager", "sales director", "sales manager",
+    "business development", "account management", "technical account",
     "finance director", "operations director", "medical director",
-    "clinical director", "data director", "analytics director",
-    "technical director",
-    # Junior
-    "junior", "intern", "entry level", "coordinator",
-    "assistant creative",
+    "clinical director", "data director",
+    "junior", "intern", "entry level", "coordinator", "assistant creative",
 ]
 
-# Travis's profile for Claude scoring
+# ─── TRAVIS PROFILE FOR CLAUDE ─────────────────────────────────────────────────
+
 TRAVIS_PROFILE = """
-Travis Shorrock is a Creative Director with 25+ years experience looking for FULLY REMOTE work.
-Background: National CD at T&Pm (Toyota Canada, TELUS, 10 yrs), CD at tms (Nissan NA, Diageo), 
-Creative Group Head at Havas (Volvo Canada). Deep AI tools expertise: Midjourney, Runway, 
-Higgsfield, ComfyUI, Claude Code. Currently in Toronto, moving to Costa Rica Aug 2026.
+Travis Shorrock — Creative Director, 25+ years. Moving to Costa Rica Aug 2026.
+Background: National CD at T&Pm (Toyota Canada, TELUS 10yrs), CD at tms (Nissan NA, Diageo),
+Creative Group Head at Havas (Volvo Canada). Deep AI fluency: Midjourney, Runway, Higgsfield,
+ComfyUI, Claude Code. Integrated campaigns, TV production, OOH, digital, CRM, packaging.
+Built creative departments from scratch. Mentored large teams.
 
-Requirements (ALL must be met for a high score):
-- REMOTE WORK: The job must explicitly mention "remote" as an option. 
-  "Fully remote", "100% remote", "remote-first", "remote or hybrid" all pass.
-  "Hybrid or remote" passes. "Remote with occasional travel" passes.
-  If the posting does NOT mention remote at all = score 0.
-  If it says hybrid only with no remote option = score 0.
-  If it says on-site or in-office with no remote option = score 0.
-- EST or CST timezone overlap only. Score 0 if explicitly PST-only.
-- $150K+ USD. Score lower if salary listed and clearly below this.
-- Senior creative leadership level — CD, ACD, Head of, VP, Director minimum.
-- Creative/brand work — NOT engineering, UX, product design, or sales.
+Hard requirements for any score above 0:
+- Must explicitly mention REMOTE as an option (fully remote, remote-first, remote or hybrid)
+  If no mention of remote = SCORE 0 immediately
+- EST or CST timezone. PST only = SCORE 0
+- Senior level. Junior/coordinator = SCORE 0
+- NOT engineering, UX, product design, sales
 
-Travis's strengths to match against:
-- 25 years brand, campaign, integrated creative (Toyota, TELUS, Diageo, Nissan, Volvo)
-- Proven at scale — 1000+ assets/month, 280+ dealerships, global accounts
-- Deep AI tools: Midjourney, Runway, Higgsfield, ComfyUI, Claude Code
-- TV production, OOH, digital, CRM, packaging — full integrated creative
-- Team builder and mentor — built departments from scratch
+You must also assign a CATEGORY:
+- CORE: Direct CD/creative leadership roles (CD, ACD, Head of Creative, VP Creative, Head of Brand)
+- ADJACENT: Senior creative-adjacent roles Travis could excel at (Design Director, CMO, AI Director, Creative Strategist, Head of Content, Graphic Design Director)
+- WILDCARD: Unusual, unexpected, or surprising remote roles that don't fit neat categories but Travis might find genuinely interesting or fun — think outside the box, things he'd never consider but might love
 
-AUTOMATIC SCORE 0:
-- Explicitly on-site or mandatory in-office (not just "office available")
-- PST-only timezone
-- Engineering, sales, UX, product design, data roles
-- Junior, intern, coordinator level
+Score 8-10: Senior creative leadership, remote confirmed, strong Travis fit, exciting company
+Score 5-7: Good fit, most criteria met, some ambiguity
+Score 3-4: Interesting stretch, adjacent skills, unclear requirements  
+Score 1-2: Wrong fit, probably not remote, or very weak match
+Score 0: Auto-disqualify — no remote mention, PST only, UX/engineering/sales/junior
 
-Score 8-10: Senior creative leadership, remote-friendly, right pay, strong Travis fit
-Score 5-7: Good fit, most criteria met, some ambiguity on pay or remote status
-Score 3-4: Interesting stretch — adjacent role or unclear requirements
-Score 1-2: Wrong field, wrong level, or likely on-site
-Score 0: Disqualified per above rules
+Respond ONLY with JSON: {"score": 7, "category": "CORE", "reason": "one punchy sentence"}
 """
 
-# ─── SOURCES ───────────────────────────────────────────────────────────────────
+# ─── SOURCES ──────────────────────────────────────────────────────────────────
 
 SOURCES = [
-    {"name": "We Work Remotely",   "url": "https://weworkremotely.com/remote-jobs.rss",              "type": "rss"},
-    {"name": "Remote OK Design",   "url": "https://remoteok.com/remote-design-jobs.json",             "type": "remoteok"},
-    {"name": "Remote OK Marketing","url": "https://remoteok.com/remote-marketing-jobs.json",          "type": "remoteok"},
-    {"name": "Remote OK Exec",     "url": "https://remoteok.com/remote-exec-jobs.json",               "type": "remoteok"},
-    {"name": "Himalayas",          "url": "https://himalayas.app/jobs/rss",                           "type": "rss"},
-    {"name": "Remotive",           "url": "https://remotive.com/api/remote-jobs?limit=100",           "type": "remotive"},
-    {"name": "Jobicy",             "url": "https://jobicy.com/?feed=job_feed&job_types=full-time",    "type": "rss"},
-    {"name": "Arbeitnow",          "url": "https://www.arbeitnow.com/api/job-board-api",              "type": "arbeitnow"},
-    {"name": "Authentic Jobs",     "url": "https://authenticjobs.com/feed/",                          "type": "rss"},
-    {"name": "WWR Design",         "url": "https://weworkremotely.com/categories/remote-design-jobs.rss", "type": "rss"},
-    {"name": "WWR Marketing",      "url": "https://weworkremotely.com/categories/remote-marketing-jobs.rss","type": "rss"},
+    {"name": "We Work Remotely",    "url": "https://weworkremotely.com/remote-jobs.rss",                   "type": "rss"},
+    {"name": "WWR Design",          "url": "https://weworkremotely.com/categories/remote-design-jobs.rss", "type": "rss"},
+    {"name": "WWR Marketing",       "url": "https://weworkremotely.com/categories/remote-marketing-jobs.rss","type": "rss"},
+    {"name": "Remote OK Design",    "url": "https://remoteok.com/remote-design-jobs.json",                 "type": "remoteok"},
+    {"name": "Remote OK Marketing", "url": "https://remoteok.com/remote-marketing-jobs.json",              "type": "remoteok"},
+    {"name": "Remote OK Exec",      "url": "https://remoteok.com/remote-exec-jobs.json",                   "type": "remoteok"},
+    {"name": "Himalayas",           "url": "https://himalayas.app/jobs/rss",                               "type": "rss"},
+    {"name": "Remotive",            "url": "https://remotive.com/api/remote-jobs?limit=100",               "type": "remotive"},
+    {"name": "Jobicy",              "url": "https://jobicy.com/?feed=job_feed&job_types=full-time",        "type": "rss"},
+    {"name": "Arbeitnow",           "url": "https://www.arbeitnow.com/api/job-board-api",                  "type": "arbeitnow"},
+    {"name": "Authentic Jobs",      "url": "https://authenticjobs.com/feed/",                              "type": "rss"},
 ]
 
 MANUAL_BOARDS = [
@@ -148,7 +142,7 @@ MANUAL_BOARDS = [
     ("Hubstaff Talent",              "https://hubstafftalent.net/search/jobs?q=creative+director"),
 ]
 
-# ─── HELPERS ───────────────────────────────────────────────────────────────────
+# ─── HELPERS ──────────────────────────────────────────────────────────────────
 
 def make_id(title, company):
     return hashlib.md5(f"{title.lower().strip()}{company.lower().strip()}".encode()).hexdigest()[:12]
@@ -162,13 +156,13 @@ def fetch_url(url, timeout=15):
         with urllib.request.urlopen(req, timeout=timeout) as r:
             return r.read().decode("utf-8", errors="replace")
     except Exception as e:
-        print(f"    ⚠ fetch failed: {url[:55]} → {e}")
+        print(f"    ⚠ {url[:55]} → {e}")
         return None
 
-def strip_tags(text):
-    return re.sub(r"<[^>]+>", "", text or "").strip()
+def strip_tags(t):
+    return re.sub(r"<[^>]+>", "", t or "").strip()
 
-# ─── PARSERS ───────────────────────────────────────────────────────────────────
+# ─── PARSERS ──────────────────────────────────────────────────────────────────
 
 def parse_rss(xml, src):
     jobs = []
@@ -176,12 +170,10 @@ def parse_rss(xml, src):
         def tag(t):
             m = re.search(rf"<{t}[^>]*>(.*?)</{t}>", item, re.DOTALL | re.IGNORECASE)
             return strip_tags(m.group(1)) if m else ""
-        title = tag("title")
-        url   = (tag("link") or tag("guid")).strip()
+        title = tag("title"); url = (tag("link") or tag("guid")).strip()
         if title and url:
             jobs.append({"title": title, "company": tag("author") or tag("dc:creator") or src,
-                         "url": url, "description": tag("description")[:600],
-                         "source": src, "date": tag("pubDate")})
+                         "url": url, "description": tag("description")[:600], "source": src})
     return jobs
 
 def parse_remotive(text, src):
@@ -190,10 +182,8 @@ def parse_remotive(text, src):
         for j in json.loads(text).get("jobs", []):
             jobs.append({"title": j.get("title",""), "company": j.get("company_name",""),
                          "url": j.get("url",""), "source": src,
-                         "description": strip_tags(j.get("description",""))[:600],
-                         "date": j.get("publication_date","")})
-    except Exception as e:
-        print(f"    ⚠ remotive: {e}")
+                         "description": strip_tags(j.get("description",""))[:600]})
+    except: pass
     return jobs
 
 def parse_remoteok(text, src):
@@ -203,10 +193,9 @@ def parse_remoteok(text, src):
             if not isinstance(j, dict): continue
             jobs.append({"title": j.get("position",""), "company": j.get("company",""),
                          "url": j.get("url",""), "source": src,
-                         "description": strip_tags(j.get("description",""))[:600],
-                         "salary": j.get("salary",""), "date": j.get("date","")})
-    except Exception as e:
-        print(f"    ⚠ remoteok: {e}")
+                         "salary": j.get("salary",""),
+                         "description": strip_tags(j.get("description",""))[:600]})
+    except: pass
     return jobs
 
 def parse_arbeitnow(text, src):
@@ -216,71 +205,41 @@ def parse_arbeitnow(text, src):
             if not j.get("remote"): continue
             jobs.append({"title": j.get("title",""), "company": j.get("company_name",""),
                          "url": j.get("url",""), "source": src,
-                         "description": strip_tags(j.get("description",""))[:600],
-                         "date": j.get("created_at","")})
-    except Exception as e:
-        print(f"    ⚠ arbeitnow: {e}")
+                         "description": strip_tags(j.get("description",""))[:600]})
+    except: pass
     return jobs
 
-# ─── PASS 1: BROAD KEYWORD FILTER ──────────────────────────────────────────────
+# ─── BROAD FILTER ─────────────────────────────────────────────────────────────
 
 def broad_match(job):
     title = (job.get("title") or "").lower()
     desc  = (job.get("description") or "").lower()
-
-    # Hard exclude by title first
     if any(kw in title for kw in HARD_EXCLUDES):
         return False
-
-    # Must explicitly mention "remote" somewhere in title or description
     if "remote" not in title and "remote" not in desc:
         return False
+    return any(kw in title for kw in ALL_BROAD)
 
-    # Must match at least one broad title keyword
-    return any(kw in title for kw in BROAD_TITLES)
-
-def fetch_all():
-    parsers = {"rss": parse_rss, "remotive": parse_remotive,
-               "remoteok": parse_remoteok, "arbeitnow": parse_arbeitnow}
-    all_jobs = []
-    for src in SOURCES:
-        print(f"  → {src['name']}")
-        content = fetch_url(src["url"])
-        if not content: continue
-        raw  = parsers.get(src["type"], lambda c,n: [])(content, src["name"])
-        hits = [j for j in raw if broad_match(j)]
-        print(f"     {len(raw)} fetched · {len(hits)} broad matches")
-        for h in hits: print(f"     ✓ {h['title']} @ {h['company']}")
-        all_jobs.extend(hits)
-    return all_jobs
-
-# ─── PASS 2: CLAUDE AI SCORING ─────────────────────────────────────────────────
+# ─── CLAUDE SCORING ───────────────────────────────────────────────────────────
 
 def score_with_claude(jobs):
-    """
-    Send each job to Claude for scoring. Returns jobs with ai_score added.
-    Only called for jobs that passed broad_match filter.
-    Cost: ~$0.001 per job scored.
-    """
     api_key = os.environ.get("ANTHROPIC_API_KEY", "")
     if not api_key:
-        print("  ⚠ No ANTHROPIC_API_KEY — falling back to keyword scoring")
+        print("  ⚠ No ANTHROPIC_API_KEY — keyword fallback")
         for job in jobs:
             job["score"] = keyword_score(job)
+            job["category"] = guess_category(job)
             job["score_method"] = "keyword"
         return jobs
 
     scored = []
     for job in jobs:
-        title = job.get("title", "")
+        title   = job.get("title", "")
         company = job.get("company", "")
-        desc = (job.get("description") or "")[:400]
-        salary = job.get("salary", "")
+        desc    = (job.get("description") or "")[:400]
+        salary  = job.get("salary", "")
 
-        prompt = f"""Score this job for Travis Shorrock (0-10). Respond with ONLY a JSON object like:
-{{"score": 7, "reason": "one sentence why"}}
-
-{TRAVIS_PROFILE}
+        prompt = f"""{TRAVIS_PROFILE}
 
 JOB:
 Title: {title}
@@ -297,46 +256,70 @@ Description: {desc}"""
                     "content-type": "application/json",
                 },
                 data=json.dumps({
-                    "model": "claude-haiku-4-5-20251001",  # cheapest model
-                    "max_tokens": 100,
+                    "model": "claude-haiku-4-5-20251001",
+                    "max_tokens": 120,
                     "messages": [{"role": "user", "content": prompt}]
                 }).encode()
             )
             with urllib.request.urlopen(req, timeout=20) as r:
                 data = json.loads(r.read())
-            
+
             text = data["content"][0]["text"].strip()
-            # Parse JSON response
             result = json.loads(re.search(r'\{.*\}', text, re.DOTALL).group())
             job["score"]        = int(result.get("score", 3))
+            job["category"]     = result.get("category", guess_category(job)).upper()
             job["score_reason"] = result.get("reason", "")
             job["score_method"] = "claude"
-            print(f"     scored {job['score']}/10 — {title[:50]}")
-            time.sleep(0.3)  # gentle rate limiting
+            print(f"     [{job['score']}/10] [{job['category']}] {title[:50]}")
+            time.sleep(0.3)
 
         except Exception as e:
-            print(f"     ⚠ scoring failed for '{title}': {e}")
+            print(f"     ⚠ scoring failed: {e}")
             job["score"]        = keyword_score(job)
+            job["category"]     = guess_category(job)
             job["score_method"] = "keyword_fallback"
 
         scored.append(job)
-
     return scored
 
 def keyword_score(job):
-    """Fallback scoring when Claude API unavailable."""
-    text  = f"{job.get('title','')} {job.get('description','')}".lower()
+    text = f"{job.get('title','')} {job.get('description','')}".lower()
     score = 0
     for pts, kws in {
-        3: ["creative director", "head of creative", "executive creative", "chief creative"],
-        2: ["ai", "generative", "midjourney", "runway", "fully remote", "100% remote", "head of brand"],
-        1: ["tech", "dtc", "startup", "saas", "remote-first", "async", "fractional"],
+        3: ["creative director", "head of creative", "executive creative"],
+        2: ["ai", "generative", "midjourney", "runway", "fully remote", "head of brand"],
+        1: ["tech", "dtc", "startup", "remote-first", "fractional"],
     }.items():
         for kw in kws:
             if kw in text: score += pts
     return min(score, 10)
 
-# ─── DEDUP + PERSIST ───────────────────────────────────────────────────────────
+def guess_category(job):
+    title = (job.get("title") or "").lower()
+    if any(kw in title for kw in CORE_TITLES):
+        return "CORE"
+    if any(kw in title for kw in ADJACENT_TITLES):
+        return "ADJACENT"
+    return "WILDCARD"
+
+# ─── FETCH ────────────────────────────────────────────────────────────────────
+
+def fetch_all():
+    parsers = {"rss": parse_rss, "remotive": parse_remotive,
+               "remoteok": parse_remoteok, "arbeitnow": parse_arbeitnow}
+    all_jobs = []
+    for src in SOURCES:
+        print(f"  → {src['name']}")
+        content = fetch_url(src["url"])
+        if not content: continue
+        raw  = parsers.get(src["type"], lambda c,n: [])(content, src["name"])
+        hits = [j for j in raw if broad_match(j)]
+        print(f"     {len(raw)} fetched · {len(hits)} matched")
+        for h in hits: print(f"     ✓ {h['title'][:55]} @ {h['company']}")
+        all_jobs.extend(hits)
+    return all_jobs
+
+# ─── PERSIST ──────────────────────────────────────────────────────────────────
 
 def load_json(path, default):
     try: return json.loads(Path(path).read_text())
@@ -349,8 +332,7 @@ def save_json(path, data):
 def process_jobs(raw_jobs):
     seen     = set(load_json(SEEN_FILE, []))
     existing = load_json(DATA_FILE, [])
-    
-    # Deduplicate
+
     new_jobs = []
     for job in raw_jobs:
         jid = make_id(job["title"], job["company"])
@@ -360,15 +342,13 @@ def process_jobs(raw_jobs):
         seen.add(jid)
         new_jobs.append(job)
 
-    print(f"\n  → {len(new_jobs)} new jobs to score with Claude...")
-    
-    # Score new jobs with Claude
+    print(f"\n  → {len(new_jobs)} new to score...")
     if new_jobs:
         new_jobs = score_with_claude(new_jobs)
 
-    # Filter out low scores (0-2 = irrelevant)
+    # Drop score 0-2 (irrelevant) but keep all scored 3+
     new_jobs = [j for j in new_jobs if (j.get("score") or 0) >= 3]
-    print(f"  → {len(new_jobs)} jobs scored 3+ kept")
+    print(f"  → {len(new_jobs)} scored 3+ kept")
 
     all_jobs = (new_jobs + existing)[:300]
     save_json(DATA_FILE, all_jobs)
@@ -382,62 +362,70 @@ def process_jobs(raw_jobs):
     print(f"  ✓ {len(new_jobs)} new · {len(all_jobs)} total")
     return new_jobs, all_jobs
 
-# ─── EMAIL ─────────────────────────────────────────────────────────────────────
+# ─── EMAIL ────────────────────────────────────────────────────────────────────
 
 def build_html(new_jobs, all_jobs):
     today = datetime.now().strftime("%A, %B %d, %Y")
-    top   = sorted(new_jobs, key=lambda j: j.get("score",0), reverse=True)[:20]
-    hot   = [j for j in top if (j.get("score",0)) >= 7]
+    core     = [j for j in new_jobs if j.get("category") == "CORE"]
+    adjacent = [j for j in new_jobs if j.get("category") == "ADJACENT"]
+    wildcard = [j for j in new_jobs if j.get("category") == "WILDCARD"]
 
-    def row(j):
-        score = j.get("score", 0)
-        dots  = "●" * min(score,5) + "○" * max(0, 5-min(score,5))
-        bg    = "#0d2218" if score >= 7 else "#0d1420"
-        bdr   = "#00e5b4" if score >= 7 else "#1c2a3a"
+    def row(j, color):
+        sc   = j.get("score", 0)
+        dots = "●" * min(sc,5) + "○" * max(0,5-min(sc,5))
         reason = j.get("score_reason","")
-        reason_html = f'<br><span style="color:#445566;font-size:10px;font-style:italic;">{reason}</span>' if reason else ""
-        sal   = f' · <span style="color:#f5a623;font-size:11px;">{j["salary"]}</span>' if j.get("salary") else ""
         return f"""<tr>
-          <td style="padding:12px 10px;border-bottom:1px solid #1c2a3a;background:{bg};border-left:3px solid {bdr};">
-            <a href="{j['url']}" style="color:#00e5b4;font-weight:700;font-size:14px;text-decoration:none;">{j['title']}</a><br>
-            <span style="color:#778899;font-size:12px;">{j['company']} · {j['source']}</span>{sal}{reason_html}
+          <td style="padding:12px 10px;border-bottom:1px solid #1c2a3a;">
+            <a href="{j['url']}" style="color:{color};font-weight:700;font-size:14px;text-decoration:none;">{j['title']}</a><br>
+            <span style="color:#778899;font-size:12px;">{j['company']} · {j['source']}</span>
+            {f'<br><span style="color:#445566;font-size:11px;font-style:italic;">{reason}</span>' if reason else ''}
           </td>
-          <td style="padding:12px 10px;border-bottom:1px solid #1c2a3a;background:{bg};color:#f5a623;white-space:nowrap;font-size:13px;">{dots}</td>
+          <td style="padding:12px 10px;border-bottom:1px solid #1c2a3a;color:{color};white-space:nowrap;">{dots}</td>
         </tr>"""
 
-    rows   = "".join(row(j) for j in top) if top else """<tr><td colspan="2" style="padding:32px;text-align:center;color:#445566;">No new matches today — check manual boards below.</td></tr>"""
-    boards = "".join(f'<a href="{u}" style="display:inline-block;margin:3px;padding:5px 11px;background:#111927;color:#778899;border:1px solid #1c2a3a;border-radius:4px;font-size:11px;text-decoration:none;font-family:monospace;">{n}</a>' for n,u in MANUAL_BOARDS)
+    def section(title, jobs, color):
+        if not jobs: return ""
+        rows = "".join(row(j, color) for j in sorted(jobs, key=lambda j: j.get("score",0), reverse=True)[:10])
+        return f"""
+        <div style="margin-bottom:28px;">
+          <div style="font-size:10px;letter-spacing:3px;color:{color};font-family:monospace;text-transform:uppercase;margin-bottom:12px;">{title}</div>
+          <table style="width:100%;border-collapse:collapse;">{rows}</table>
+        </div>"""
+
+    boards = "".join(f'<a href="{u}" style="display:inline-block;margin:3px;padding:4px 10px;background:#111927;color:#778899;border:1px solid #1c2a3a;border-radius:4px;font-size:11px;text-decoration:none;font-family:monospace;">{n}</a>' for n,u in MANUAL_BOARDS)
 
     return f"""<!DOCTYPE html><html><body style="margin:0;background:#080c14;font-family:Helvetica,Arial,sans-serif;color:#c8d8e8;">
 <div style="max-width:660px;margin:0 auto;padding:28px 20px;">
-  <div style="border-bottom:2px solid #00e5b4;padding-bottom:16px;margin-bottom:24px;">
-    <div style="font-size:10px;letter-spacing:3px;color:#00e5b4;font-family:monospace;margin-bottom:8px;">DAILY JOB BRIEF · REMOTE ONLY · AI-SCORED</div>
+  <div style="border-bottom:2px solid #d4f244;padding-bottom:16px;margin-bottom:24px;">
+    <div style="font-size:10px;letter-spacing:3px;color:#d4f244;font-family:monospace;margin-bottom:8px;">DAILY JOB BRIEF · AI-SCORED · REMOTE ONLY</div>
     <div style="font-size:26px;font-weight:700;color:#fff;">Travis Shorrock</div>
-    <div style="font-size:12px;color:#556677;margin-top:4px;">{today} · EST/CST · $150K+ USD</div>
+    <div style="font-size:12px;color:#556677;margin-top:4px;">{today}</div>
   </div>
-  <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
-    <span style="background:rgba(0,229,180,.15);border:1px solid rgba(0,229,180,.3);color:#00e5b4;padding:4px 12px;border-radius:20px;font-size:12px;">{len(new_jobs)} New Today</span>
-    <span style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:#f5a623;padding:4px 12px;border-radius:20px;font-size:12px;">{len(hot)} High Match (7+)</span>
-    <span style="background:#111927;border:1px solid #1c2a3a;color:#556677;padding:4px 12px;border-radius:20px;font-size:12px;">{len(all_jobs)} Total Tracked</span>
+  <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
+    <span style="background:rgba(212,242,68,.12);border:1px solid rgba(212,242,68,.3);color:#d4f244;padding:4px 12px;border-radius:20px;font-size:12px;">{len(core)} Core</span>
+    <span style="background:rgba(240,165,0,.12);border:1px solid rgba(240,165,0,.3);color:#f0a500;padding:4px 12px;border-radius:20px;font-size:12px;">{len(adjacent)} Adjacent</span>
+    <span style="background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.3);color:#a78bfa;padding:4px 12px;border-radius:20px;font-size:12px;">{len(wildcard)} Wildcard</span>
   </div>
-  <table style="width:100%;border-collapse:collapse;margin-bottom:28px;">{rows}</table>
-  <div style="margin-bottom:24px;">
-    <div style="font-size:10px;letter-spacing:2px;color:#445566;font-family:monospace;margin-bottom:10px;">CHECK THESE MANUALLY EVERY DAY</div>
+  {section("Core Roles", core, "#d4f244")}
+  {section("Adjacent Roles", adjacent, "#f0a500")}
+  {section("Wildcard — You Might Love These", wildcard, "#a78bfa")}
+  <div style="margin-top:24px;">
+    <div style="font-size:10px;letter-spacing:2px;color:#445566;font-family:monospace;margin-bottom:10px;">CHECK THESE MANUALLY</div>
     {boards}
   </div>
-  <div style="border-top:1px solid #1c2a3a;padding-top:14px;font-size:10px;color:#334455;font-family:monospace;text-align:center;">Claude Haiku AI scoring · GitHub Actions · 7AM EST Mon–Fri</div>
 </div></body></html>"""
 
 def send_email(new_jobs, all_jobs):
-    user = os.environ.get("SMTP_USER","")
-    pwd  = os.environ.get("SMTP_PASS","")
+    user = os.environ.get("SMTP_USER",""); pwd = os.environ.get("SMTP_PASS","")
     to   = os.environ.get("TO_EMAIL", user)
     if not user or not pwd:
-        print("  ⚠ Email skipped (secrets not set)")
-        return
+        print("  ⚠ Email skipped"); return
+    core = len([j for j in new_jobs if j.get("category")=="CORE"])
+    adj  = len([j for j in new_jobs if j.get("category")=="ADJACENT"])
+    wild = len([j for j in new_jobs if j.get("category")=="WILDCARD"])
     today = datetime.now().strftime("%b %d")
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"🎯 Job Brief {today} — {len(new_jobs)} new · AI-scored"
+    msg["Subject"] = f"🎯 Jobs {today} — {core} core · {adj} adjacent · {wild} wildcard"
     msg["From"] = user; msg["To"] = to
     msg.attach(MIMEText(build_html(new_jobs, all_jobs), "html"))
     try:
@@ -445,24 +433,20 @@ def send_email(new_jobs, all_jobs):
             s.starttls(); s.login(user, pwd); s.sendmail(user, to, msg.as_string())
         print(f"  ✓ Email → {to}")
     except Exception as e:
-        print(f"  ⚠ Email failed: {e}")
+        print(f"  ⚠ Email: {e}")
 
-# ─── MAIN ──────────────────────────────────────────────────────────────────────
+# ─── MAIN ─────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    print("=" * 55)
-    print(f"Travis Shorrock Job Scraper — AI Edition")
+    print("="*55)
+    print(f"Travis Shorrock Job Scraper — 3-Lane Edition")
     print(f"{datetime.now().strftime('%Y-%m-%d %H:%M UTC')}")
-    print("=" * 55)
-
-    print("\n[1/4] Fetching from all sources...")
+    print("="*55)
+    print("\n[1/3] Fetching...")
     raw = fetch_all()
-    print(f"\n  → {len(raw)} total broad matches across all sources")
-
-    print("\n[2/4] Deduplicating + AI scoring...")
+    print(f"\n  → {len(raw)} total broad matches")
+    print("\n[2/3] Scoring with Claude...")
     new_jobs, all_jobs = process_jobs(raw)
-
-    print("\n[3/4] Sending email...")
+    print("\n[3/3] Emailing...")
     send_email(new_jobs, all_jobs)
-
     print("\n✅ Done.")
