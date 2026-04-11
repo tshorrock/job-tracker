@@ -44,6 +44,8 @@
   --amber:    #F59E0B;
   --amber-d:  rgba(245,158,11,0.10);
   --err:      #EF4444;
+  --lime:     #A3E635;
+  --lime-d:   rgba(163,230,53,0.10);
   /* Brief typography */
   --t1:  #E5E5E5;
   --t2:  #A3A3A3;
@@ -381,6 +383,74 @@ body{
   font-size:11px;color:var(--t4);line-height:1.7;
 }
 
+/* ── STATUS PILL (per-card tracking) ──────────────────────────────────────── */
+.jstatus{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:3px 9px;border-radius:4px;
+  cursor:pointer;user-select:none;
+  transition:background 150ms, color 150ms, transform 120ms;
+  flex-shrink:0;white-space:nowrap;
+}
+.jstatus:hover{transform:scale(1.06)}
+.jstatus:active{transform:scale(0.96)}
+.jstatus[data-status=""]{
+  background:rgba(61,61,61,0.4);color:var(--t4);
+  border:1px dashed var(--border2);
+  font-size:9px;
+}
+.jstatus[data-status="Saved"]{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,229,204,0.25)}
+.jstatus[data-status="Applied"]{background:var(--amber-d);color:var(--amber);border:1px solid rgba(245,158,11,0.25)}
+.jstatus[data-status="Interviewing"]{background:var(--mint-d);color:var(--mint);border:1px solid rgba(74,222,128,0.25)}
+.jstatus[data-status="Offer"]{background:var(--lime-d);color:var(--lime);border:1px solid rgba(163,230,53,0.25)}
+.jstatus[data-status="Passed"]{background:rgba(61,61,61,0.3);color:var(--t4);border:1px solid var(--border)}
+
+/* ── EVALUATE BUTTON ─────────────────────────────────────────────────────── */
+.eval-btn{
+  text-align:center;padding:11px 14px;border-radius:9px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  letter-spacing:0.06em;font-weight:600;
+  background:var(--purple-d);
+  border:1px solid rgba(185,131,255,0.25);
+  color:var(--purple);
+  cursor:pointer;white-space:nowrap;
+  transition:transform 150ms ease-out, filter 150ms ease-out, background 150ms;
+  position:relative;
+}
+.eval-btn:hover{background:var(--purple);color:#0D0D0D;transform:scale(1.02)}
+.eval-btn:active{transform:scale(0.98)}
+.eval-tip{
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:var(--card3);border:1px solid var(--border2);
+  border-radius:8px;padding:8px 12px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:0.04em;color:var(--t2);
+  white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity 200ms;
+  z-index:10;
+}
+.eval-tip.show{opacity:1}
+.eval-tip::after{
+  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:var(--border2);
+}
+
+/* ── PIPELINE SUMMARY (header bar) ───────────────────────────────────────── */
+.pipeline{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.pipe-chip{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:0.08em;
+  padding:3px 8px;border-radius:4px;
+  display:flex;align-items:center;gap:5px;
+}
+.pipe-chip .pipe-n{font-weight:700}
+.pipe-chip.teal{background:var(--teal-dim);color:var(--teal)}
+.pipe-chip.amber{background:var(--amber-d);color:var(--amber)}
+.pipe-chip.mint{background:var(--mint-d);color:var(--mint)}
+.pipe-chip.lime{background:var(--lime-d);color:var(--lime)}
+
 /* ── FOCUS STATES (brief: custom 2px accent outline) ─────────────────────── */
 :focus-visible{
   outline:2px solid var(--teal);
@@ -502,6 +572,7 @@ body{
       <span id="status-txt" style="color:var(--t2)">Checking…</span>
       <span class="sbar-time" id="status-time"></span>
     </div>
+    <div class="pipeline" id="pipeline" aria-label="Application pipeline summary"></div>
     <button class="restore-btn" onclick="clearD()" aria-label="Restore dismissed jobs">↺ Restore dismissed</button>
   </div>
 
@@ -586,6 +657,57 @@ body{
 const TODAY = new Date().toISOString().slice(0,10);
 let jobs = [], meta = {};
 let dismissed = new Set(JSON.parse(localStorage.getItem('ts_dismissed') || '[]'));
+
+// ── STATUS TRACKING ──────────────────────────────────────────────────────
+const STATUSES = ['', 'Saved', 'Applied', 'Interviewing', 'Offer', 'Passed'];
+const ACTIVE_STATUSES = new Set(['Saved', 'Applied', 'Interviewing', 'Offer']);
+
+function getStatus(id) {
+  return localStorage.getItem('ts_status_' + id) || '';
+}
+function setStatus(id, status) {
+  if (status === '') localStorage.removeItem('ts_status_' + id);
+  else localStorage.setItem('ts_status_' + id, status);
+}
+function cycleStatus(id, e) {
+  e.preventDefault(); e.stopPropagation();
+  const cur = getStatus(id);
+  const idx = STATUSES.indexOf(cur);
+  const next = STATUSES[(idx + 1) % STATUSES.length];
+  setStatus(id, next);
+  render();
+}
+function statusLabel(s) {
+  return s === '' ? '+ Status' : s;
+}
+function renderPipeline() {
+  const counts = { Saved:0, Applied:0, Interviewing:0, Offer:0 };
+  jobs.forEach(j => {
+    const s = getStatus(j.id || '');
+    if (counts.hasOwnProperty(s)) counts[s]++;
+  });
+  const el = document.getElementById('pipeline');
+  if (!el) return;
+  const chips = [
+    { label:'Saved', n:counts.Saved, cls:'teal' },
+    { label:'Applied', n:counts.Applied, cls:'amber' },
+    { label:'Interviewing', n:counts.Interviewing, cls:'mint' },
+    { label:'Offer', n:counts.Offer, cls:'lime' },
+  ].filter(c => c.n > 0);
+  if (!chips.length) { el.innerHTML = ''; return; }
+  el.innerHTML = chips.map(c =>
+    `<span class="pipe-chip ${c.cls}"><span class="pipe-n">${c.n}</span> ${c.label}</span>`
+  ).join('');
+}
+
+// ── EVALUATE (clipboard + tooltip) ───────────────────────────────────────
+function evalJob(url, btnEl, e) {
+  e.preventDefault(); e.stopPropagation();
+  navigator.clipboard.writeText(url).then(() => {
+    const tip = btnEl.querySelector('.eval-tip');
+    if (tip) { tip.classList.add('show'); setTimeout(() => tip.classList.remove('show'), 2200); }
+  });
+}
 
 // ── TRIGGER RUN ───────────────────────────────────────────────────────────
 async function triggerRun() {
@@ -695,7 +817,13 @@ function getCol(cat) {
     (j.title || '').toLowerCase().includes(q) ||
     (j.company || '').toLowerCase().includes(q)
   );
-  return r.sort((a, b) => (b.score || 0) - (a.score || 0));
+  // Sort: active-status cards float to top, then by score
+  return r.sort((a, b) => {
+    const sa = ACTIVE_STATUSES.has(getStatus(a.id || '')) ? 1 : 0;
+    const sb = ACTIVE_STATUSES.has(getStatus(b.id || '')) ? 1 : 0;
+    if (sb !== sa) return sb - sa;
+    return (b.score || 0) - (a.score || 0);
+  });
 }
 
 function dismiss(id, e) {
@@ -725,6 +853,10 @@ function makeCard(j, accent) {
     : '';
   const jid = j.id || '';
 
+  const status = getStatus(jid);
+  const statusHtml = `<span class="jstatus" data-status="${status}" onclick="cycleStatus('${jid}',event)" title="Click to cycle status" aria-label="Status: ${status || 'none'}">${statusLabel(status)}</span>`;
+  const safeUrl = (j.url || '').replace(/'/g, "\\'");
+
   return `<article class="jcard" aria-label="${j.title||'Job'} at ${j.company||'Unknown'}">
     <div class="jcard-head">
       <div class="jcard-title">${j.title || 'Untitled'}</div>
@@ -733,11 +865,12 @@ function makeCard(j, accent) {
         <div class="jcard-score-lbl">/ 10</div>
       </div>
     </div>
-    <div class="jcard-co">${j.company || 'Unknown'}</div>
+    <div class="jcard-co">${j.company || 'Unknown'} ${statusHtml}</div>
     <div class="jtags">${tags}</div>
     ${reason}
     <div class="jcard-actions">
       <a class="open-btn ${accent}" href="${j.url}" target="_blank" rel="noopener" aria-label="Open ${j.title||'job'} listing">Open Role →</a>
+      <button class="eval-btn" onclick="evalJob('${safeUrl}',this,event)" aria-label="Copy URL and evaluate">⚡ Evaluate<span class="eval-tip">URL copied — paste into Claude Code and run /career-ops</span></button>
       <button class="x-btn" onclick="dismiss('${jid}',event)" aria-label="Dismiss this job">✕</button>
     </div>
   </article>`;
@@ -789,6 +922,7 @@ function render() {
   renderCol('list-core', 'cnt-core', 'm-core', 'CORE',     'teal');
   renderCol('list-adj',  'cnt-adj',  'm-adj',  'ADJACENT', 'purple');
   renderCol('list-wild', 'cnt-wild', 'm-wild', 'WILDCARD', 'orange');
+  renderPipeline();
 }
 
 // ── BOARDS ────────────────────────────────────────────────────────────────
