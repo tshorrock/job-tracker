@@ -312,42 +312,48 @@ Description: {desc}"""
     return scored
 
 WILDCARD_PROFILE = """
-You are finding quirky, fun, unusual remote jobs for Travis Shorrock — a 25yr Creative Director 
-with deep AI skills, moving to Costa Rica. He wants to SEE these jobs for entertainment and 
-inspiration, not necessarily apply to all of them. Think: "would this make him smile to read?"
+You are curating the WILDCARD column of a job dashboard for Travis Shorrock — a 25yr Creative 
+Director with deep AI skills, moving to Costa Rica. This column is called "Wildcard" for a reason.
 
-WILDCARD CRITERIA — score on FUN + FEASIBILITY:
-- 100% remote, paid (no unpaid internships, no MLMs, no pure commission sales)
-- Fun, low-pressure, high creative freedom OR just genuinely weird/interesting
-- Could be full-time or part-time
-- NO: cold-call sales, data entry, MLM, high-pressure commission roles
+The vibe: jobs that would make him go "huh, that's interesting" or "wait, that's actually a job?"
+Think: surprising, fun, low-pressure, creative freedom, good story at a dinner party.
 
-WHAT SCORES HIGH (7-10):
-- Creative consulting for unusual startups or niche industries
-- AI prompt artistry, AI creative tool beta testing, AI content creation
-- Voiceover, narration, on-camera presenting (remote)
-- Community hosting, creative facilitation, workshop leading
-- Travel content, lifestyle content creation
-- Brand consultant for weird/niche products
-- Creative director for gaming, animation, comics, toys
-- Writing for TV/film/streaming (story room, creative development)
-- Chief Storyteller, Head of Culture, Creative Futurist — unusual senior titles
-- Anything at the intersection of creativity + technology + fun
+Examples of HIGH scores (7-10):
+- AI prompt artist for a gaming studio
+- Creative director for a cannabis brand
+- Voiceover work for an audiobook platform
+- Narrative designer for an indie game
+- Travel content creator for a luxury yacht company
+- Comedy writer for a tech startup
+- Head of culture at a weird startup
+- Mystery shopper for luxury brands (remote version)
+- Creative consultant for a celebrity
+- Documentary project creative lead
+- Trend forecaster for a fashion brand
+- Illustrator/typographer for a niche publisher
+- Sound designer for an app
+- Creative director for a surf or outdoor brand
+- Spiritual/wellness content creative lead
+- Kids content creative director
+- Esports creative lead
+- Metaverse experience designer
 
-WHAT SCORES LOW (1-3):
-- Standard corporate jobs he'd find boring
-- Anything requiring specific technical skills he doesn't have (coding, data science)
-- High-stress, high-accountability senior roles (he has those already in Core)
+Examples of LOW scores (1-3):
+- Anything corporate, boring, or stressful
+- Anything requiring skills he doesn't have (coding, medical, legal)
+- High accountability senior roles (those belong in Core)
 
-WHAT SCORES 0:
+Score 0 for:
 - On-site required
-- MLM, pyramid scheme, cold calling
-- Pure data entry or admin
-- Clearly fake or scammy
+- MLM, cold calling, data entry, scams
+- Pure commission sales
+
+The question to ask yourself: would Travis smile reading this job description?
+If yes → high score. If "meh, another job" → low score.
 
 Always assign category: WILDCARD
 
-Respond ONLY with JSON: {"score": 7, "category": "WILDCARD", "reason": "one punchy sentence that captures why this would make him smile"}
+Respond ONLY with JSON: {"score": 8, "category": "WILDCARD", "reason": "one punchy sentence explaining the smile factor"}
 """
 
 # Wildcard-specific sources — broader, weirder feeds
@@ -362,25 +368,45 @@ WILDCARD_SOURCES = [
 WILDCARD_BROAD = [
     # Voice / performance
     "voiceover", "voice actor", "narrator", "on-camera", "presenter", "host",
-    "podcast host", "video host", "live host", "streamer",
-    # AI creative tools
+    "podcast host", "video host", "live host", "streamer", "emcee",
+    # AI creative
     "prompt engineer", "ai artist", "ai filmmaker", "generative artist",
-    "creative ai", "ai trainer", "ai evaluator", "ai tester",
-    "beta tester", "creative tester",
+    "ai trainer", "ai evaluator", "ai tester", "beta tester",
     # Entertainment / gaming / animation
     "game designer", "game writer", "narrative designer", "level designer",
     "animation director", "comic", "graphic novelist", "toy designer",
-    "creative development", "showrunner", "story editor", "writers room",
-    # Unusual creative roles
+    "showrunner", "story editor", "writers room", "script",
+    # Unusual senior creative
     "chief storyteller", "head of culture", "creative futurist",
-    "experience designer", "creative technologist", "imagineer",
-    "creative consultant", "brand consultant", "creative coach",
-    # Content / lifestyle
+    "imagineer", "creative coach", "creative educator",
+    "artist in residence", "creative entrepreneur",
+    # Content / lifestyle / travel
     "travel writer", "travel content", "lifestyle creator",
     "food writer", "culture writer", "creative writer",
     # Community / facilitation
-    "community host", "creative facilitator", "workshop leader",
-    "creative educator", "artist in residence",
+    "community host", "creative facilitator", "workshop",
+    # Random fun stuff
+    "futurist", "trend forecaster", "cool hunter",
+    "mystery shopper", "brand ambassador", "talent scout",
+    "casting", "creative producer", "production designer",
+    "set designer", "prop designer", "costume designer",
+    "museum", "gallery", "curator", "archivist",
+    "documentary", "photographer", "photo editor",
+    "illustrator", "typographer", "motion", "vfx",
+    "sound designer", "music supervisor", "creative director games",
+    "esports", "metaverse", "virtual", "avatar",
+    "influencer", "creator economy", "substack",
+    "cookbook", "food stylist", "recipe developer",
+    "sommelier", "spirits", "cannabis creative",
+    "surf", "ski", "outdoor", "adventure", "wellness",
+    "yoga", "meditation", "mindfulness content",
+    "astrology", "tarot", "spiritual",
+    "tattoo", "fashion", "streetwear", "sneaker",
+    "luxury", "yacht", "private aviation",
+    "comedy writer", "joke writer", "humor",
+    "children", "kids content", "family",
+    "pet", "animal", "wildlife",
+    "space", "science communicator", "nerd",
 ]
 
 # Wildcard hard excludes
