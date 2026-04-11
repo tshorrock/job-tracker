@@ -171,7 +171,10 @@ MANUAL_BOARDS = [
 # ─── HELPERS ──────────────────────────────────────────────────────────────────
 
 def make_id(title, company):
-    return hashlib.md5(f"{title.lower().strip()}{company.lower().strip()}".encode()).hexdigest()[:12]
+    # Normalize aggressively so same job from different sources = same ID
+    t = re.sub(r'[^a-z0-9]', '', (title or '').lower())[:30]
+    c = re.sub(r'[^a-z0-9]', '', (company or '').lower())[:20]
+    return hashlib.md5(f"{t}{c}".encode()).hexdigest()[:12]
 
 def fetch_url(url, timeout=15):
     req = urllib.request.Request(url, headers={
@@ -357,16 +360,27 @@ WILDCARD_SOURCES = [
 
 # Wildcard broad filter — anything creative, content, AI, media, entertainment
 WILDCARD_BROAD = [
-    "storyteller", "narrator", "voice", "presenter", "host",
-    "content creator", "creative consultant", "brand consultant",
-    "community", "facilitator", "workshop", "coach",
-    "ai artist", "prompt", "generative", "creative technologist",
-    "game", "gaming", "animation", "comic", "toy",
-    "travel", "lifestyle", "culture", "futurist",
-    "creative development", "story", "writer", "script",
-    "creative lead", "creative producer", "creative manager",
-    "brand manager", "marketing manager", "campaign manager",
-    "social media", "creative strategist", "creative director",
+    # Voice / performance
+    "voiceover", "voice actor", "narrator", "on-camera", "presenter", "host",
+    "podcast host", "video host", "live host", "streamer",
+    # AI creative tools
+    "prompt engineer", "ai artist", "ai filmmaker", "generative artist",
+    "creative ai", "ai trainer", "ai evaluator", "ai tester",
+    "beta tester", "creative tester",
+    # Entertainment / gaming / animation
+    "game designer", "game writer", "narrative designer", "level designer",
+    "animation director", "comic", "graphic novelist", "toy designer",
+    "creative development", "showrunner", "story editor", "writers room",
+    # Unusual creative roles
+    "chief storyteller", "head of culture", "creative futurist",
+    "experience designer", "creative technologist", "imagineer",
+    "creative consultant", "brand consultant", "creative coach",
+    # Content / lifestyle
+    "travel writer", "travel content", "lifestyle creator",
+    "food writer", "culture writer", "creative writer",
+    # Community / facilitation
+    "community host", "creative facilitator", "workshop leader",
+    "creative educator", "artist in residence",
 ]
 
 # Wildcard hard excludes
@@ -380,11 +394,33 @@ WILDCARD_EXCLUDES = [
 def wildcard_match(job):
     title = (job.get("title") or "").lower()
     desc  = (job.get("description") or "").lower()
+
+    # Hard exclude — if it would qualify for Core or Adjacent, it's NOT a wildcard
+    if broad_match(job):
+        return False
+
+    # Exclude typical corporate/advertising/marketing roles
+    NOT_WILDCARD = [
+        "product designer", "ux designer", "ui designer",
+        "product manager", "product marketing", "marketing manager",
+        "marketing director", "account manager", "account executive",
+        "sales", "business development", "engineer", "developer",
+        "data analyst", "data scientist", "finance", "operations",
+        "recruiter", "hr manager", "customer success",
+        "seo", "sem", "paid media", "growth hacker",
+    ]
+    if any(kw in title for kw in NOT_WILDCARD):
+        return False
+
     if any(kw in title for kw in WILDCARD_EXCLUDES):
         return False
+
+    # Must be remote
     if "remote" not in title and "remote" not in desc:
         return False
-    return any(kw in title or kw in desc[:200] for kw in WILDCARD_BROAD)
+
+    # Must match something genuinely interesting/unusual
+    return any(kw in title or kw in desc[:300] for kw in WILDCARD_BROAD)
 
 def fetch_wildcards():
     """Separate pass for wildcard jobs — broader sources, different filter."""
