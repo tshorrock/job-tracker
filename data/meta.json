@@ -1,11 +1,11 @@
 {
-  "updated": "2026-04-11T00:29:43.750007+00:00",
-  "new_count": 3,
+  "updated": "2026-04-11T00:35:30.273783+00:00",
+  "new_count": 0,
   "total_count": 5,
   "boards": [
     {
       "name": "LinkedIn \u2014 CD Remote",
-      "url": "https://www.linkedin.com/jobs/search/?keywords=creative+director+AI&f_WT=2&f_TPR=r86400"
+      "url": "https://www.linkedin.com/jobs/search/?keywords=creative+director&f_WT=2&f_TPR=r86400"
     },
     {
       "name": "LinkedIn \u2014 Head of Creative",
@@ -16,20 +16,52 @@
       "url": "https://www.linkedin.com/jobs/search/?keywords=vp+creative+remote&f_WT=2"
     },
     {
-      "name": "Built In \u2014 Remote CD",
-      "url": "https://builtin.com/jobs/remote/design-ux/search/creative-director"
+      "name": "LinkedIn \u2014 ECD Remote",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=executive+creative+director+remote&f_WT=2"
+    },
+    {
+      "name": "LinkedIn \u2014 Head of Design",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=head+of+design+remote&f_WT=2"
+    },
+    {
+      "name": "LinkedIn \u2014 AI Creative",
+      "url": "https://www.linkedin.com/jobs/search/?keywords=ai+creative+director+remote&f_WT=2"
+    },
+    {
+      "name": "FlexJobs \u2014 Creative",
+      "url": "https://www.flexjobs.com/remote-jobs/creative-director"
+    },
+    {
+      "name": "Wellfound (AngelList)",
+      "url": "https://wellfound.com/role/r/creative-director"
     },
     {
       "name": "Remote Rocketship",
       "url": "https://www.remoterocketship.com/jobs/creative-director/"
     },
     {
-      "name": "FlexJobs CD",
-      "url": "https://www.flexjobs.com/remote-jobs/creative-director"
+      "name": "Built In \u2014 Remote CD",
+      "url": "https://builtin.com/jobs/remote/design-ux/search/creative-director"
     },
     {
-      "name": "Wellfound (AngelList)",
-      "url": "https://wellfound.com/role/r/creative-director"
+      "name": "Crossover",
+      "url": "https://www.crossover.com/jobs"
+    },
+    {
+      "name": "Turing",
+      "url": "https://www.turing.com/jobs"
+    },
+    {
+      "name": "Arc.dev",
+      "url": "https://arc.dev/remote-jobs"
+    },
+    {
+      "name": "Jobot Creative",
+      "url": "https://jobot.com/jobs?q=creative+director&remote=true"
+    },
+    {
+      "name": "Daily Remote",
+      "url": "https://dailyremote.com/remote-creative-director-jobs"
     },
     {
       "name": "JustRemote Design",
@@ -40,12 +72,28 @@
       "url": "https://www.workingnomads.com/jobs?category=design"
     },
     {
-      "name": "Roboflow \u2014 CD Role",
-      "url": "https://jobs.ashbyhq.com/roboflow"
+      "name": "Skip the Drive",
+      "url": "https://www.skipthedrive.com/job-category/design-creative/"
+    },
+    {
+      "name": "4 Day Week \u2014 $100K+",
+      "url": "https://4dayweek.io/remote-jobs"
+    },
+    {
+      "name": "Dynamite Jobs",
+      "url": "https://dynamitejobs.com/remote-jobs/creative"
+    },
+    {
+      "name": "Remote Circle",
+      "url": "https://remotecircle.com"
+    },
+    {
+      "name": "Hubstaff Talent",
+      "url": "https://hubstafftalent.net/search/jobs?q=creative+director"
     },
     {
       "name": "Superside \u2014 AI CD",
-      "url": "https://careers.superside.com/jobs/ai-creative-director"
+      "url": "https://careers.superside.com"
     },
     {
       "name": "Curious Refuge AI Jobs",
@@ -64,16 +112,8 @@
       "url": "https://www.toptal.com/creative"
     },
     {
-      "name": "Daily Remote",
-      "url": "https://dailyremote.com/remote-creative-director-jobs"
-    },
-    {
-      "name": "Remote Circle",
-      "url": "https://remotecircle.com"
-    },
-    {
-      "name": "Hubstaff Talent",
-      "url": "https://hubstafftalent.net/search/jobs?q=creative+director"
+      "name": "Roboflow \u2014 CD",
+      "url": "https://jobs.ashbyhq.com/roboflow"
     }
   ]
 }
