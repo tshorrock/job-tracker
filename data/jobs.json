@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "title": "Creative Director",
+    "company": "Lumimeds",
+    "url": "https://remoteOK.com/remote-jobs/remote-creative-director-lumimeds-1131047",
+    "source": "Remote OK Design",
+    "salary": "",
+    "description": "About LumiMedsLumiMeds is a fast-growing U.S.-based telehealth startup focused on weight management and long-term metabolic health. We are building the next generation of e-commerce and clinical infrastructure from the ground up.As an early-stage company, we move quickly, operate with limited layers, and expect high ownership from every team member. There is no bureaucracy here \u00e2\u0080\u0094 decisions happen fast, priorities evolve, and builders thrive.We are a remote-first, globally distributed team that values clarity, accountability, and people who take initiative rather than wait for direction.About",
+    "id": "d554e1913554",
+    "added": "2026-04-11T00:27:38.089065+00:00",
+    "score": 2,
+    "category": "CORE",
+    "score_reason": "Senior Creative Director title and remote work qualify, but telehealth/e-commerce lacks advertising, brand strategy, or creative tech focus\u2014outside Travis's core wheelhouse and business model doesn't align with his campaign/brand leadership background.",
+    "score_method": "claude"
+  },
+  {
+    "title": "Legal Counsel AI Trainer Freelance 8 20 hrs week",
+    "company": "10x Team",
+    "url": "https://remoteOK.com/remote-jobs/remote-legal-counsel-ai-trainer-freelance-8-20-hrs-week-10x-team-1130991",
+    "source": "Remote OK",
+    "salary": "",
+    "description": "Updated: 03 April 2026Freelance | 8\u00e2\u0080\u009320 hrs/week | Remote (EU/UK)Are you an experienced legal counsel who instinctively spots gaps in legal reasoning and understands the complex realities of legal practice? Do you have 8 to 20 hours per week available alongside your main job or consulting projects? Join us in shaping how AI understands and applies legal expertise at scale.About the Role10x.team connects expert freelancers with leading AI labs building next-generation models. We are looking for knowledgeable legal counsels based in the EU or UK to enhance the accuracy, depth, and real-world re",
+    "id": "67d95e3326bf",
+    "added": "2026-04-11T00:27:38.089092+00:00",
+    "score": 3,
+    "category": "WILDCARD",
+    "score_reason": "AI training is cool, but 'legal counsel' requires actual legal expertise Travis doesn't have\u2014fun concept, wrong skill set for him.",
+    "score_method": "claude"
+  }
+]
