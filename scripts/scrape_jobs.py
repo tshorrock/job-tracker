@@ -64,20 +64,31 @@ WILDCARD_TITLES = [
 
 ALL_BROAD = CORE_TITLES + ADJACENT_TITLES + WILDCARD_TITLES
 
-# Hard excludes — never pass through regardless
+# Hard excludes — title must contain these to be blocked
+# Keep these SPECIFIC — broad terms like "design" block legitimate roles
 HARD_EXCLUDES = [
-    "engineer", "engineering", "developer", "software", "backend",
-    "frontend", "fullstack", "devops", "data scientist", "machine learning",
-    "security engineer", "platform engineer",
-    "product designer", "ux designer", "ui designer", "ui/ux",
+    # Engineering
+    "software engineer", "backend engineer", "frontend engineer",
+    "fullstack engineer", "devops engineer", "data engineer",
+    "machine learning engineer", "security engineer", "platform engineer",
+    "infrastructure engineer", "systems engineer",
+    "developer", "programmer",
+    # Wrong design disciplines — specific enough not to block "Head of Design"
+    "product designer", "ux designer", "ui designer", "ui/ux designer",
     "user experience designer", "interaction designer",
-    "video editor", "video producer", "motion designer", "animator",
-    "cinematographer", "videographer",
-    "account executive", "account manager", "sales director", "sales manager",
-    "business development", "account management", "technical account",
+    "product design lead", "head of ux", "vp of ux", "director of ux",
+    # Video production (individual contributor)
+    "video editor", "motion designer", "animator", "cinematographer", "videographer",
+    # Sales
+    "account executive", "sales director", "sales manager", "sales representative",
+    "business development", "account management",
+    # Finance / ops / medical
     "finance director", "operations director", "medical director",
-    "clinical director", "data director",
+    "clinical director", "data scientist", "data analyst",
+    # Junior
     "junior", "intern", "entry level", "coordinator", "assistant creative",
+    # Support
+    "customer support", "technical support", "help desk", "customer service",
 ]
 
 # ─── TRAVIS PROFILE FOR CLAUDE ─────────────────────────────────────────────────
