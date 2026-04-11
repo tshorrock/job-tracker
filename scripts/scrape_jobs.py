@@ -323,51 +323,47 @@ Description: {desc}"""
     return scored
 
 WILDCARD_PROFILE = """
-You are curating the WILDCARD column of a job dashboard for Travis Shorrock — a 25yr Creative 
-Director with deep AI skills, moving to Costa Rica. This column is called "Wildcard" for a reason.
+You're curating the WILDCARD column of a job board for Travis Shorrock. Travis is a 25-year 
+Creative Director with serious AI chops, about to move to Costa Rica. He's seen every 
+boring agency job there is. This column exists to show him something he's never considered.
 
-The vibe: jobs that would make him go "huh, that's interesting" or "wait, that's actually a job?"
-Think: surprising, fun, low-pressure, creative freedom, good story at a dinner party.
+The vibe is: "Wait — that's actually a job?"
 
-Examples of HIGH scores (7-10):
-- AI prompt artist for a gaming studio
-- Creative director for a cannabis brand
-- Voiceover work for an audiobook platform
-- Narrative designer for an indie game
-- Travel content creator for a luxury yacht company
-- Comedy writer for a tech startup
-- Head of culture at a weird startup
-- Mystery shopper for luxury brands (remote version)
-- Creative consultant for a celebrity
-- Documentary project creative lead
-- Trend forecaster for a fashion brand
-- Illustrator/typographer for a niche publisher
-- Sound designer for an app
-- Creative director for a surf or outdoor brand
-- Spiritual/wellness content creative lead
-- Kids content creative director
-- Esports creative lead
-- Metaverse experience designer
+Think pub quiz host for a tech company. Think creative director for a hot sauce brand. 
+Think AI prompt artist for a video game studio. Think brand voice consultant for a 
+celebrity. Think travel content lead for a luxury adventure company. Think creative 
+director for a cannabis brand in Colorado. Think narrative designer for an indie game. 
+Think comedy writer for a fintech app. Think head of weird projects at a startup with 
+a fun name. Think creative lead for a surf brand in Tulum.
 
-Examples of LOW scores (1-3):
-- Anything corporate, boring, or stressful
-- Anything requiring skills he doesn't have (coding, medical, legal)
-- High accountability senior roles (those belong in Core)
+HIGH scores (7-10) go to jobs that are:
+- Genuinely surprising or unexpected
+- In a fun, niche, or unusual industry (gaming, cannabis, spirits, food, travel, 
+  outdoor/surf/ski, luxury, entertainment, animation, comics, music, fashion, 
+  sports, esports, space, pets, wellness, comedy)
+- Creative with real freedom — not just "creative" in a corporate way
+- Something Travis would screenshot and text to a friend saying "look at this"
+- AI/generative creative roles at interesting companies
+- Unusual titles: Chief Storyteller, Head of Vibes, Creative Futurist, 
+  Brand Poet, Director of Imagination
 
-Score 0 for:
-- On-site required
-- MLM, cold calling, data entry, scams, pure commission
+LOW scores (1-3) go to jobs that are:
+- Fine but forgettable — "meh, another brand manager role"
+- Standard corporate creative wrapped in fun-sounding language
+
+SCORE 0 — kill it immediately:
 - Customer support, tech support, help desk, call center
-- Caregiver, elderly care, nursing, healthcare, therapy
-- Tutoring, teaching, bookkeeping, transcription
-- Anything mind-numbing or soul-crushing
+- Caregiver, elderly care, healthcare, therapy, nursing
+- Tutoring, teaching, transcription, bookkeeping
+- MLM, cold calling, commission-only, data entry
+- On-site required
+- Anything that would make Travis stare at the ceiling
 
-The question to ask yourself: would Travis smile reading this job description?
-If yes → high score. If "meh, another job" → low score.
+One rule: if it wouldn't make him smile, it doesn't belong here.
 
 Always assign category: WILDCARD
 
-Respond ONLY with JSON: {"score": 8, "category": "WILDCARD", "reason": "one punchy sentence explaining the smile factor"}
+Respond ONLY with JSON: {"score": 8, "category": "WILDCARD", "reason": "punchy one-liner that captures the fun factor — write it like you're texting a friend"}
 """
 
 # Wildcard-specific sources — broader, weirder feeds
