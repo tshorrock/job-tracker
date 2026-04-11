@@ -134,23 +134,15 @@ Respond ONLY with JSON: {"score": 7, "category": "CORE", "reason": "one punchy s
 # ─── SOURCES ──────────────────────────────────────────────────────────────────
 
 SOURCES = [
-    # ── Already running ──
-    {"name": "We Work Remotely",    "url": "https://weworkremotely.com/remote-jobs.rss",                    "type": "rss"},
-    {"name": "WWR Design",          "url": "https://weworkremotely.com/categories/remote-design-jobs.rss",  "type": "rss"},
-    {"name": "WWR Marketing",       "url": "https://weworkremotely.com/categories/remote-marketing-jobs.rss","type": "rss"},
-    {"name": "Remote OK Design",    "url": "https://remoteok.com/remote-design-jobs.json",                  "type": "remoteok"},
-    {"name": "Remote OK Marketing", "url": "https://remoteok.com/remote-marketing-jobs.json",               "type": "remoteok"},
-    {"name": "Remote OK Exec",      "url": "https://remoteok.com/remote-exec-jobs.json",                    "type": "remoteok"},
-    {"name": "Remote OK All",       "url": "https://remoteok.com/remote-jobs.json",                         "type": "remoteok"},
-    {"name": "Remote OK Writing",   "url": "https://remoteok.com/remote-writing-jobs.json",                 "type": "remoteok"},
-    {"name": "Himalayas",           "url": "https://himalayas.app/jobs/rss",                                "type": "rss"},
-    {"name": "Remotive",            "url": "https://remotive.com/api/remote-jobs?limit=100",                "type": "remotive"},
-    {"name": "Jobicy",              "url": "https://jobicy.com/?feed=job_feed&job_types=full-time",         "type": "rss"},
-    {"name": "Arbeitnow",           "url": "https://www.arbeitnow.com/api/job-board-api",                   "type": "arbeitnow"},
-    {"name": "Authentic Jobs",      "url": "https://authenticjobs.com/feed/",                               "type": "rss"},
-    # ── Newly confirmed working ──
-    {"name": "Jobspresso",          "url": "https://jobspresso.co/feed/?post_type=job_listing",             "type": "rss"},
-    {"name": "Workew",              "url": "https://workew.com/feed/",                                      "type": "rss"},
+    {"name": "We Work Remotely",  "url": "https://weworkremotely.com/remote-jobs.rss",               "type": "rss"},
+    {"name": "Remote OK",         "url": "https://remoteok.com/remote-jobs.json",                    "type": "remoteok"},
+    {"name": "Himalayas",         "url": "https://himalayas.app/jobs/rss",                           "type": "rss"},
+    {"name": "Remotive",          "url": "https://remotive.com/api/remote-jobs?limit=100",           "type": "remotive"},
+    {"name": "Jobicy",            "url": "https://jobicy.com/?feed=job_feed&job_types=full-time",    "type": "rss"},
+    {"name": "Arbeitnow",         "url": "https://www.arbeitnow.com/api/job-board-api",              "type": "arbeitnow"},
+    {"name": "Authentic Jobs",    "url": "https://authenticjobs.com/feed/",                          "type": "rss"},
+    {"name": "Jobspresso",        "url": "https://jobspresso.co/feed/?post_type=job_listing",        "type": "rss"},
+    {"name": "Workew",            "url": "https://workew.com/feed/",                                 "type": "rss"},
 ]
 
 MANUAL_BOARDS = [
