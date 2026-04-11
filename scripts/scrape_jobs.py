@@ -356,8 +356,11 @@ Examples of LOW scores (1-3):
 
 Score 0 for:
 - On-site required
-- MLM, cold calling, data entry, scams
-- Pure commission sales
+- MLM, cold calling, data entry, scams, pure commission
+- Customer support, tech support, help desk, call center
+- Caregiver, elderly care, nursing, healthcare, therapy
+- Tutoring, teaching, bookkeeping, transcription
+- Anything mind-numbing or soul-crushing
 
 The question to ask yourself: would Travis smile reading this job description?
 If yes → high score. If "meh, another job" → low score.
@@ -426,6 +429,16 @@ WILDCARD_EXCLUDES = [
     "pyramid", "insurance agent", "mortgage", "real estate agent",
     "engineer", "developer", "software", "devops",
     "junior", "intern", "entry level",
+    # Support / care roles
+    "customer support", "customer service", "technical support", "tech support",
+    "help desk", "it support", "support specialist", "support agent",
+    "support representative", "call center", "contact center",
+    "caregiver", "care assistant", "home care", "senior care",
+    "elderly", "nursing", "healthcare", "medical", "clinical",
+    "telehealth", "therapy", "therapist", "counselor",
+    "bookkeeper", "accountant", "tax", "payroll",
+    "transcription", "transcriber", "captioning",
+    "tutor", "teacher", "instructor", "educator",
 ]
 
 def wildcard_match(job):
