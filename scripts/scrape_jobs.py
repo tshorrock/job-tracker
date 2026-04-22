@@ -32,11 +32,38 @@ CORE_QUERIES = [
     "head of design remote",
 ]
 
+# Wildcard = genuinely random/weird/fun jobs. Nothing to do with design or advertising.
 WILDCARD_QUERIES = [
-    "creative director gaming entertainment remote",
-    "AI filmmaker generative creative remote",
-    "chief storyteller creative lead remote",
+    "voice actor cartoon remote",
+    "professional video game tester remote",
+    "mystery shopper remote",
+    "sommelier wine remote",
+    "escape room designer remote",
+    "ASMR content creator remote",
+    "pet psychic animal communicator remote",
+    "food taster taste tester remote",
+    "happiness officer chief fun remote",
+    "professional sleeper sleep researcher remote",
 ]
+
+# Core/adjacent title patterns — anything matching these gets rerouted OUT of wildcard
+CORE_ADJACENT_PATTERNS = [
+    "creative director", "head of creative", "executive creative",
+    "group creative", "vp creative", "vp of creative", "chief creative",
+    "head of brand", "brand director", "director of creative",
+    "head of design", "vp design", "vp of design", "director of design",
+    "chief design", "design director", "graphic design director",
+    "creative lead", "creative strategist", "brand strategist",
+    "head of content", "vp content", "chief content",
+    "ai director", "ai creative", "creative technologist",
+    "head of marketing", "vp marketing", "chief marketing", "cmo",
+    "filmmaker", "film director", "producer",
+]
+
+def is_core_adjacent(title):
+    """Returns True if this job belongs in core/adjacent, not wildcard."""
+    t = title.lower()
+    return any(p in t for p in CORE_ADJACENT_PATTERNS)
 
 # ─── HARD EXCLUDES (title must NOT contain these) ─────────────────────────────
 
@@ -305,8 +332,18 @@ def fetch_all(rapidapi_key):
         jobs = fetch_jsearch(query, rapidapi_key)
         filtered = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
         for j in filtered: seen_urls.add(j["url"])
-        print(f"     {len(jobs)} fetched · {len(filtered)} kept")
-        wild_jobs.extend(filtered)
+        # Reroute any core/adjacent titles that snuck in via wildcard queries
+        rerouted, true_wild = [], []
+        for j in filtered:
+            if is_core_adjacent(j["title"]):
+                rerouted.append(j)
+            else:
+                true_wild.append(j)
+        if rerouted:
+            print(f"     ↳ rerouted {len(rerouted)} core/adjacent jobs to main pipeline")
+            all_jobs.extend(rerouted)
+        print(f"     {len(jobs)} fetched · {len(true_wild)} wildcard · {len(rerouted)} rerouted")
+        wild_jobs.extend(true_wild)
 
     return all_jobs, wild_jobs
 
