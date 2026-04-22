@@ -475,36 +475,7 @@ body{
   .page{padding:20px 20px 60px}
   .logo-sub{display:none}
 }
-/* ── MANUAL BOARDS SECTION ───────────────────────────────────────────────── */
-.boards-section{margin-top:28px}
-.boards-hdr{
-  display:flex;align-items:baseline;gap:14px;margin-bottom:16px;
-}
-.boards-title{
-  font-size:20px;font-weight:800;letter-spacing:-0.03em;color:var(--t1);
-}
-.boards-sub{font-size:13px;color:var(--t4)}
-.boards-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:8px;
-}
-.board-link{
-  display:flex;align-items:center;justify-content:space-between;
-  background:var(--card);border:1px solid var(--border);
-  border-radius:10px;padding:12px 16px;
-  text-decoration:none;
-  transition:border-color 150ms, background 150ms, transform 150ms;
-}
-.board-link:hover{
-  border-color:var(--teal);
-  background:var(--card2);
-  transform:translateY(-2px);
-}
-.board-link:hover .board-name{color:var(--teal)}
-.board-link:hover .board-arr{color:var(--teal);transform:translateX(3px)}
-.board-name{font-size:13px;font-weight:600;color:var(--t2);transition:color 150ms}
-.board-arr{font-size:11px;color:var(--t4);transition:all 150ms}
+
 </style>
 </head>
 <body>
@@ -560,8 +531,8 @@ body{
     </div>
     <div class="metric muted">
       <div class="metric-label">Live Sources</div>
-      <div class="metric-num" style="color:var(--t1)">11</div>
-      <div class="metric-sub">Feeds active</div>
+      <div class="metric-num" style="color:var(--t1)">4</div>
+      <div class="metric-sub">LinkedIn · Indeed · Glassdoor · ZipRecruiter</div>
     </div>
   </div>
 
@@ -624,7 +595,7 @@ body{
       <div class="col-hdr">
         <div class="col-hdr-left">
           <div class="col-title orange" id="col-wild-title">Wildcard</div>
-          <div class="col-desc">Unexpected · Unusual · Remote roles Claude thinks you'd find interesting</div>
+          <div class="col-desc">Mystery shoppers · Voice actors · Pet psychics · Whatever the hell else</div>
         </div>
         <div class="col-hdr-right">
           <span class="col-badge orange">Who knows</span>
@@ -641,14 +612,7 @@ body{
 
   </div>
 
-  <!-- MANUAL BOARDS -->
-  <div class="boards-section">
-    <div class="boards-hdr">
-      <div class="boards-title">Manual Boards</div>
-      <div class="boards-sub">These don't have feeds — check them daily</div>
-    </div>
-    <div class="boards-grid" id="boards-grid"></div>
-  </div>
+
 
 </main>
 
@@ -761,7 +725,6 @@ async function boot() {
   updateMeta();
   countUp();
   render();
-  renderBoards();
 }
 
 // ── COUNT-UP ANIMATION (brief: 1–2s duration) ─────────────────────────────
@@ -923,53 +886,6 @@ function render() {
   renderCol('list-adj',  'cnt-adj',  'm-adj',  'ADJACENT', 'purple');
   renderCol('list-wild', 'cnt-wild', 'm-wild', 'WILDCARD', 'orange');
   renderPipeline();
-}
-
-// ── BOARDS ────────────────────────────────────────────────────────────────
-const BOARDS = [
-  // LinkedIn
-  {n:'LinkedIn — CD Remote',         u:'https://www.linkedin.com/jobs/search/?keywords=creative+director&f_WT=2&f_TPR=r86400'},
-  {n:'LinkedIn — Head of Creative',  u:'https://www.linkedin.com/jobs/search/?keywords=head+of+creative+remote&f_WT=2'},
-  {n:'LinkedIn — VP Creative',       u:'https://www.linkedin.com/jobs/search/?keywords=vp+creative+remote&f_WT=2'},
-  {n:'LinkedIn — ECD Remote',        u:'https://www.linkedin.com/jobs/search/?keywords=executive+creative+director+remote&f_WT=2'},
-  {n:'LinkedIn — Head of Design',    u:'https://www.linkedin.com/jobs/search/?keywords=head+of+design+remote&f_WT=2'},
-  {n:'LinkedIn — AI Creative',       u:'https://www.linkedin.com/jobs/search/?keywords=ai+creative+director+remote&f_WT=2'},
-  // No public API
-  {n:'FlexJobs — Creative',          u:'https://www.flexjobs.com/remote-jobs/creative-director'},
-  {n:'Wellfound (AngelList)',         u:'https://wellfound.com/role/r/creative-director'},
-  {n:'Remote Rocketship',            u:'https://www.remoterocketship.com/jobs/creative-director/'},
-  {n:'Built In — Remote CD',         u:'https://builtin.com/jobs/remote/design-ux/search/creative-director'},
-  {n:'Crossover',                    u:'https://www.crossover.com/jobs'},
-  {n:'Turing',                       u:'https://www.turing.com/jobs'},
-  {n:'Arc.dev',                      u:'https://arc.dev/remote-jobs'},
-  {n:'Jobot Creative',               u:'https://jobot.com/jobs?q=creative+director&remote=true'},
-  {n:'Daily Remote',                 u:'https://dailyremote.com/remote-creative-director-jobs'},
-  {n:'JustRemote Design',            u:'https://justremote.co/remote-design-jobs'},
-  {n:'Working Nomads',               u:'https://www.workingnomads.com/jobs?category=design'},
-  {n:'Skip the Drive',               u:'https://www.skipthedrive.com/job-category/design-creative/'},
-  {n:'4 Day Week — $100K+',          u:'https://4dayweek.io/remote-jobs'},
-  {n:'Dynamite Jobs',                u:'https://dynamitejobs.com/remote-jobs/creative'},
-  {n:'Remote Circle',                u:'https://remotecircle.com'},
-  {n:'Hubstaff Talent',              u:'https://hubstafftalent.net/search/jobs?q=creative+director'},
-  // AI / creative tech
-  {n:'Superside — AI CD',            u:'https://careers.superside.com'},
-  {n:'Curious Refuge AI Jobs',       u:'https://curiousrefuge.com/ai-jobs-board'},
-  {n:'The AI Job Board',             u:'https://theaijobboard.com'},
-  {n:'Contra — Fractional',          u:'https://contra.com/opportunities'},
-  {n:'Toptal Creative',              u:'https://www.toptal.com/creative'},
-  {n:'Roboflow — CD',                u:'https://jobs.ashbyhq.com/roboflow'},
-];
-
-function renderBoards() {
-  const el = document.getElementById('boards-grid');
-  if (!el) return;
-  const list = meta.boards?.length ? meta.boards.map(b=>({n:b.name,u:b.url})) : BOARDS;
-  el.innerHTML = list.map(b=>
-    `<a class="board-link" href="${b.u}" target="_blank" rel="noopener">
-      <span class="board-name">${b.n}</span>
-      <span class="board-arr">→</span>
-    </a>`
-  ).join('');
 }
 
 boot();
