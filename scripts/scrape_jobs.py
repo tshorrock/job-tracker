@@ -22,7 +22,8 @@ JSEARCH_URL  = "https://jsearch.p.rapidapi.com/search"
 # Each tuple: (query string, hint) — hint is used for logging only
 # Claude does the real categorization. 10 queries × 20 weekdays ≈ 200 req/month (free tier)
 
-CORE_QUERIES = [
+# US queries — JSearch defaults to US results
+CORE_QUERIES_US = [
     "creative director remote",
     "executive creative director remote",
     "head of creative remote",
@@ -32,18 +33,22 @@ CORE_QUERIES = [
     "head of design remote",
 ]
 
+# Canada queries — explicit country pass to catch Canadian LinkedIn/Indeed postings
+CORE_QUERIES_CA = [
+    "creative director remote Canada",
+    "head of creative remote Canada",
+    "executive creative director remote Canada",
+    "VP creative remote Canada",
+    "head of brand remote Canada",
+]
+
 # Wildcard = genuinely random/weird/fun jobs. Nothing to do with design or advertising.
 WILDCARD_QUERIES = [
     "voice actor cartoon remote",
     "professional video game tester remote",
     "mystery shopper remote",
-    "sommelier wine remote",
     "escape room designer remote",
-    "ASMR content creator remote",
-    "pet psychic animal communicator remote",
     "food taster taste tester remote",
-    "happiness officer chief fun remote",
-    "professional sleeper sleep researcher remote",
 ]
 
 # Core/adjacent title patterns — anything matching these gets rerouted OUT of wildcard
@@ -316,8 +321,8 @@ def fetch_all(rapidapi_key):
     all_jobs = []
     seen_urls = set()
 
-    print("\n  Core/Adjacent queries:")
-    for query in CORE_QUERIES:
+    print("\n  Core/Adjacent queries — US:")
+    for query in CORE_QUERIES_US + CORE_QUERIES_CA:
         print(f"  → \"{query}\"")
         jobs = fetch_jsearch(query, rapidapi_key)
         filtered = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
