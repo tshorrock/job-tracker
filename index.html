@@ -415,25 +415,9 @@ body{
   color:var(--purple);
   cursor:pointer;white-space:nowrap;
   transition:transform 150ms ease-out, filter 150ms ease-out, background 150ms;
-  position:relative;
 }
 .eval-btn:hover{background:var(--purple);color:#0D0D0D;transform:scale(1.02)}
 .eval-btn:active{transform:scale(0.98)}
-.eval-tip{
-  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
-  background:var(--card3);border:1px solid var(--border2);
-  border-radius:8px;padding:8px 12px;
-  font-family:'JetBrains Mono',monospace;font-size:10px;
-  letter-spacing:0.04em;color:var(--t2);
-  white-space:nowrap;pointer-events:none;
-  opacity:0;transition:opacity 200ms;
-  z-index:10;
-}
-.eval-tip.show{opacity:1}
-.eval-tip::after{
-  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
-  border:5px solid transparent;border-top-color:var(--border2);
-}
 
 /* ── PIPELINE SUMMARY (header bar) ───────────────────────────────────────── */
 .pipeline{
@@ -461,6 +445,130 @@ body{
 /* ── REDUCED MOTION ──────────────────────────────────────────────────────── */
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
+}
+
+/* ── EVAL MODAL ──────────────────────────────────────────────────────────── */
+.modal-backdrop{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(6px);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity 300ms ease;
+}
+.modal-backdrop.open{opacity:1;pointer-events:all}
+.modal{
+  width:100%;max-width:780px;
+  max-height:88vh;overflow-y:auto;
+  background:var(--card2);
+  border:1px solid var(--border2);
+  border-bottom:none;
+  border-radius:20px 20px 0 0;
+  padding:0 0 60px;
+  transform:translateY(100%);
+  transition:transform 380ms cubic-bezier(0.32,0.72,0,1);
+}
+.modal-backdrop.open .modal{transform:translateY(0)}
+
+.modal-handle{
+  width:40px;height:4px;border-radius:2px;
+  background:var(--border2);margin:16px auto 0;
+}
+.modal-header{
+  padding:24px 32px 0;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+}
+.modal-title{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--t1);line-height:1.3}
+.modal-company{font-size:15px;color:var(--t3);margin-top:4px}
+.modal-close{
+  width:36px;height:36px;border-radius:8px;flex-shrink:0;margin-top:2px;
+  background:transparent;border:1px solid var(--border2);
+  color:var(--t3);font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 150ms;
+}
+.modal-close:hover{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.35);color:var(--err)}
+
+.modal-body{padding:28px 32px 0}
+
+/* Score banner */
+.eval-score-row{
+  display:flex;align-items:center;gap:20px;
+  background:var(--card3);border:1px solid var(--border);
+  border-radius:14px;padding:20px 24px;margin-bottom:24px;
+}
+.eval-score-big{
+  font-size:64px;font-weight:700;letter-spacing:-0.04em;line-height:1;
+  flex-shrink:0;
+}
+.eval-score-big.high{color:var(--teal)}
+.eval-score-big.mid{color:var(--amber)}
+.eval-score-big.low{color:var(--err)}
+.eval-score-meta{flex:1}
+.eval-score-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--t4);
+  margin-bottom:6px;
+}
+.eval-verdict{font-size:15px;color:var(--t2);line-height:1.65}
+
+/* Sections */
+.eval-section{margin-bottom:22px}
+.eval-section-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--t4);margin-bottom:10px;
+}
+.eval-cover{
+  background:var(--card3);border-left:3px solid var(--teal);
+  border-radius:0 10px 10px 0;padding:16px 20px;
+  font-size:15px;color:var(--t1);line-height:1.7;font-style:italic;
+}
+.eval-cv-angle{
+  background:var(--card3);border-left:3px solid var(--purple);
+  border-radius:0 10px 10px 0;padding:14px 20px;
+  font-size:14px;color:var(--t2);line-height:1.6;
+}
+.eval-points{display:flex;flex-direction:column;gap:8px}
+.eval-point{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--card3);border-radius:10px;padding:12px 16px;
+  font-size:14px;color:var(--t2);line-height:1.6;
+}
+.eval-point::before{
+  content:'→';color:var(--teal);font-weight:700;
+  flex-shrink:0;margin-top:1px;
+}
+.eval-flags{display:flex;flex-direction:column;gap:8px}
+.eval-flag{
+  display:flex;align-items:flex-start;gap:12px;
+  background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);
+  border-radius:10px;padding:12px 16px;
+  font-size:14px;color:var(--t2);line-height:1.6;
+}
+.eval-flag::before{content:'⚑';color:var(--err);flex-shrink:0;margin-top:1px}
+.eval-salary{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;color:var(--t3);
+  background:var(--card3);border-radius:8px;
+  padding:10px 14px;
+}
+
+/* Loading state */
+.eval-loading{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:60px 32px;gap:16px;
+}
+.eval-spinner{
+  width:40px;height:40px;border-radius:50%;
+  border:3px solid var(--border2);
+  border-top-color:var(--teal);
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.eval-loading-txt{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;letter-spacing:0.1em;color:var(--t4);
 }
 
 /* ── RESPONSIVE ──────────────────────────────────────────────────────────── */
@@ -614,7 +722,27 @@ body{
 
 
 
-</main>
+</div><!-- end .page -->
+
+<!-- EVAL MODAL -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeModal(event)" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal" id="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-title">Evaluating…</div>
+        <div class="modal-company" id="modal-company"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close evaluation">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <div class="eval-loading">
+        <div class="eval-spinner"></div>
+        <div class="eval-loading-txt">Claude is reading the role…</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ── DATA ──────────────────────────────────────────────────────────────────
@@ -664,13 +792,121 @@ function renderPipeline() {
   ).join('');
 }
 
-// ── EVALUATE (clipboard + tooltip) ───────────────────────────────────────
-function evalJob(url, btnEl, e) {
+// ── EVALUATE — calls Cloudflare Worker, shows modal ──────────────────────
+// TODO: replace with your Cloudflare Worker URL after deploying
+const WORKER_URL = 'https://job-eval-worker.YOUR-SUBDOMAIN.workers.dev';
+
+function evalJob(jobId, e) {
   e.preventDefault(); e.stopPropagation();
-  navigator.clipboard.writeText(url).then(() => {
-    const tip = btnEl.querySelector('.eval-tip');
-    if (tip) { tip.classList.add('show'); setTimeout(() => tip.classList.remove('show'), 2200); }
-  });
+  const job = jobs.find(j => j.id === jobId);
+  if (!job) return;
+  openModal(job);
+}
+
+function openModal(job) {
+  document.getElementById('modal-title').textContent   = job.title || 'Evaluating…';
+  document.getElementById('modal-company').textContent = job.company || '';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="eval-loading">
+      <div class="eval-spinner"></div>
+      <div class="eval-loading-txt">Claude is reading the role…</div>
+    </div>`;
+  document.getElementById('modal-backdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  runEval(job);
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-backdrop') && !e.target.classList.contains('modal-close')) return;
+  document.getElementById('modal-backdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal({ target: document.getElementById('modal-backdrop') }); });
+
+async function runEval(job) {
+  const bodyEl = document.getElementById('modal-body');
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title:       job.title || '',
+        company:     job.company || '',
+        description: job.description || '',
+        salary:      job.salary || '',
+        url:         job.url || '',
+      })
+    });
+    if (!res.ok) throw new Error(`Worker returned ${res.status}`);
+    const r = await res.json();
+    if (r.error) throw new Error(r.error);
+    renderEval(bodyEl, r);
+  } catch(err) {
+    bodyEl.innerHTML = `
+      <div style="padding:40px 32px;text-align:center">
+        <div style="font-size:32px;margin-bottom:12px">⚠</div>
+        <div style="color:var(--err);font-size:15px;margin-bottom:8px">Evaluation failed</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t4)">${err.message}</div>
+        <div style="margin-top:16px;font-size:13px;color:var(--t4)">Make sure the Worker URL is set in index.html</div>
+      </div>`;
+  }
+}
+
+function renderEval(el, r) {
+  const sc = r.score || 0;
+  const scClass = sc >= 7 ? 'high' : sc >= 4 ? 'mid' : 'low';
+  const points = (r.talking_points || []).map(p => `<div class="eval-point">${p}</div>`).join('');
+  const flags  = (r.red_flags || []).filter(f => f && f.trim()).map(f => `<div class="eval-flag">${f}</div>`).join('');
+
+  el.innerHTML = `
+    <div class="eval-score-row">
+      <div class="eval-score-big ${scClass}">${sc}</div>
+      <div class="eval-score-meta">
+        <div class="eval-score-label">Match Score · ${r.category || ''}</div>
+        <div class="eval-verdict">${r.verdict || ''}</div>
+      </div>
+    </div>
+
+    <div class="eval-section">
+      <div class="eval-section-label">Cover Letter Opening</div>
+      <div class="eval-cover">${r.cover_letter_hook || '—'}</div>
+    </div>
+
+    <div class="eval-section">
+      <div class="eval-section-label">How to Angle Your CV</div>
+      <div class="eval-cv-angle">${r.cv_angle || '—'}</div>
+    </div>
+
+    ${points ? `<div class="eval-section">
+      <div class="eval-section-label">Talking Points</div>
+      <div class="eval-points">${points}</div>
+    </div>` : ''}
+
+    ${flags ? `<div class="eval-section">
+      <div class="eval-section-label">Red Flags</div>
+      <div class="eval-flags">${flags}</div>
+    </div>` : ''}
+
+    ${r.salary_note ? `<div class="eval-section">
+      <div class="eval-section-label">Compensation Note</div>
+      <div class="eval-salary">${r.salary_note}</div>
+    </div>` : ''}
+
+    <div style="margin-top:8px">
+      <a href="${jobs.find(j=>j.title===document.getElementById('modal-title').textContent)?.url||'#'}" 
+         target="_blank" rel="noopener"
+         style="display:block;text-align:center;padding:14px;border-radius:12px;
+                background:var(--teal-dim);border:1px solid rgba(0,229,204,0.25);
+                color:var(--teal);font-family:'JetBrains Mono',monospace;
+                font-size:12px;letter-spacing:0.1em;font-weight:700;
+                text-decoration:none;text-transform:uppercase;
+                transition:background 150ms"
+         onmouseover="this.style.background='var(--teal)';this.style.color='#0D0D0D'"
+         onmouseout="this.style.background='var(--teal-dim)';this.style.color='var(--teal)'">
+        Open Role →
+      </a>
+    </div>`;
 }
 
 // ── TRIGGER RUN ───────────────────────────────────────────────────────────
@@ -833,7 +1069,7 @@ function makeCard(j, accent) {
     ${reason}
     <div class="jcard-actions">
       <a class="open-btn ${accent}" href="${j.url}" target="_blank" rel="noopener" aria-label="Open ${j.title||'job'} listing">Open Role →</a>
-      <button class="eval-btn" onclick="evalJob('${safeUrl}',this,event)" aria-label="Copy URL and evaluate">⚡ Evaluate<span class="eval-tip">URL copied — paste into Claude Code and run /career-ops</span></button>
+      <button class="eval-btn" onclick="evalJob('${jid}',event)" aria-label="Evaluate this role">⚡ Evaluate</button>
       <button class="x-btn" onclick="dismiss('${jid}',event)" aria-label="Dismiss this job">✕</button>
     </div>
   </article>`;
