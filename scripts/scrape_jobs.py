@@ -33,16 +33,9 @@ CORE_QUERIES = [
 ]
 
 WILDCARD_QUERIES = [
-    "voice actor cartoon remote",
-    "professional video game tester remote",
-    "mystery shopper remote",
-    "sommelier wine remote",
-    "escape room designer remote",
-    "ASMR content creator remote",
-    "pet psychic animal communicator remote",
-    "professional sleeper sleep researcher remote",
-    "food taster taste tester remote",
-    "happiness officer chief fun remote",
+    "creative director gaming entertainment remote",
+    "AI filmmaker generative creative remote",
+    "chief storyteller creative lead remote",
 ]
 
 # ─── HARD EXCLUDES (title must NOT contain these) ─────────────────────────────
@@ -202,9 +195,21 @@ def fetch_jsearch(query, rapidapi_key, num_pages=1):
 
 # ─── FILTERS ──────────────────────────────────────────────────────────────────
 
+HYBRID_SIGNALS = [
+    "hybrid", "on-site", "onsite", "in-office", "in office",
+    "in-person", "in person", "office required", "must be local",
+    "must be in", "days in office", "days per week in",
+    "occasional travel required", "relocation required",
+]
+
 def title_ok(title):
     t = title.lower()
     return not any(ex in t for ex in HARD_EXCLUDES)
+
+def is_remote_clean(job):
+    """Kill anything that hints at hybrid or in-person, regardless of remote flag."""
+    text = ((job.get("title") or "") + " " + (job.get("description") or "")).lower()
+    return not any(signal in text for signal in HYBRID_SIGNALS)
 
 # ─── HELPERS ──────────────────────────────────────────────────────────────────
 
@@ -288,7 +293,7 @@ def fetch_all(rapidapi_key):
     for query in CORE_QUERIES:
         print(f"  → \"{query}\"")
         jobs = fetch_jsearch(query, rapidapi_key)
-        filtered = [j for j in jobs if title_ok(j["title"]) and j["url"] not in seen_urls]
+        filtered = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
         for j in filtered: seen_urls.add(j["url"])
         print(f"     {len(jobs)} fetched · {len(filtered)} kept")
         all_jobs.extend(filtered)
@@ -298,7 +303,7 @@ def fetch_all(rapidapi_key):
     for query in WILDCARD_QUERIES:
         print(f"  → \"{query}\"")
         jobs = fetch_jsearch(query, rapidapi_key)
-        filtered = [j for j in jobs if title_ok(j["title"]) and j["url"] not in seen_urls]
+        filtered = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
         for j in filtered: seen_urls.add(j["url"])
         print(f"     {len(jobs)} fetched · {len(filtered)} kept")
         wild_jobs.extend(filtered)
