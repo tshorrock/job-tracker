@@ -33,9 +33,16 @@ CORE_QUERIES = [
 ]
 
 WILDCARD_QUERIES = [
-    "creative director gaming entertainment remote",
-    "AI filmmaker generative creative remote",
-    "chief storyteller creative lead remote",
+    "voice actor cartoon remote",
+    "professional video game tester remote",
+    "mystery shopper remote",
+    "sommelier wine remote",
+    "escape room designer remote",
+    "ASMR content creator remote",
+    "pet psychic animal communicator remote",
+    "professional sleeper sleep researcher remote",
+    "food taster taste tester remote",
+    "happiness officer chief fun remote",
 ]
 
 # ─── HARD EXCLUDES (title must NOT contain these) ─────────────────────────────
