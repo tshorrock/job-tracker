@@ -4,7 +4,7 @@ on:
   schedule:
     # Noon UTC = 7AM EST = 6AM CST (Costa Rica) — Mon-Fri
     - cron: '0 12 * * 1-5'
-  workflow_dispatch: # Allow manual trigger
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -24,10 +24,11 @@ jobs:
 
       - name: Run scraper
         env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           TO_EMAIL: ${{ secrets.TO_EMAIL }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scripts/scrape_jobs.py
 
       - name: Commit updated data
