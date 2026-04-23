@@ -916,15 +916,9 @@ async function triggerRun() {
   btn.disabled = true;
   btn.style.opacity = '0.6';
   try {
-    const r = await fetch('https://api.github.com/repos/tshorrock/job-tracker/actions/workflows/daily_scrape.yml/dispatches', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/vnd.github+json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ref: 'main' })
-    });
-    if (r.status === 204 || r.status === 201 || r.ok) {
+    const r = await fetch(WORKER_URL + '/run', { method: 'POST' });
+    const data = await r.json();
+    if (data.ok) {
       btn.textContent = '✓ Started!';
       btn.style.background = 'var(--mint)';
       setTimeout(() => {
@@ -935,17 +929,12 @@ async function triggerRun() {
       }, 3000);
       setTimeout(() => { boot(); }, 90000);
     } else {
-      // Needs auth — fall back to opening Actions page
-      window.open('https://github.com/tshorrock/job-tracker/actions/workflows/daily_scrape.yml','_blank');
-      btn.textContent = '↻ Run Now';
-      btn.disabled = false;
-      btn.style.opacity = '1';
+      throw new Error(data.error || 'Unknown error');
     }
   } catch(e) {
-    window.open('https://github.com/tshorrock/job-tracker/actions/workflows/daily_scrape.yml','_blank');
-    btn.textContent = '↻ Run Now';
-    btn.disabled = false;
-    btn.style.opacity = '1';
+    btn.textContent = '✗ Failed';
+    btn.style.background = 'var(--danger, #e05)';
+    setTimeout(() => { btn.textContent = '↻ Run Now'; btn.disabled = false; btn.style.opacity = '1'; btn.style.background = ''; }, 3000);
   }
 }
 

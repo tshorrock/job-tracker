@@ -52,6 +52,22 @@ export default {
       return new Response('Method not allowed', { status: 405, headers: CORS });
     }
 
+    const { pathname } = new URL(request.url);
+
+    if (pathname === '/run') {
+      try {
+        const r = await fetch('https://api.github.com/repos/tshorrock/job-tracker/actions/workflows/daily_scrape.yml/dispatches', {
+          method: 'POST',
+          headers: { 'Accept': 'application/vnd.github+json', 'Authorization': `Bearer ${env.GITHUB_TOKEN}`, 'Content-Type': 'application/json', 'User-Agent': 'job-eval-worker' },
+          body: JSON.stringify({ ref: 'main' }),
+        });
+        if (r.status === 204 || r.ok) return new Response(JSON.stringify({ ok: true }), { headers: { ...CORS, 'Content-Type': 'application/json' } });
+        throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
+      } catch (err) {
+        return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: { ...CORS, 'Content-Type': 'application/json' } });
+      }
+    }
+
     let body;
     try {
       body = await request.json();
