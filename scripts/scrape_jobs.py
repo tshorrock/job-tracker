@@ -5,8 +5,8 @@ Data source: JSearch API (LinkedIn + Indeed + Glassdoor + ZipRecruiter)
 Three category lanes: CORE · ADJACENT · WILDCARD
 """
 
-import json, os, re, hashlib, smtplib, urllib.request, time
-from datetime import datetime, timezone
+import json, os, re, hashlib, smtplib, urllib.request, urllib.parse, time
+from datetime import datetime, timezone, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pathlib import Path
@@ -89,6 +89,24 @@ HARD_EXCLUDES = [
     "junior", "intern", "entry level", "coordinator", "assistant creative",
     "customer support", "technical support", "help desk", "customer service",
 ]
+
+# ─── DOMAIN BLOCKLIST (junk aggregators / SEO spam boards) ───────────────────
+
+BLOCKED_DOMAINS = {
+    'liveblog365.com', 'unaux.com', 'infinityfree.me', 'wuaze.com',
+    'fast-page.org', 'zya.me', 'starterparadise.com', 'lovestoblog.com',
+    'iceiy.com', 'hiresociall.com', 'jaabz.com', 'learn4good.com',
+    'jooble.org', 'whatjobs.com', 'bebee.com', 'theelitejob.com',
+    'lensa.com', 'jobleads.com', 'talent.com', 'gusher.co',
+    'career.zycto.com', 'wfh.hiresociall.com',
+}
+
+def domain_ok(url):
+    try:
+        netloc = urllib.parse.urlparse(url).netloc.lower().replace('www.', '')
+        return not any(blocked in netloc for blocked in BLOCKED_DOMAINS)
+    except:
+        return True
 
 # ─── CLAUDE SCORING PROMPT ────────────────────────────────────────────────────
 
@@ -187,7 +205,7 @@ def fetch_jsearch(query, rapidapi_key, num_pages=1):
             "query": query,
             "page": page,
             "num_pages": 1,
-            "date_posted": "week",
+            "date_posted": "3days",
             "remote_jobs_only": "true",
         })
         url = f"{JSEARCH_URL}?{params}"
@@ -203,14 +221,14 @@ def fetch_jsearch(query, rapidapi_key, num_pages=1):
                 title = (j.get("job_title") or "").strip()
                 company = (j.get("employer_name") or "").strip()
                 url_apply = j.get("job_apply_link") or j.get("job_url") or ""
-                desc = (j.get("job_description") or "")[:600]
+                desc = (j.get("job_description") or "")[:1200]
                 salary = ""
                 if j.get("job_min_salary") and j.get("job_max_salary"):
                     salary = f"${int(j['job_min_salary']):,}–${int(j['job_max_salary']):,} {j.get('job_salary_currency','USD')}/{j.get('job_salary_period','year')}"
                 elif j.get("job_min_salary"):
                     salary = f"${int(j['job_min_salary']):,}+ {j.get('job_salary_currency','USD')}"
 
-                if title and url_apply:
+                if title and url_apply and domain_ok(url_apply):
                     all_jobs.append({
                         "title": title,
                         "company": company,
@@ -324,7 +342,7 @@ def fetch_all(rapidapi_key):
     print("\n  Core/Adjacent queries — US:")
     for query in CORE_QUERIES_US + CORE_QUERIES_CA:
         print(f"  → \"{query}\"")
-        jobs = fetch_jsearch(query, rapidapi_key)
+        jobs = fetch_jsearch(query, rapidapi_key, num_pages=2)
         filtered = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
         for j in filtered: seen_urls.add(j["url"])
         print(f"     {len(jobs)} fetched · {len(filtered)} kept")
@@ -334,7 +352,7 @@ def fetch_all(rapidapi_key):
     wild_jobs = []
     for query in WILDCARD_QUERIES:
         print(f"  → \"{query}\"")
-        jobs = fetch_jsearch(query, rapidapi_key)
+        jobs = fetch_jsearch(query, rapidapi_key, num_pages=2)
         filtered = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
         for j in filtered: seen_urls.add(j["url"])
         # Reroute any core/adjacent titles that snuck in via wildcard queries
@@ -355,7 +373,15 @@ def fetch_all(rapidapi_key):
 # ─── PERSIST ──────────────────────────────────────────────────────────────────
 
 def process_jobs(raw_jobs, wild_jobs):
-    seen     = set(load_json(SEEN_FILE, []))
+    # Load seen dict; migrate list format if needed
+    raw_seen = load_json(SEEN_FILE, {})
+    if isinstance(raw_seen, list):
+        raw_seen = {id: datetime.now(timezone.utc).isoformat() for id in raw_seen}
+    # Purge entries older than 21 days
+    cutoff = datetime.now(timezone.utc) - timedelta(days=21)
+    seen = {k: v for k, v in raw_seen.items()
+            if datetime.fromisoformat(v) > cutoff}
+    print(f"  seen_ids: {len(raw_seen)} loaded, {len(raw_seen)-len(seen)} expired, {len(seen)} active")
     existing = load_json(DATA_FILE, [])
 
     new_core = []
@@ -364,7 +390,7 @@ def process_jobs(raw_jobs, wild_jobs):
         if jid in seen: continue
         job["id"]    = jid
         job["added"] = datetime.now(timezone.utc).isoformat()
-        seen.add(jid)
+        seen[jid] = datetime.now(timezone.utc).isoformat()
         new_core.append(job)
 
     new_wild = []
@@ -373,7 +399,7 @@ def process_jobs(raw_jobs, wild_jobs):
         if jid in seen: continue
         job["id"]    = jid
         job["added"] = datetime.now(timezone.utc).isoformat()
-        seen.add(jid)
+        seen[jid] = datetime.now(timezone.utc).isoformat()
         new_wild.append(job)
 
     print(f"\n  → {len(new_core)} new core/adjacent to score...")
@@ -384,12 +410,12 @@ def process_jobs(raw_jobs, wild_jobs):
     if new_wild:
         new_wild = score_batch(new_wild, WILDCARD_PROFILE, "wildcard")
 
-    all_new = [j for j in (new_core + new_wild) if (j.get("score") or 0) >= 1]
+    all_new = [j for j in (new_core + new_wild) if (j.get("score") or 0) >= 3]
     print(f"\n  → {len(all_new)} total kept (score ≥ 1)")
 
     all_jobs = (all_new + existing)[:300]
     save_json(DATA_FILE, all_jobs)
-    save_json(SEEN_FILE, list(seen))
+    save_json(SEEN_FILE, seen)
     save_json(META_FILE, {
         "updated":     datetime.now(timezone.utc).isoformat(),
         "new_count":   len(all_new),
@@ -466,8 +492,6 @@ def send_email(new_jobs, all_jobs):
         print(f"  ⚠ Email failed: {e}")
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────────
-
-import urllib.parse  # add at top — needed for urlencode
 
 if __name__ == "__main__":
     print("=" * 55)

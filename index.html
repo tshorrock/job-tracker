@@ -793,7 +793,6 @@ function renderPipeline() {
 }
 
 // ── EVALUATE — calls Cloudflare Worker, shows modal ──────────────────────
-// TODO: replace with your Cloudflare Worker URL after deploying
 const WORKER_URL = 'https://job-eval-worker.travis-shorrock.workers.dev';
 
 function evalJob(jobId, e) {
@@ -812,6 +811,7 @@ function openModal(job) {
       <div class="eval-loading-txt">Claude is reading the role…</div>
     </div>`;
   document.getElementById('modal-backdrop').classList.add('open');
+  document.getElementById('modal-backdrop').dataset.jobId = job.id || '';
   document.body.style.overflow = 'hidden';
   runEval(job);
 }
@@ -894,7 +894,7 @@ function renderEval(el, r) {
     </div>` : ''}
 
     <div style="margin-top:8px">
-      <a href="${jobs.find(j=>j.title===document.getElementById('modal-title').textContent)?.url||'#'}" 
+      <a href="${jobs.find(j=>j.id===document.getElementById('modal-backdrop').dataset.jobId)?.url||'#'}"
          target="_blank" rel="noopener"
          style="display:block;text-align:center;padding:14px;border-radius:12px;
                 background:var(--teal-dim);border:1px solid rgba(0,229,204,0.25);
@@ -927,7 +927,12 @@ async function triggerRun() {
         btn.style.opacity = '1';
         btn.style.background = '';
       }, 3000);
-      setTimeout(() => { boot(); }, 90000);
+      let secsLeft = 210;
+      const countTick = setInterval(() => {
+        secsLeft--;
+        if (secsLeft > 0) btn.textContent = `↻ Refreshing in ${secsLeft}s…`;
+        else { clearInterval(countTick); boot(); }
+      }, 1000);
     } else {
       throw new Error(data.error || 'Unknown error');
     }
@@ -956,10 +961,10 @@ async function boot() {
 function countUp() {
   const targets = {
     'm0':     meta.new_count || 0,
-    'm-core': jobs.filter(j => j.category === 'CORE').length,
-    'm-adj':  jobs.filter(j => j.category === 'ADJACENT').length,
-    'm-wild': jobs.filter(j => j.category === 'WILDCARD').length,
-    'm-total':meta.total_count || jobs.length || 0,
+    'm-core': jobs.filter(j => !dismissed.has(j.id||'') && j.category === 'CORE'     && (j.score||0) >= 3).length,
+    'm-adj':  jobs.filter(j => !dismissed.has(j.id||'') && j.category === 'ADJACENT' && (j.score||0) >= 3).length,
+    'm-wild': jobs.filter(j => !dismissed.has(j.id||'') && j.category === 'WILDCARD' && (j.score||0) >= 3).length,
+    'm-total':jobs.filter(j => !dismissed.has(j.id||'')                              && (j.score||0) >= 3).length,
   };
   Object.entries(targets).forEach(([id, target]) => {
     const el = document.getElementById(id);
@@ -996,11 +1001,11 @@ function updateMeta() {
 
 // ── HELPERS ───────────────────────────────────────────────────────────────
 const isNew = j => j.added && j.added.startsWith(TODAY);
-const isAI  = j => /ai|generative|midjourney|runway|sora/i.test((j.title||'')+(j.description||''));
+const isAI  = j => /\bai\b|generative|midjourney|runway|higgsfield|kling|comfyui|flux|firefly|stable.diffusion|llm|gpt|claude/i.test((j.title||'')+(j.description||''));
 
 function getCol(cat) {
   const q = (document.getElementById('q').value || '').toLowerCase();
-  let r = jobs.filter(j => !dismissed.has(j.id || '') && (j.category || 'CORE') === cat);
+  let r = jobs.filter(j => !dismissed.has(j.id || '') && (j.category || 'CORE') === cat && (j.score || 0) >= 3);
   if (q) r = r.filter(j =>
     (j.title || '').toLowerCase().includes(q) ||
     (j.company || '').toLowerCase().includes(q)
