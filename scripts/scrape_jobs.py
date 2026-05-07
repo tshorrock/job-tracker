@@ -48,22 +48,6 @@ LINKEDIN_QUERIES = [
     "narrative director",
     "head of programming",
     "chief experience officer",
-    # Wildcard — remote-compatible weird jobs
-    "remote game tester",
-    "online poker player",
-    "remote voice actor",
-    "esports broadcaster remote",
-    "remote astrologer",
-    "remote futurist",
-    "online wine educator",
-    "remote NFT community manager",
-    "remote cultural consultant",
-    "remote ethics consultant",
-    "remote sleep coach",
-    "online sommelier",
-    "remote documentary researcher",
-    "remote trend forecaster",
-    "remote mystery shopper",
 ]
 
 # Adzuna — free API, generous limits, runs every day
@@ -80,16 +64,6 @@ ADZUNA_QUERIES = [
     "director immersive experience",
     "narrative director",
     "creative director entertainment",
-    # Wildcard — remote-compatible weird jobs
-    "remote game tester",
-    "remote voice actor",
-    "online wine educator",
-    "remote futurist",
-    "esports broadcaster",
-    "remote ethics consultant",
-    "remote trend forecaster",
-    "remote documentary researcher",
-    "remote mystery shopper",
 ]
 
 # ─── HARD EXCLUDES ────────────────────────────────────────────────────────────
@@ -154,17 +128,6 @@ Head of Programming, Chief Experience Officer, Head of Culture, Creative Lead at
 entertainment venues, theme parks, gaming studios, hospitality brands, festivals.
 These roles still require creative thinking but aren't traditional CD/brand roles.
 
-WILDCARD — Zero creative or marketing DNA. Completely unrelated to Travis's career.
-Jobs that have nothing to do with advertising, brand, or experience design whatsoever.
-MUST be fully remote — can be done from anywhere in the world.
-Examples: remote game tester, online poker player, esports broadcaster, remote futurist,
-online sommelier, remote astrologer, trend forecaster, remote ethics consultant,
-remote documentary researcher, remote voice actor, online educator for anything unusual.
-Score these purely on how weird, interesting, and surprising they are.
-Compensation and timezone are irrelevant for Wildcard.
-A park ranger, dive master, or expedition leader is NOT a wildcard — those are on-site roles.
-If a wildcard job requires physical presence, score it 0.
-
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SCORING RULES BY CATEGORY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -197,14 +160,9 @@ Score 7-10: Genuinely fascinating, senior scope, Travis could walk in
 Score 4-6:  Interesting but niche expertise gap
 Score 1-3:  Too specialized or too junior
 
-FOR WILDCARD roles — score based purely on how weird and interesting:
-Score 9-10: Jaw-dropping. What a job. Travis would tell everyone about this.
-Score 6-8:  Genuinely unusual and interesting
-Score 3-5:  Mildly interesting
-Score 1-2:  Boring wildcard
-
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+Category must be either CORE or ADJACENT. No other values are valid.
 Respond ONLY with JSON: {"score": 7, "category": "CORE", "reason": "one punchy sentence"}
 """
 

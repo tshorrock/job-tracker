@@ -146,7 +146,7 @@ body{
 /* Brief: Metric Numbers 48–64px / 700, label 12px gray, delta 14px */
 .metrics{
   display:grid;
-  grid-template-columns:repeat(6,1fr);
+  grid-template-columns:repeat(5,1fr);
   gap:20px;
   margin-bottom:28px;
 }
@@ -210,10 +210,10 @@ body{
 }
 .restore-btn:hover{background:var(--orange);color:#0D0D0D}
 
-/* ── THREE COLUMN LAYOUT ─────────────────────────────────────────────────── */
+/* ── TWO COLUMN LAYOUT ───────────────────────────────────────────────────── */
 .cols{
   display:grid;
-  grid-template-columns:1fr 1fr 1fr;
+  grid-template-columns:1fr 1fr;
   gap:20px;
   align-items:start;
 }
@@ -227,7 +227,6 @@ body{
 }
 .col.col-core{border-top:2px solid var(--teal)}
 .col.col-adj{border-top:2px solid var(--purple)}
-.col.col-wild{border-top:2px solid var(--orange)}
 
 .col-hdr{
   padding:22px 24px 18px;
@@ -627,11 +626,6 @@ body{
       <div class="metric-num purple" id="m-adj">—</div>
       <div class="metric-sub">Design Dir · CMO · AI</div>
     </div>
-    <div class="metric orange">
-      <div class="metric-label">Wildcard</div>
-      <div class="metric-num orange" id="m-wild">—</div>
-      <div class="metric-sub">Unexpected finds</div>
-    </div>
     <div class="metric mint">
       <div class="metric-label">Total Tracked</div>
       <div class="metric-num mint" id="m-total">—</div>
@@ -640,7 +634,7 @@ body{
     <div class="metric muted">
       <div class="metric-label">Live Sources</div>
       <div class="metric-num" style="color:var(--t1)">4</div>
-      <div class="metric-sub">LinkedIn · Adzuna · JSearch</div>
+      <div class="metric-sub">LinkedIn · Adzuna · JSearch · US + Canada</div>
     </div>
   </div>
 
@@ -691,26 +685,6 @@ body{
         </div>
       </div>
       <div class="col-body" id="list-adj">
-        <div class="col-empty">
-          <div class="col-empty-n">—</div>
-          <div class="col-empty-t">Loading…</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- WILDCARD -->
-    <section class="col col-wild" aria-labelledby="col-wild-title">
-      <div class="col-hdr">
-        <div class="col-hdr-left">
-          <div class="col-title orange" id="col-wild-title">Wildcard</div>
-          <div class="col-desc">Expedition leader · Sommelier · Park ranger · Whatever the hell</div>
-        </div>
-        <div class="col-hdr-right">
-          <span class="col-badge orange">Who knows</span>
-          <span class="col-count" id="cnt-wild">— roles</span>
-        </div>
-      </div>
-      <div class="col-body" id="list-wild">
         <div class="col-empty">
           <div class="col-empty-n">—</div>
           <div class="col-empty-t">Loading…</div>
@@ -963,7 +937,6 @@ function countUp() {
     'm0':     meta.new_count || 0,
     'm-core': jobs.filter(j => !dismissed.has(j.id||'') && j.category === 'CORE'     && (j.score||0) >= 3).length,
     'm-adj':  jobs.filter(j => !dismissed.has(j.id||'') && j.category === 'ADJACENT' && (j.score||0) >= 3).length,
-    'm-wild': jobs.filter(j => !dismissed.has(j.id||'') && j.category === 'WILDCARD' && (j.score||0) >= 3).length,
     'm-total':jobs.filter(j => !dismissed.has(j.id||'')                              && (j.score||0) >= 3).length,
   };
   Object.entries(targets).forEach(([id, target]) => {
@@ -1083,7 +1056,6 @@ function renderCol(listId, cntId, metricId, cat, accent) {
     const msgs = {
       CORE:     ['◈', 'No core roles yet', 'Run the scraper or check manual boards'],
       ADJACENT: ['◇', 'No adjacent roles yet', 'These populate on the next scored run'],
-      WILDCARD: ['◉', 'No wildcards yet', 'Claude will surface these — stay tuned'],
     };
     const [ico, t, s] = msgs[cat] || ['—', 'Empty', ''];
     el.innerHTML = `<div class="col-empty">
@@ -1114,7 +1086,6 @@ function renderCol(listId, cntId, metricId, cat, accent) {
 function render() {
   renderCol('list-core', 'cnt-core', 'm-core', 'CORE',     'teal');
   renderCol('list-adj',  'cnt-adj',  'm-adj',  'ADJACENT', 'purple');
-  renderCol('list-wild', 'cnt-wild', 'm-wild', 'WILDCARD', 'orange');
   renderPipeline();
 }
 
