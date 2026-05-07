@@ -42,4 +42,5 @@ jobs:
           git config user.email "bot@job-tracker.local"
           git add data/
           git diff --staged --quiet || git commit -m "Update job data — $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git pull origin main --rebase
           git push
