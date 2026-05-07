@@ -21,52 +21,80 @@ JSEARCH_URL  = "https://jsearch.p.rapidapi.com/search"
 
 # ─── SEARCH QUERIES ───────────────────────────────────────────────────────────
 
-# JSearch — throttled to every 3rd day (6 queries × 1 page × 10 runs/month = ~60 req/month, free tier = 200)
+# JSearch — throttled to every 3rd day (free tier = 200 req/month)
 JSEARCH_QUERIES = [
     "creative director remote",
-    "executive creative director remote",
+    "chief marketing officer remote",
     "head of creative remote",
     "VP creative remote",
-    "AI creative director remote",
-    "head of brand remote",
+    "chief brand officer remote",
+    "head of content remote",
 ]
 
 # LinkedIn guest API — free, no auth, runs every day
 LINKEDIN_QUERIES = [
+    # Core
     "creative director",
-    "head of creative",
     "executive creative director",
+    "head of creative",
+    "chief brand officer",
     "VP creative",
-    "head of brand",
+    "head of content",
+    "creative technologist",
     "AI creative director",
+    # Adjacent
+    "head of experience",
+    "director of immersive experiences",
+    "narrative director",
+    "head of programming",
+    "chief experience officer",
+    # Wildcard
+    "expedition leader",
+    "head of conservation",
+    "dive master",
+    "wilderness guide",
 ]
 
 # Adzuna — free API, generous limits, runs every day
 ADZUNA_QUERIES = [
+    # Core
     "creative director",
     "head of creative",
-    "executive creative director",
+    "chief brand officer",
     "VP creative",
+    "chief marketing officer",
+    "head of content",
+    # Adjacent
+    "head of experience",
+    "director immersive experience",
+    "narrative director",
+    "creative director entertainment",
+    # Wildcard
+    "expedition leader",
+    "sommelier",
+    "dive master",
+    "park ranger",
 ]
 
 # ─── HARD EXCLUDES ────────────────────────────────────────────────────────────
 
 HARD_EXCLUDES = [
+    # Pure engineering
     "software engineer", "backend engineer", "frontend engineer",
     "fullstack engineer", "devops engineer", "data engineer",
     "machine learning engineer", "security engineer", "platform engineer",
-    "infrastructure engineer", "systems engineer",
-    "developer", "programmer",
-    "product designer", "ux designer", "ui designer", "ui/ux designer",
+    "infrastructure engineer", "systems engineer", "developer", "programmer",
+    # Pure UX/product design (not creative direction)
+    "ux designer", "ui designer", "ui/ux designer",
     "user experience designer", "interaction designer",
-    "product design lead", "head of ux", "vp of ux", "director of ux",
-    "video editor", "motion designer", "animator", "cinematographer", "videographer",
-    "account executive", "sales director", "sales manager", "sales representative",
-    "business development", "account management",
-    "finance director", "operations director", "medical director",
-    "clinical director", "data scientist", "data analyst",
-    "junior", "intern", "entry level", "coordinator", "assistant creative",
-    "customer support", "technical support", "help desk", "customer service",
+    # Pure sales
+    "account executive", "sales representative",
+    # Pure finance/medical/legal
+    "finance director", "medical director", "clinical director",
+    "legal counsel", "data scientist", "data analyst",
+    # Junior only
+    "junior", "intern", "entry level", "customer support",
+    "technical support", "help desk", "customer service",
 ]
 
 # ─── DOMAIN BLOCKLIST ─────────────────────────────────────────────────────────
@@ -90,46 +118,72 @@ def domain_ok(url):
 # ─── CLAUDE SCORING PROMPT ────────────────────────────────────────────────────
 
 TRAVIS_PROFILE = """
-You are scoring remote job postings for Travis Shorrock, a senior Creative Director with 25+ years experience.
+You are scoring job postings for Travis Shorrock. He has three job lanes he tracks.
+Assign the correct CATEGORY first, then score within that category.
 
-SEARCH CRITERIA — score based on how well the job meets ALL of these:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CATEGORY DEFINITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-MUST-HAVES (failure on any = score 0-2 max):
-- 100% remote. No on-site, no mandatory office days.
-- Senior level only: Creative Director, Executive Creative Director, Group Creative Director,
-  VP Creative, Head of Creative, ACD (senior IC), Head of Brand, VP Design, Head of Design,
-  Director of Design, Chief Design Officer — or equivalent senior roles.
-  UX Director, UI Director, Product Designer, Head of UX = score 0.
-  Mid-level, junior, coordinator = score 0.
-- Focus area must be one of:
-    a) Traditional advertising campaigns (concept through execution)
-    b) Brand identity, brand strategy, or brand design
-    c) AI-powered creative tools or platforms
-    d) Generative AI applications in advertising/marketing
-    e) Creative technology innovation
-- Timezone: Team must be primarily US Eastern or Central time (EST/CST).
-  PST-heavy teams are borderline — score lower but don't disqualify.
-  European or Asian timezones = score 0. Latin America is fine.
-- Compensation in USD or CAD. Other currencies = score lower.
+CORE — Senior creative leadership, any flavor.
+If it's a senior title and creative/brand/marketing is in the DNA, it's Core.
+Titles: CD, ECD, GCD, ACD, VP Creative, Head of Creative, Head of Brand, Head of Content,
+Chief Brand Officer, CMO, Creative Partner, AI Creative Director, Creative Technologist Lead,
+VP Marketing with creative scope, Chief Creative Officer.
+Focus: Advertising, brand, AI-powered creative, integrated campaigns, content at scale.
 
-TRAVIS'S BACKGROUND:
+ADJACENT — Has a creative or experiential angle but lives outside traditional advertising.
+Titles: Head of Experience, Director of Immersive Experiences, Narrative Director,
+Head of Programming, Chief Experience Officer, Head of Culture, Creative Lead at
+entertainment venues, theme parks, gaming studios, hospitality brands, festivals.
+These roles still require creative thinking but aren't traditional CD/brand roles.
+
+WILDCARD — Zero creative or marketing DNA. Completely unrelated to Travis's career.
+Jobs that have nothing to do with advertising, brand, or experience design.
+Examples: expedition leader, sommelier, park ranger, dive master, wilderness guide,
+conservation officer, Antarctic logistics, winemaker, professional sports coach.
+Score these purely on how interesting/unusual they are. Comp and timezone don't matter.
+Travis won't apply — he just finds these fascinating.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCORING RULES BY CATEGORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FOR CORE roles — score based on fit with Travis's background:
+MUST-HAVES for high score:
+- 100% remote. Hybrid or on-site = score 2 max.
+- Senior level only. Junior/coordinator/mid-level = score 0.
+- Compensation in USD or CAD preferred. Other currencies = score lower.
+- Timezone: Prefer US-compatible. If not mentioned, do NOT penalize — assume US-compatible.
+  Only penalize if posting explicitly requires European or Asian hours.
+
+Travis's background:
 - National CD at T&Pm 10yrs: Toyota Canada, TELUS — large-scale integrated campaigns
 - CD at tms: Nissan North America, Diageo (Guinness, Smirnoff, Strongbow)
 - Creative Group Head at Havas: Volvo Canada
 - Deep hands-on AI: Midjourney, Runway, Higgsfield, ComfyUI, Claude Code
-- TV production, OOH, digital, CRM, packaging — full integrated creative
+- TV, OOH, digital, CRM, packaging — full integrated creative
 - Built and led large creative departments from scratch
 
-CATEGORY — assign one:
-- CORE: Direct creative leadership (CD, ECD, GCD, VP Creative, Head of Creative, Head of Brand)
-- ADJACENT: Roles Travis could excel at (AI Director, Creative Technologist, Head of Content, CMO, Design Director, Creative Strategist)
+Score 9-10: Perfect fit — senior, remote, USD, strong creative scope
+Score 7-8:  Strong fit — minor gaps (DTC focus, PST timezone, slightly off-brief)
+Score 5-6:  Interesting — worth a look but clear gaps
+Score 3-4:  Stretch — notable mismatches but not disqualified
+Score 1-2:  Weak — remote or seniority issues
+Score 0:    Disqualified — not remote, not senior, wrong currency/region
 
-Score 9-10: Perfect match
-Score 7-8:  Strong match
-Score 5-6:  Good fit with minor gaps
-Score 3-4:  Stretch — interesting but off-brief
-Score 1-2:  Weak fit
-Score 0:    Disqualified
+FOR ADJACENT roles — score based on how interesting and accessible the role is:
+Score 7-10: Genuinely fascinating, senior scope, Travis could walk in
+Score 4-6:  Interesting but niche expertise gap
+Score 1-3:  Too specialized or too junior
+
+FOR WILDCARD roles — score based purely on how weird and interesting:
+Score 9-10: Jaw-dropping. What a job. Travis would tell everyone about this.
+Score 6-8:  Genuinely unusual and interesting
+Score 3-5:  Mildly interesting
+Score 1-2:  Boring wildcard
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Respond ONLY with JSON: {"score": 7, "category": "CORE", "reason": "one punchy sentence"}
 """
@@ -409,7 +463,7 @@ JOB:
 Title: {job.get('title', '')}
 Company: {job.get('company', '')}
 Salary: {job.get('salary', '')}
-Description: {(job.get('description') or '')[:400]}"""
+Description: {(job.get('description') or '')[:1500]}"""
 
         try:
             req = urllib.request.Request(
