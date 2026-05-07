@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """
 Travis Shorrock — AI-Powered Job Scraper
-Data source: JSearch API (LinkedIn + Indeed + Glassdoor + ZipRecruiter)
-Three category lanes: CORE · ADJACENT · WILDCARD
+Sources: LinkedIn Guest API + Adzuna API + JSearch (throttled)
+Three category lanes: CORE · ADJACENT
 """
 
-import json, os, re, hashlib, smtplib, urllib.request, urllib.parse, time
+import json, os, re, hashlib, smtplib, urllib.request, urllib.parse, time, random
 from datetime import datetime, timezone, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pathlib import Path
+from bs4 import BeautifulSoup
 
 DATA_FILE = Path("data/jobs.json")
 SEEN_FILE = Path("data/seen_ids.json")
@@ -19,58 +20,36 @@ JSEARCH_HOST = "jsearch.p.rapidapi.com"
 JSEARCH_URL  = "https://jsearch.p.rapidapi.com/search"
 
 # ─── SEARCH QUERIES ───────────────────────────────────────────────────────────
-# Each tuple: (query string, hint) — hint is used for logging only
-# Claude does the real categorization. 10 queries × 20 weekdays ≈ 200 req/month (free tier)
 
-# US queries — JSearch defaults to US results
-CORE_QUERIES_US = [
+# JSearch — throttled to every 3rd day (6 queries × 1 page × 10 runs/month = ~60 req/month, free tier = 200)
+JSEARCH_QUERIES = [
     "creative director remote",
     "executive creative director remote",
     "head of creative remote",
     "VP creative remote",
-    "head of brand remote",
     "AI creative director remote",
-    "head of design remote",
+    "head of brand remote",
 ]
 
-# Canada queries — explicit country pass to catch Canadian LinkedIn/Indeed postings
-CORE_QUERIES_CA = [
-    "creative director remote Canada",
-    "head of creative remote Canada",
-    "executive creative director remote Canada",
-    "VP creative remote Canada",
-    "head of brand remote Canada",
+# LinkedIn guest API — free, no auth, runs every day
+LINKEDIN_QUERIES = [
+    "creative director",
+    "head of creative",
+    "executive creative director",
+    "VP creative",
+    "head of brand",
+    "AI creative director",
 ]
 
-# Wildcard = genuinely random/weird/fun jobs. Nothing to do with design or advertising.
-WILDCARD_QUERIES = [
-    "voice actor cartoon remote",
-    "professional video game tester remote",
-    "mystery shopper remote",
-    "escape room designer remote",
-    "food taster taste tester remote",
+# Adzuna — free API, generous limits, runs every day
+ADZUNA_QUERIES = [
+    "creative director",
+    "head of creative",
+    "executive creative director",
+    "VP creative",
 ]
 
-# Core/adjacent title patterns — anything matching these gets rerouted OUT of wildcard
-CORE_ADJACENT_PATTERNS = [
-    "creative director", "head of creative", "executive creative",
-    "group creative", "vp creative", "vp of creative", "chief creative",
-    "head of brand", "brand director", "director of creative",
-    "head of design", "vp design", "vp of design", "director of design",
-    "chief design", "design director", "graphic design director",
-    "creative lead", "creative strategist", "brand strategist",
-    "head of content", "vp content", "chief content",
-    "ai director", "ai creative", "creative technologist",
-    "head of marketing", "vp marketing", "chief marketing", "cmo",
-    "filmmaker", "film director", "producer",
-]
-
-def is_core_adjacent(title):
-    """Returns True if this job belongs in core/adjacent, not wildcard."""
-    t = title.lower()
-    return any(p in t for p in CORE_ADJACENT_PATTERNS)
-
-# ─── HARD EXCLUDES (title must NOT contain these) ─────────────────────────────
+# ─── HARD EXCLUDES ────────────────────────────────────────────────────────────
 
 HARD_EXCLUDES = [
     "software engineer", "backend engineer", "frontend engineer",
@@ -90,7 +69,7 @@ HARD_EXCLUDES = [
     "customer support", "technical support", "help desk", "customer service",
 ]
 
-# ─── DOMAIN BLOCKLIST (junk aggregators / SEO spam boards) ───────────────────
+# ─── DOMAIN BLOCKLIST ─────────────────────────────────────────────────────────
 
 BLOCKED_DOMAINS = {
     'liveblog365.com', 'unaux.com', 'infinityfree.me', 'wuaze.com',
@@ -120,7 +99,6 @@ MUST-HAVES (failure on any = score 0-2 max):
 - Senior level only: Creative Director, Executive Creative Director, Group Creative Director,
   VP Creative, Head of Creative, ACD (senior IC), Head of Brand, VP Design, Head of Design,
   Director of Design, Chief Design Officer — or equivalent senior roles.
-  Design leadership is fine IF it's brand, visual, or graphic design.
   UX Director, UI Director, Product Designer, Head of UX = score 0.
   Mid-level, junior, coordinator = score 0.
 - Focus area must be one of:
@@ -130,11 +108,11 @@ MUST-HAVES (failure on any = score 0-2 max):
     d) Generative AI applications in advertising/marketing
     e) Creative technology innovation
 - Timezone: Team must be primarily US Eastern or Central time (EST/CST).
-  PST-heavy teams are borderline (2hrs off) — score lower but don't disqualify.
+  PST-heavy teams are borderline — score lower but don't disqualify.
   European or Asian timezones = score 0. Latin America is fine.
 - Compensation in USD or CAD. Other currencies = score lower.
 
-TRAVIS'S BACKGROUND (use to assess fit):
+TRAVIS'S BACKGROUND:
 - National CD at T&Pm 10yrs: Toyota Canada, TELUS — large-scale integrated campaigns
 - CD at tms: Nissan North America, Diageo (Guinness, Smirnoff, Strongbow)
 - Creative Group Head at Havas: Volvo Canada
@@ -145,103 +123,16 @@ TRAVIS'S BACKGROUND (use to assess fit):
 CATEGORY — assign one:
 - CORE: Direct creative leadership (CD, ECD, GCD, VP Creative, Head of Creative, Head of Brand)
 - ADJACENT: Roles Travis could excel at (AI Director, Creative Technologist, Head of Content, CMO, Design Director, Creative Strategist)
-- WILDCARD: Anything outside his normal path but potentially compelling — AI companies, streaming, gaming, creative platforms, unusual titles
 
-Score 9-10: Perfect match — senior creative leadership, advertising or AI/creative tech focus, remote confirmed, EST/CST timezone, USD/CAD comp
-Score 7-8:  Strong match — meets most criteria, minor gaps
-Score 5-6:  Good fit — right level and focus but some ambiguity on timezone or comp
-Score 3-4:  Stretch — interesting but off-brief in one significant way
-Score 1-2:  Weak — technically qualifies but poor fit
-Score 0:    Disqualified — on-site, junior, wrong timezone, wrong field entirely
+Score 9-10: Perfect match
+Score 7-8:  Strong match
+Score 5-6:  Good fit with minor gaps
+Score 3-4:  Stretch — interesting but off-brief
+Score 1-2:  Weak fit
+Score 0:    Disqualified
 
 Respond ONLY with JSON: {"score": 7, "category": "CORE", "reason": "one punchy sentence"}
 """
-
-WILDCARD_PROFILE = """
-You're curating the WILDCARD column of a job board for Travis Shorrock. Travis is a 25-year
-Creative Director with serious AI chops, about to move to Costa Rica. He's seen every
-boring agency job there is. This column exists to show him something he's never considered.
-
-The vibe is: "Wait — that's actually a job?"
-
-Think creative director for a hot sauce brand. Think AI prompt artist for a video game studio.
-Think brand voice consultant for a celebrity. Think travel content lead for a luxury adventure
-company. Think creative director for a cannabis brand. Think narrative designer for an indie
-game. Think comedy writer for a fintech app. Think creative lead for a surf brand in Tulum.
-
-HIGH scores (7-10) go to jobs that are:
-- Genuinely surprising or unexpected
-- In a fun, niche, or unusual industry (gaming, cannabis, spirits, food, travel,
-  outdoor/surf/ski, luxury, entertainment, animation, comics, music, fashion,
-  sports, esports, space, pets, wellness, comedy)
-- Creative with real freedom — not just "creative" in a corporate way
-- Something Travis would screenshot and text to a friend saying "look at this"
-- AI/generative creative roles at interesting companies
-- Unusual titles: Chief Storyteller, Head of Vibes, Creative Futurist
-
-LOW scores (1-3) go to jobs that are:
-- Fine but forgettable — another brand manager role
-- Standard corporate creative wrapped in fun-sounding language
-
-SCORE 0 — kill it immediately:
-- Customer support, tech support, help desk, call center
-- Caregiver, elderly care, healthcare, therapy, nursing
-- Tutoring, teaching, transcription, bookkeeping
-- On-site required
-- Anything that would make Travis stare at the ceiling
-
-Always assign category: WILDCARD
-
-Respond ONLY with JSON: {"score": 8, "category": "WILDCARD", "reason": "punchy one-liner that captures the fun factor — write it like you're texting a friend"}
-"""
-
-# ─── JSEARCH FETCHER ──────────────────────────────────────────────────────────
-
-def fetch_jsearch(query, rapidapi_key, num_pages=1):
-    """Fetch jobs from JSearch API (aggregates LinkedIn, Indeed, Glassdoor, ZipRecruiter)."""
-    all_jobs = []
-    for page in range(1, num_pages + 1):
-        params = urllib.parse.urlencode({
-            "query": query,
-            "page": page,
-            "num_pages": 1,
-            "date_posted": "3days",
-            "remote_jobs_only": "true",
-        })
-        url = f"{JSEARCH_URL}?{params}"
-        req = urllib.request.Request(url, headers={
-            "X-RapidAPI-Key": rapidapi_key,
-            "X-RapidAPI-Host": JSEARCH_HOST,
-        })
-        try:
-            with urllib.request.urlopen(req, timeout=20) as r:
-                data = json.loads(r.read())
-            jobs = data.get("data", [])
-            for j in jobs:
-                title = (j.get("job_title") or "").strip()
-                company = (j.get("employer_name") or "").strip()
-                url_apply = j.get("job_apply_link") or j.get("job_url") or ""
-                desc = (j.get("job_description") or "")[:1200]
-                salary = ""
-                if j.get("job_min_salary") and j.get("job_max_salary"):
-                    salary = f"${int(j['job_min_salary']):,}–${int(j['job_max_salary']):,} {j.get('job_salary_currency','USD')}/{j.get('job_salary_period','year')}"
-                elif j.get("job_min_salary"):
-                    salary = f"${int(j['job_min_salary']):,}+ {j.get('job_salary_currency','USD')}"
-
-                if title and url_apply and domain_ok(url_apply):
-                    all_jobs.append({
-                        "title": title,
-                        "company": company,
-                        "url": url_apply,
-                        "description": desc,
-                        "salary": salary,
-                        "source": "JSearch",
-                        "posted": j.get("job_posted_at_datetime_utc", ""),
-                    })
-            time.sleep(0.5)
-        except Exception as e:
-            print(f"    ⚠ JSearch [{query}] p{page} → {e}")
-    return all_jobs
 
 # ─── FILTERS ──────────────────────────────────────────────────────────────────
 
@@ -257,7 +148,6 @@ def title_ok(title):
     return not any(ex in t for ex in HARD_EXCLUDES)
 
 def is_remote_clean(job):
-    """Kill anything that hints at hybrid or in-person, regardless of remote flag."""
     text = ((job.get("title") or "") + " " + (job.get("description") or "")).lower()
     return not any(signal in text for signal in HYBRID_SIGNALS)
 
@@ -276,9 +166,232 @@ def save_json(path, data):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     Path(path).write_text(json.dumps(data, indent=2, default=str))
 
+# ─── LINKEDIN GUEST SCRAPER ───────────────────────────────────────────────────
+
+LINKEDIN_UA_POOL = [
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+]
+
+def fetch_linkedin(query):
+    """Scrape LinkedIn public guest API — no login required."""
+    jobs = []
+    headers = {
+        "User-Agent": random.choice(LINKEDIN_UA_POOL),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Referer": "https://www.linkedin.com/jobs/",
+    }
+
+    params = urllib.parse.urlencode({
+        "keywords": query,
+        "location": "United States",
+        "f_WT": "2",
+        "f_E": "4,5,6",
+        "f_TPR": "r86400",
+        "start": "0",
+    })
+
+    url = f"https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?{params}"
+
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=15) as r:
+            if r.status != 200:
+                print(f"    ⚠ LinkedIn [{query}] → HTTP {r.status}")
+                return []
+            html = r.read().decode("utf-8", errors="replace")
+
+        soup = BeautifulSoup(html, "html.parser")
+        cards = soup.find_all("div", class_="base-card")
+
+        for card in cards:
+            title_el   = card.find("h3", class_="base-search-card__title")
+            company_el = card.find("h4", class_="base-search-card__subtitle")
+            link_el    = card.find("a", class_="base-card__full-link")
+
+            title   = title_el.text.strip() if title_el else ""
+            company = company_el.text.strip() if company_el else ""
+            url_raw = link_el["href"].split("?")[0] if link_el else ""
+
+            if title and url_raw:
+                jobs.append({
+                    "title":       title,
+                    "company":     company,
+                    "url":         url_raw,
+                    "description": "",
+                    "salary":      "",
+                    "source":      "LinkedIn",
+                    "posted":      "",
+                })
+
+        time.sleep(2)
+        print(f"    LinkedIn [{query}] → {len(jobs)} results")
+
+    except Exception as e:
+        print(f"    ⚠ LinkedIn [{query}] → {e}")
+
+    return jobs
+
+# ─── ADZUNA FETCHER ───────────────────────────────────────────────────────────
+
+def fetch_adzuna(query, app_id, app_key, country="us"):
+    """Fetch jobs from Adzuna API — free tier, generous limits."""
+    jobs = []
+
+    params = urllib.parse.urlencode({
+        "app_id":           app_id,
+        "app_key":          app_key,
+        "what":             query,
+        "results_per_page": 50,
+        "sort_by":          "date",
+        "max_days_old":     3,
+        "full_time":        1,
+    })
+
+    url = f"https://api.adzuna.com/v1/api/jobs/{country}/search/1?{params}"
+
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "job-tracker/1.0"})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            data = json.loads(r.read())
+
+        for j in data.get("results", []):
+            title     = (j.get("title") or "").strip()
+            company   = (j.get("company", {}) or {}).get("display_name", "").strip()
+            url_apply = j.get("redirect_url") or j.get("adref") or ""
+            desc      = (j.get("description") or "")[:1200]
+            salary    = ""
+            sal_min   = j.get("salary_min")
+            sal_max   = j.get("salary_max")
+            if sal_min and sal_max:
+                salary = f"${int(sal_min):,}–${int(sal_max):,} USD/year"
+            elif sal_min:
+                salary = f"${int(sal_min):,}+ USD/year"
+
+            if title and url_apply and domain_ok(url_apply):
+                jobs.append({
+                    "title":       title,
+                    "company":     company,
+                    "url":         url_apply,
+                    "description": desc,
+                    "salary":      salary,
+                    "source":      "Adzuna",
+                    "posted":      j.get("created", ""),
+                })
+
+        time.sleep(0.5)
+        print(f"    Adzuna [{query}] → {len(jobs)} results")
+
+    except Exception as e:
+        print(f"    ⚠ Adzuna [{query}] → {e}")
+
+    return jobs
+
+# ─── JSEARCH FETCHER ──────────────────────────────────────────────────────────
+
+def fetch_jsearch(query, rapidapi_key, num_pages=1):
+    """Fetch jobs from JSearch API — throttled to every 3rd day."""
+    all_jobs = []
+    for page in range(1, num_pages + 1):
+        params = urllib.parse.urlencode({
+            "query":          query,
+            "page":           page,
+            "num_pages":      1,
+            "date_posted":    "3days",
+            "remote_jobs_only": "true",
+        })
+        url = f"{JSEARCH_URL}?{params}"
+        req = urllib.request.Request(url, headers={
+            "X-RapidAPI-Key":  rapidapi_key,
+            "X-RapidAPI-Host": JSEARCH_HOST,
+        })
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                data = json.loads(r.read())
+            jobs = data.get("data", [])
+            for j in jobs:
+                title      = (j.get("job_title") or "").strip()
+                company    = (j.get("employer_name") or "").strip()
+                url_apply  = j.get("job_apply_link") or j.get("job_url") or ""
+                desc       = (j.get("job_description") or "")[:1200]
+                salary     = ""
+                if j.get("job_min_salary") and j.get("job_max_salary"):
+                    salary = f"${int(j['job_min_salary']):,}–${int(j['job_max_salary']):,} {j.get('job_salary_currency','USD')}/{j.get('job_salary_period','year')}"
+                elif j.get("job_min_salary"):
+                    salary = f"${int(j['job_min_salary']):,}+ {j.get('job_salary_currency','USD')}"
+
+                if title and url_apply and domain_ok(url_apply):
+                    all_jobs.append({
+                        "title":       title,
+                        "company":     company,
+                        "url":         url_apply,
+                        "description": desc,
+                        "salary":      salary,
+                        "source":      "JSearch",
+                        "posted":      j.get("job_posted_at_datetime_utc", ""),
+                    })
+            time.sleep(0.5)
+        except Exception as e:
+            print(f"    ⚠ JSearch [{query}] p{page} → {e}")
+    return all_jobs
+
+# ─── MAIN FETCH ───────────────────────────────────────────────────────────────
+
+def fetch_all(rapidapi_key):
+    all_jobs = []
+    seen_urls = set()
+
+    adzuna_id  = os.environ.get("ADZUNA_APP_ID", "")
+    adzuna_key = os.environ.get("ADZUNA_APP_KEY", "")
+
+    # ── LinkedIn (free, every day) ────────────────────────────────────────────
+    print("\n  LinkedIn guest API:")
+    for query in LINKEDIN_QUERIES:
+        jobs = fetch_linkedin(query)
+        fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+        for j in fresh: seen_urls.add(j["url"])
+        all_jobs.extend(fresh)
+
+    # ── Adzuna (free, every day) ──────────────────────────────────────────────
+    if adzuna_id and adzuna_key:
+        print("\n  Adzuna API:")
+        for query in ADZUNA_QUERIES:
+            jobs = fetch_adzuna(query, adzuna_id, adzuna_key, country="us")
+            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+            for j in fresh: seen_urls.add(j["url"])
+            all_jobs.extend(fresh)
+        for query in ADZUNA_QUERIES[:2]:
+            jobs = fetch_adzuna(query, adzuna_id, adzuna_key, country="ca")
+            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+            for j in fresh: seen_urls.add(j["url"])
+            all_jobs.extend(fresh)
+    else:
+        print("\n  Adzuna: skipped (ADZUNA_APP_ID / ADZUNA_APP_KEY not set)")
+
+    # ── JSearch (throttled: every 3rd day only) ───────────────────────────────
+    run_jsearch = (datetime.now(timezone.utc).day % 3 == 0)
+    if run_jsearch and rapidapi_key:
+        print("\n  JSearch (throttled run):")
+        for query in JSEARCH_QUERIES:
+            print(f"  → \"{query}\"")
+            jobs = fetch_jsearch(query, rapidapi_key, num_pages=1)
+            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+            for j in fresh: seen_urls.add(j["url"])
+            print(f"     {len(jobs)} fetched · {len(fresh)} kept")
+            all_jobs.extend(fresh)
+    elif not run_jsearch:
+        print("\n  JSearch: skipped today (throttled — runs every 3rd day)")
+    else:
+        print("\n  JSearch: skipped (RAPIDAPI_KEY not set)")
+
+    print(f"\n  Total pipeline: {len(all_jobs)} unique jobs before dedup/scoring")
+    return all_jobs
+
 # ─── CLAUDE SCORING ───────────────────────────────────────────────────────────
 
-def score_batch(jobs, profile, label=""):
+def score_batch(jobs, label=""):
     api_key = os.environ.get("ANTHROPIC_API_KEY", "")
     if not api_key:
         print("  ⚠ No ANTHROPIC_API_KEY")
@@ -290,7 +403,7 @@ def score_batch(jobs, profile, label=""):
 
     scored = []
     for job in jobs:
-        prompt = f"""{profile}
+        prompt = f"""{TRAVIS_PROFILE}
 
 JOB:
 Title: {job.get('title', '')}
@@ -333,95 +446,43 @@ Description: {(job.get('description') or '')[:400]}"""
         scored.append(job)
     return scored
 
-# ─── MAIN FETCH ───────────────────────────────────────────────────────────────
-
-def fetch_all(rapidapi_key):
-    all_jobs = []
-    seen_urls = set()
-
-    print("\n  Core/Adjacent queries — US:")
-    for query in CORE_QUERIES_US + CORE_QUERIES_CA:
-        print(f"  → \"{query}\"")
-        jobs = fetch_jsearch(query, rapidapi_key, num_pages=2)
-        filtered = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
-        for j in filtered: seen_urls.add(j["url"])
-        print(f"     {len(jobs)} fetched · {len(filtered)} kept")
-        all_jobs.extend(filtered)
-
-    print("\n  Wildcard queries:")
-    wild_jobs = []
-    for query in WILDCARD_QUERIES:
-        print(f"  → \"{query}\"")
-        jobs = fetch_jsearch(query, rapidapi_key, num_pages=2)
-        filtered = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
-        for j in filtered: seen_urls.add(j["url"])
-        # Reroute any core/adjacent titles that snuck in via wildcard queries
-        rerouted, true_wild = [], []
-        for j in filtered:
-            if is_core_adjacent(j["title"]):
-                rerouted.append(j)
-            else:
-                true_wild.append(j)
-        if rerouted:
-            print(f"     ↳ rerouted {len(rerouted)} core/adjacent jobs to main pipeline")
-            all_jobs.extend(rerouted)
-        print(f"     {len(jobs)} fetched · {len(true_wild)} wildcard · {len(rerouted)} rerouted")
-        wild_jobs.extend(true_wild)
-
-    return all_jobs, wild_jobs
-
 # ─── PERSIST ──────────────────────────────────────────────────────────────────
 
-def process_jobs(raw_jobs, wild_jobs):
-    # Load seen dict; migrate list format if needed
+def process_jobs(raw_jobs):
     raw_seen = load_json(SEEN_FILE, {})
     if isinstance(raw_seen, list):
         raw_seen = {id: datetime.now(timezone.utc).isoformat() for id in raw_seen}
-    # Purge entries older than 21 days
     cutoff = datetime.now(timezone.utc) - timedelta(days=21)
     seen = {k: v for k, v in raw_seen.items()
             if datetime.fromisoformat(v) > cutoff}
     print(f"  seen_ids: {len(raw_seen)} loaded, {len(raw_seen)-len(seen)} expired, {len(seen)} active")
     existing = load_json(DATA_FILE, [])
 
-    new_core = []
+    new_jobs = []
     for job in raw_jobs:
         jid = make_id(job["title"], job["company"])
         if jid in seen: continue
         job["id"]    = jid
         job["added"] = datetime.now(timezone.utc).isoformat()
-        seen[jid] = datetime.now(timezone.utc).isoformat()
-        new_core.append(job)
+        seen[jid]    = datetime.now(timezone.utc).isoformat()
+        new_jobs.append(job)
 
-    new_wild = []
-    for job in wild_jobs:
-        jid = make_id(job["title"], job["company"])
-        if jid in seen: continue
-        job["id"]    = jid
-        job["added"] = datetime.now(timezone.utc).isoformat()
-        seen[jid] = datetime.now(timezone.utc).isoformat()
-        new_wild.append(job)
+    print(f"\n  → {len(new_jobs)} new jobs to score...")
+    if new_jobs:
+        new_jobs = score_batch(new_jobs)
 
-    print(f"\n  → {len(new_core)} new core/adjacent to score...")
-    if new_core:
-        new_core = score_batch(new_core, TRAVIS_PROFILE, "core")
+    kept = [j for j in new_jobs if (j.get("score") or 0) >= 3]
+    print(f"\n  → {len(kept)} total kept (score ≥ 3)")
 
-    print(f"\n  → {len(new_wild)} new wildcards to score...")
-    if new_wild:
-        new_wild = score_batch(new_wild, WILDCARD_PROFILE, "wildcard")
-
-    all_new = [j for j in (new_core + new_wild) if (j.get("score") or 0) >= 3]
-    print(f"\n  → {len(all_new)} total kept (score ≥ 1)")
-
-    all_jobs = (all_new + existing)[:300]
+    all_jobs = (kept + existing)[:300]
     save_json(DATA_FILE, all_jobs)
     save_json(SEEN_FILE, seen)
     save_json(META_FILE, {
         "updated":     datetime.now(timezone.utc).isoformat(),
-        "new_count":   len(all_new),
+        "new_count":   len(kept),
         "total_count": len(all_jobs),
     })
-    return all_new, all_jobs
+    return kept, all_jobs
 
 # ─── EMAIL ────────────────────────────────────────────────────────────────────
 
@@ -429,7 +490,6 @@ def build_html(new_jobs, all_jobs):
     today = datetime.now().strftime("%A, %B %d, %Y")
     core     = [j for j in new_jobs if j.get("category") == "CORE"]
     adjacent = [j for j in new_jobs if j.get("category") == "ADJACENT"]
-    wildcard = [j for j in new_jobs if j.get("category") == "WILDCARD"]
 
     def row(j, color):
         sc     = j.get("score", 0)
@@ -464,11 +524,9 @@ def build_html(new_jobs, all_jobs):
   <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
     <span style="background:rgba(0,229,204,.12);border:1px solid rgba(0,229,204,.3);color:#00E5CC;padding:4px 12px;border-radius:20px;font-size:12px;">{len(core)} Core</span>
     <span style="background:rgba(185,131,255,.12);border:1px solid rgba(185,131,255,.3);color:#B983FF;padding:4px 12px;border-radius:20px;font-size:12px;">{len(adjacent)} Adjacent</span>
-    <span style="background:rgba(255,107,53,.12);border:1px solid rgba(255,107,53,.3);color:#FF6B35;padding:4px 12px;border-radius:20px;font-size:12px;">{len(wildcard)} Wildcard</span>
   </div>
   {section("Core Roles", core, "#00E5CC")}
   {section("Adjacent Roles", adjacent, "#B983FF")}
-  {section("Wildcard — You Might Love These", wildcard, "#FF6B35")}
 </div></body></html>"""
 
 def send_email(new_jobs, all_jobs):
@@ -478,10 +536,9 @@ def send_email(new_jobs, all_jobs):
         print("  ⚠ Email skipped — no credentials"); return
     core = len([j for j in new_jobs if j.get("category") == "CORE"])
     adj  = len([j for j in new_jobs if j.get("category") == "ADJACENT"])
-    wild = len([j for j in new_jobs if j.get("category") == "WILDCARD"])
     today = datetime.now().strftime("%b %d")
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"🎯 Jobs {today} — {core} core · {adj} adjacent · {wild} wildcard"
+    msg["Subject"] = f"🎯 Jobs {today} — {core} core · {adj} adjacent"
     msg["From"] = user; msg["To"] = to
     msg.attach(MIMEText(build_html(new_jobs, all_jobs), "html"))
     try:
@@ -495,21 +552,17 @@ def send_email(new_jobs, all_jobs):
 
 if __name__ == "__main__":
     print("=" * 55)
-    print("Travis Shorrock Job Scraper — JSearch Edition")
+    print("Travis Shorrock Job Scraper — Multi-Source Edition")
     print(datetime.now().strftime("%Y-%m-%d %H:%M UTC"))
     print("=" * 55)
 
     rapidapi_key = os.environ.get("RAPIDAPI_KEY", "")
-    if not rapidapi_key:
-        print("❌ RAPIDAPI_KEY not set — aborting")
-        exit(1)
 
-    print("\n[1/3] Fetching from JSearch (LinkedIn + Indeed + Glassdoor + ZipRecruiter)...")
-    raw_jobs, wild_jobs = fetch_all(rapidapi_key)
-    print(f"\n  Total: {len(raw_jobs)} core/adjacent · {len(wild_jobs)} wildcard candidates")
+    print("\n[1/3] Fetching from LinkedIn + Adzuna + JSearch...")
+    raw_jobs = fetch_all(rapidapi_key)
 
     print("\n[2/3] Scoring with Claude Haiku...")
-    new_jobs, all_jobs = process_jobs(raw_jobs, wild_jobs)
+    new_jobs, all_jobs = process_jobs(raw_jobs)
 
     print("\n[3/3] Sending email...")
     if new_jobs:
