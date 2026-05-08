@@ -6,6 +6,7 @@ Three category lanes: CORE · ADJACENT
 """
 
 import json, os, re, hashlib, smtplib, urllib.request, urllib.parse, time, random
+import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -137,8 +138,12 @@ MUST-HAVES for high score:
 - 100% remote. Hybrid or on-site = score 2 max.
 - Senior level only. Junior/coordinator/mid-level = score 0.
 - Compensation in USD or CAD preferred. Other currencies = score lower.
-- Timezone: Prefer US-compatible. If not mentioned, do NOT penalize — assume US-compatible.
-  Only penalize if posting explicitly requires European or Asian hours.
+- Location/Timezone: Strongly prefer North America (US, Canada).
+  If timezone is not mentioned, assume US-compatible and do NOT penalize.
+  If the posting is explicitly for a European, Asian, or other non-North-American team
+  with required overlap hours, score it 2 points lower than you otherwise would.
+  Do NOT score 0 purely on timezone unless hours are explicitly incompatible.
+  Remote roles open worldwide are fine — Travis can work from anywhere.
 
 Travis's background:
 - National CD at T&Pm 10yrs: Toyota Canada, TELUS — large-scale integrated campaigns
@@ -217,7 +222,7 @@ LINKEDIN_UA_POOL = [
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
 ]
 
-def fetch_linkedin(query):
+def fetch_linkedin(query, location=None):
     """Scrape LinkedIn public guest API — no login required."""
     jobs = []
     headers = {
@@ -227,14 +232,16 @@ def fetch_linkedin(query):
         "Referer": "https://www.linkedin.com/jobs/",
     }
 
-    params = urllib.parse.urlencode({
+    params_dict = {
         "keywords": query,
-        "location": "United States",
         "f_WT": "2",
         "f_E": "4,5,6",
         "f_TPR": "r86400",
         "start": "0",
-    })
+    }
+    if location:
+        params_dict["location"] = location
+    params = urllib.parse.urlencode(params_dict)
 
     url = f"https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?{params}"
 
@@ -333,6 +340,172 @@ def fetch_adzuna(query, app_id, app_key, country="us"):
 
     return jobs
 
+# ─── REMOTEOK FETCHER ─────────────────────────────────────────────────────────
+
+REMOTEOK_TAGS = [
+    "marketing", "content", "creative", "brand", "design",
+    "executive", "director", "lead", "manager",
+]
+
+def fetch_remoteok():
+    """Fetch all jobs from RemoteOK public API and filter by relevant tags/titles."""
+    jobs = []
+    try:
+        req = urllib.request.Request(
+            "https://remoteok.com/api",
+            headers={"User-Agent": "job-tracker/1.0"}
+        )
+        with urllib.request.urlopen(req, timeout=20) as r:
+            data = json.loads(r.read())
+
+        # First item is metadata, skip it
+        listings = data[1:] if len(data) > 1 else []
+
+        for j in listings:
+            title   = (j.get("position") or "").strip()
+            company = (j.get("company") or "").strip()
+            url     = j.get("apply_url") or j.get("url") or ""
+            tags    = [t.lower() for t in (j.get("tags") or [])]
+            desc    = re.sub(r'<[^>]+>', ' ', j.get("description") or "")[:1200]
+            salary  = ""
+            if j.get("salary_min") and j.get("salary_max"):
+                salary = f"${int(j['salary_min']):,}–${int(j['salary_max']):,}"
+            elif j.get("salary_min"):
+                salary = f"${int(j['salary_min']):,}+"
+
+            # Keep only if tags or title suggest relevance
+            relevant = any(tag in tags for tag in REMOTEOK_TAGS) or \
+                       any(t in title.lower() for t in ["director", "head of", "chief", "vp ", "lead", "creative", "brand", "content", "marketing"])
+
+            if relevant and title and url and domain_ok(url):
+                jobs.append({
+                    "title":       title,
+                    "company":     company,
+                    "url":         url,
+                    "description": desc,
+                    "salary":      salary,
+                    "source":      "RemoteOK",
+                    "posted":      "",
+                })
+
+        print(f"    RemoteOK → {len(jobs)} relevant results from {len(listings)} total")
+        time.sleep(1)
+
+    except Exception as e:
+        print(f"    ⚠ RemoteOK → {e}")
+
+    return jobs
+
+# ─── REMOTIVE FETCHER ─────────────────────────────────────────────────────────
+
+REMOTIVE_CATEGORIES = [
+    "marketing",
+    "design",
+    "artificial-intelligence",
+    "communications",
+]
+
+def fetch_remotive():
+    """Fetch jobs from Remotive free API across relevant categories."""
+    jobs = []
+    for category in REMOTIVE_CATEGORIES:
+        try:
+            url = f"https://remotive.com/api/remote-jobs?category={category}&limit=50"
+            req = urllib.request.Request(url, headers={"User-Agent": "job-tracker/1.0"})
+            with urllib.request.urlopen(req, timeout=20) as r:
+                data = json.loads(r.read())
+
+            listings = data.get("jobs", [])
+            for j in listings:
+                title    = (j.get("title") or "").strip()
+                company  = (j.get("company_name") or "").strip()
+                url_apply = j.get("url") or ""
+                desc     = re.sub(r'<[^>]+>', ' ', j.get("description") or "")[:1200]
+                salary   = j.get("salary") or ""
+                location = j.get("candidate_required_location") or "Worldwide"
+
+                # Skip explicitly European/Asian timezone-required roles
+                skip_regions = ["europe", "european", "asia", "apac", "emea", "africa", "middle east"]
+                if any(r in location.lower() for r in skip_regions) and \
+                   not any(r in location.lower() for r in ["americas", "worldwide", "global", "us", "canada"]):
+                    continue
+
+                if title and url_apply and domain_ok(url_apply):
+                    jobs.append({
+                        "title":       title,
+                        "company":     company,
+                        "url":         url_apply,
+                        "description": desc,
+                        "salary":      salary,
+                        "source":      "Remotive",
+                        "posted":      j.get("publication_date", ""),
+                    })
+
+            print(f"    Remotive [{category}] → {len(listings)} results")
+            time.sleep(0.5)
+
+        except Exception as e:
+            print(f"    ⚠ Remotive [{category}] → {e}")
+
+    return jobs
+
+# ─── WE WORK REMOTELY FETCHER ─────────────────────────────────────────────────
+
+WWR_FEEDS = [
+    "https://weworkremotely.com/categories/remote-marketing-jobs.rss",
+    "https://weworkremotely.com/categories/remote-management-and-finance-jobs.rss",
+    "https://weworkremotely.com/categories/remote-design-jobs.rss",
+]
+
+def fetch_weworkremotely():
+    """Fetch jobs from We Work Remotely RSS feeds."""
+    jobs = []
+    for feed_url in WWR_FEEDS:
+        try:
+            req = urllib.request.Request(feed_url, headers={"User-Agent": "job-tracker/1.0"})
+            with urllib.request.urlopen(req, timeout=20) as r:
+                xml_data = r.read()
+
+            root = ET.fromstring(xml_data)
+            channel = root.find("channel")
+            items = channel.findall("item") if channel else []
+
+            count = 0
+            for item in items:
+                title_el   = item.find("title")
+                link_el    = item.find("link")
+                desc_el    = item.find("description")
+
+                raw_title = title_el.text if title_el is not None else ""
+                # WWR titles are formatted as "Company: Job Title"
+                if ": " in raw_title:
+                    company, title = raw_title.split(": ", 1)
+                else:
+                    company, title = "", raw_title
+
+                url_apply = link_el.text if link_el is not None else ""
+                desc = re.sub(r'<[^>]+>', ' ', desc_el.text or "")[:1200] if desc_el is not None else ""
+
+                if title and url_apply:
+                    jobs.append({
+                        "title":       title.strip(),
+                        "company":     company.strip(),
+                        "url":         url_apply,
+                        "description": desc,
+                        "salary":      "",
+                        "source":      "WeWorkRemotely",
+                        "posted":      "",
+                    })
+                    count += 1
+
+            print(f"    WeWorkRemotely [{feed_url.split('/')[-1].replace('.rss','')}] → {count} results")
+            time.sleep(0.5)
+
+        except Exception as e:
+            print(f"    ⚠ WeWorkRemotely → {e}")
+
+    return jobs
+
 # ─── JSEARCH FETCHER ──────────────────────────────────────────────────────────
 
 def fetch_jsearch(query, rapidapi_key, num_pages=1):
@@ -413,6 +586,27 @@ def fetch_all(rapidapi_key):
             all_jobs.extend(fresh)
     else:
         print("\n  Adzuna: skipped (ADZUNA_APP_ID / ADZUNA_APP_KEY not set)")
+
+    # ── RemoteOK (free, every day) ────────────────────────────────────────────
+    print("\n  RemoteOK:")
+    jobs = fetch_remoteok()
+    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+    for j in fresh: seen_urls.add(j["url"])
+    all_jobs.extend(fresh)
+
+    # ── Remotive (free, every day) ────────────────────────────────────────────
+    print("\n  Remotive:")
+    jobs = fetch_remotive()
+    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+    for j in fresh: seen_urls.add(j["url"])
+    all_jobs.extend(fresh)
+
+    # ── We Work Remotely (free, every day) ────────────────────────────────────
+    print("\n  We Work Remotely:")
+    jobs = fetch_weworkremotely()
+    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+    for j in fresh: seen_urls.add(j["url"])
+    all_jobs.extend(fresh)
 
     # ── JSearch (throttled: every 3rd day only) ───────────────────────────────
     run_jsearch = (datetime.now(timezone.utc).day % 3 == 0)
