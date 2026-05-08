@@ -1,5 +1,35 @@
 [
   {
+    "title": "VP Marketing",
+    "company": "Chamberlain Advisors",
+    "url": "https://www.linkedin.com/jobs/view/vp-marketing-at-chamberlain-advisors-4411734976",
+    "description": "",
+    "salary": "",
+    "source": "LinkedIn",
+    "posted": "",
+    "id": "686d3c4750d7",
+    "added": "2026-05-08T21:18:15.766037+00:00",
+    "score": 5,
+    "category": "ADJACENT",
+    "score_reason": "Marketing VP is a peer-level leadership role but tilts business/strategy over creative direction\u2014good fit if creative-led, weak if not.",
+    "score_method": "claude"
+  },
+  {
+    "title": "Director, Product & Innovation - Remote",
+    "company": "Ubique Group",
+    "url": "https://www.linkedin.com/jobs/view/director-product-innovation-remote-at-ubique-group-4411761424",
+    "description": "",
+    "salary": "",
+    "source": "LinkedIn",
+    "posted": "",
+    "id": "56a2b407354e",
+    "added": "2026-05-08T21:18:15.766080+00:00",
+    "score": 4,
+    "category": "ADJACENT",
+    "score_reason": "Product & Innovation suggests strategy/operations over creative direction, but could involve creative leadership depending on company structure.",
+    "score_method": "claude"
+  },
+  {
     "title": "Toronto, ON",
     "company": "GTMnow",
     "url": "https://www.linkedin.com/comm/jobs/view/4409934775/",
