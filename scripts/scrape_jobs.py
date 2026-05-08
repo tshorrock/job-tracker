@@ -199,6 +199,42 @@ def has_remote_signal(job):
     text = ((job.get("title") or "") + " " + (job.get("description") or "")).lower()
     return any(signal in text for signal in REMOTE_SIGNALS)
 
+# ─── SENIOR TITLE RELEVANCE ───────────────────────────────────────────────────
+# Used for sources that don't have query-based pre-filtering (RemoteOK, Remotive, WWR).
+# Pulls senior creative/brand/marketing leadership titles and adjacent leadership roles.
+
+SENIOR_TITLE_RE = re.compile(
+    r"\b("
+    # Explicit senior CD/ECD/GCD/ACD
+    r"creative director|executive creative director|group creative director|"
+    r"associate creative director|acd|ecd|gcd|"
+    # Head of <X>
+    r"head of (creative|brand|content|marketing|design|experience|programming|"
+    r"culture|communications|growth|copy|story)|"
+    # VP <X> / SVP <X>
+    r"(?:s?vp|vice president)\s+(of\s+)?(creative|marketing|brand|design|content|"
+    r"experience|communications)|"
+    # Chief X Officer
+    r"chief (brand|marketing|creative|experience|content|communications) officer|"
+    r"cmo|cco|cbo|ccmo|cxo|"
+    # Modifier + Director (catches Brand Director, Art Director, Creative Director, etc.)
+    r"(creative|brand|art|content|marketing|design|narrative|experience|immersive|"
+    r"communications|copy|story)\s+director|"
+    # Director of <X> / Director, <X>
+    r"director\s*(of|,)\s+(creative|brand|content|marketing|design|experience|"
+    r"communications|copy|story)|"
+    # Lead patterns
+    r"(creative|brand|content|marketing|design)\s+lead|"
+    # AI / tech creative roles
+    r"creative technologist|ai creative director|creative partner"
+    r")\b",
+    re.IGNORECASE,
+)
+
+def is_relevant_title(job):
+    """Match senior creative/brand/marketing leadership patterns in the title."""
+    return bool(SENIOR_TITLE_RE.search(job.get("title") or ""))
+
 # ─── HELPERS ──────────────────────────────────────────────────────────────────
 
 def make_id(title, company):
@@ -452,7 +488,7 @@ def fetch_remotive():
 # ─── WE WORK REMOTELY FETCHER ─────────────────────────────────────────────────
 
 WWR_FEEDS = [
-    "https://weworkremotely.com/categories/remote-marketing-jobs.rss",
+    "https://weworkremotely.com/categories/remote-sales-and-marketing-jobs.rss",
     "https://weworkremotely.com/categories/remote-management-and-finance-jobs.rss",
     "https://weworkremotely.com/categories/remote-design-jobs.rss",
 ]
@@ -567,7 +603,9 @@ def fetch_all(rapidapi_key):
     print("\n  LinkedIn guest API:")
     for query in LINKEDIN_QUERIES:
         jobs = fetch_linkedin(query)
-        fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and has_remote_signal(j) and j["url"] not in seen_urls]
+        # No has_remote_signal: LinkedIn pre-filters via f_WT=2 (Remote workplace flag)
+        # and returns empty descriptions, so the keyword check would strip 90% of valid jobs.
+        fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
         for j in fresh: seen_urls.add(j["url"])
         all_jobs.extend(fresh)
 
@@ -597,15 +635,19 @@ def fetch_all(rapidapi_key):
     # ── Remotive (free, every day) ────────────────────────────────────────────
     print("\n  Remotive:")
     jobs = fetch_remotive()
-    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+    before = len(jobs)
+    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and is_relevant_title(j) and j["url"] not in seen_urls]
     for j in fresh: seen_urls.add(j["url"])
+    print(f"    Remotive → {before} fetched · {len(fresh)} relevant senior titles kept")
     all_jobs.extend(fresh)
 
     # ── We Work Remotely (free, every day) ────────────────────────────────────
     print("\n  We Work Remotely:")
     jobs = fetch_weworkremotely()
-    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+    before = len(jobs)
+    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and is_relevant_title(j) and j["url"] not in seen_urls]
     for j in fresh: seen_urls.add(j["url"])
+    print(f"    WeWorkRemotely → {before} fetched · {len(fresh)} relevant senior titles kept")
     all_jobs.extend(fresh)
 
     # ── JSearch (throttled: every 3rd day only) ───────────────────────────────
@@ -615,7 +657,8 @@ def fetch_all(rapidapi_key):
         for query in JSEARCH_QUERIES:
             print(f"  → \"{query}\"")
             jobs = fetch_jsearch(query, rapidapi_key, num_pages=1)
-            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and has_remote_signal(j) and j["url"] not in seen_urls]
+            # No has_remote_signal: JSearch already enforces remote_jobs_only=true server-side.
+            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
             for j in fresh: seen_urls.add(j["url"])
             print(f"     {len(jobs)} fetched · {len(fresh)} kept")
             all_jobs.extend(fresh)
