@@ -549,16 +549,16 @@ def fetch_linkedin_email():
     """
     Parse LinkedIn Job Alert emails from Gmail.
     LinkedIn sends daily digests from jobalerts-noreply@linkedin.com.
-    Uses OAuth refresh token — no browser needed, works in GitHub Actions.
+    Uses multiple parsing strategies since LinkedIn changes email format frequently.
     """
     jobs = []
 
-    refresh_token = os.environ.get("GMAIL_REFRESH_TOKEN", "")
-    client_id     = os.environ.get("GMAIL_CLIENT_ID", "")
-    client_secret = os.environ.get("GMAIL_CLIENT_SECRET", "")
+    refresh_token  = os.environ.get("GMAIL_REFRESH_TOKEN", "")
+    client_id      = os.environ.get("GMAIL_CLIENT_ID", "")
+    client_secret  = os.environ.get("GMAIL_CLIENT_SECRET", "")
 
     if not all([refresh_token, client_id, client_secret]):
-        print("    Gmail: skipped (GMAIL_REFRESH_TOKEN / GMAIL_CLIENT_ID / GMAIL_CLIENT_SECRET not set)")
+        print("    Gmail: skipped (credentials not set)")
         return jobs
 
     try:
@@ -588,15 +588,6 @@ def fetch_linkedin_email():
         messages = results.get("messages", [])
         print(f"    Gmail: found {len(messages)} LinkedIn alert email(s)")
 
-        def extract_body(payload):
-            if payload.get("body", {}).get("data"):
-                return base64.urlsafe_b64decode(payload["body"]["data"]).decode("utf-8", errors="replace")
-            for part in payload.get("parts", []):
-                result = extract_body(part)
-                if result:
-                    return result
-            return ""
-
         for msg_meta in messages:
             msg = service.users().messages().get(
                 userId="me",
@@ -604,67 +595,137 @@ def fetch_linkedin_email():
                 format="full",
             ).execute()
 
-            payload = msg.get("payload", {})
-            body = extract_body(payload)
+            def extract_body(payload):
+                """Recursively extract HTML or plain text body."""
+                mime = payload.get("mimeType", "")
+                data = payload.get("body", {}).get("data", "")
+                if data and mime in ("text/html", "text/plain"):
+                    return base64.urlsafe_b64decode(data).decode("utf-8", errors="replace"), mime
+                for part in payload.get("parts", []):
+                    result, found_mime = extract_body(part)
+                    if result:
+                        return result, found_mime
+                return "", ""
+
+            body, mime = extract_body(msg.get("payload", {}))
             if not body:
                 continue
 
-            # Parse job listings from LinkedIn alert HTML
-            soup = BeautifulSoup(body, "html.parser")
+            email_jobs = []
 
-            # LinkedIn alert emails contain job cards with title, company, location.
-            # Structure varies but typically has anchor tags with job titles.
-            job_links = soup.find_all("a", href=True)
+            # ── Strategy 1: Parse HTML with BeautifulSoup ─────────────────────
+            if "html" in mime or "<html" in body.lower():
+                soup = BeautifulSoup(body, "html.parser")
 
-            for link in job_links:
-                href = link.get("href", "")
-                text = link.get_text(strip=True)
+                # Strategy 1a: Find all links containing linkedin.com/jobs
+                for a in soup.find_all("a", href=True):
+                    href = a.get("href", "")
+                    # LinkedIn tracking URLs redirect to the real job URL
+                    # They look like: https://www.linkedin.com/comm/jobs/view/XXXXXX
+                    # or: https://www.linkedin.com/jobs/view/XXXXXX
+                    if "linkedin.com" not in href:
+                        continue
+                    if not any(x in href for x in ["/jobs/view/", "/comm/jobs/view/", "currentJobId="]):
+                        continue
 
-                # LinkedIn job URLs contain /jobs/view/
-                if "/jobs/view/" not in href and "linkedin.com/jobs" not in href:
-                    continue
+                    title = a.get_text(separator=" ", strip=True)
+                    if not title or len(title) < 4 or len(title) > 200:
+                        continue
 
-                if not text or len(text) < 5:
-                    continue
+                    # Clean URL — strip tracking params but keep job ID
+                    clean_url = href.split("?")[0] if "?" in href else href
+                    # Handle currentJobId format
+                    if "currentJobId=" in href:
+                        params = urllib.parse.parse_qs(urllib.parse.urlparse(href).query)
+                        job_id = params.get("currentJobId", [""])[0]
+                        if job_id:
+                            clean_url = f"https://www.linkedin.com/jobs/view/{job_id}/"
 
-                clean_url = href.split("?")[0] if "?" in href else href
-                if not clean_url.startswith("http"):
-                    continue
+                    # Try to get company from nearby elements
+                    company = ""
+                    parent = a.find_parent(["td", "div", "table", "tr"])
+                    if parent:
+                        all_text = [t.get_text(strip=True) for t in parent.find_all(["span", "p", "div", "td"])
+                                   if t.get_text(strip=True) and t.get_text(strip=True) != title]
+                        candidates = [t for t in all_text if 1 < len(t) < 100 and t != title]
+                        if candidates:
+                            company = candidates[0]
 
-                # Try to get company from sibling/parent elements
-                company = ""
-                parent = link.parent
-                if parent:
-                    siblings = parent.find_all(["span", "p", "td"])
-                    for sib in siblings:
-                        sib_text = sib.get_text(strip=True)
-                        if sib_text and sib_text != text and len(sib_text) < 80:
-                            company = sib_text
-                            break
+                    if clean_url:
+                        email_jobs.append({
+                            "title":       title,
+                            "company":     company,
+                            "url":         clean_url,
+                            "description": "",
+                            "salary":      "",
+                            "source":      "LinkedIn",
+                            "posted":      "",
+                        })
 
-                jobs.append({
-                    "title":       text,
-                    "company":     company,
-                    "url":         clean_url,
-                    "description": "",
-                    "salary":      "",
-                    "source":      "LinkedIn",
-                    "posted":      "",
-                })
+                # Strategy 1b: Look for job title patterns in text even without job URL
+                # LinkedIn sometimes uses redirect URLs that don't contain /jobs/view/
+                if not email_jobs:
+                    for a in soup.find_all("a", href=True):
+                        href = a.get("href", "")
+                        if "linkedin.com" not in href and "li.com" not in href:
+                            continue
+                        title = a.get_text(separator=" ", strip=True)
+                        job_keywords = ["director", "head of", "chief", "vp ", "v.p.", "creative",
+                                       "brand", "content", "marketing", "manager", "lead", "officer"]
+                        if (10 < len(title) < 120 and
+                            any(kw in title.lower() for kw in job_keywords)):
+                            email_jobs.append({
+                                "title":       title,
+                                "company":     "",
+                                "url":         href,
+                                "description": "",
+                                "salary":      "",
+                                "source":      "LinkedIn",
+                                "posted":      "",
+                            })
+
+            # ── Strategy 2: Plain text parsing ────────────────────────────────
+            if not email_jobs and body:
+                # LinkedIn plain text emails list jobs as:
+                # "Job Title at Company\nhttps://www.linkedin.com/jobs/view/XXXXX"
+                lines = body.split("\n")
+                for i, line in enumerate(lines):
+                    line = line.strip()
+                    if "linkedin.com/jobs/view/" in line or "linkedin.com/comm/jobs/view/" in line:
+                        url = re.search(r'https?://[^\s<>"]+linkedin\.com[^\s<>"]*jobs[^\s<>"]*', line)
+                        if url:
+                            clean_url = url.group(0).split("?")[0]
+                            title = lines[i-1].strip() if i > 0 else ""
+                            company = lines[i-2].strip() if i > 1 else ""
+                            if title and len(title) > 4:
+                                email_jobs.append({
+                                    "title":       title,
+                                    "company":     company,
+                                    "url":         clean_url,
+                                    "description": "",
+                                    "salary":      "",
+                                    "source":      "LinkedIn",
+                                    "posted":      "",
+                                })
+
+            jobs.extend(email_jobs)
+            print(f"    Gmail email parsed: {len(email_jobs)} jobs")
 
         # Deduplicate by URL
-        seen_urls_local = set()
-        unique_jobs = []
+        seen_local = set()
+        unique = []
         for j in jobs:
-            if j["url"] not in seen_urls_local:
-                seen_urls_local.add(j["url"])
-                unique_jobs.append(j)
+            if j["url"] and j["url"] not in seen_local:
+                seen_local.add(j["url"])
+                unique.append(j)
 
-        print(f"    Gmail LinkedIn: {len(unique_jobs)} unique jobs parsed from emails")
-        return unique_jobs
+        print(f"    Gmail LinkedIn total: {len(unique)} unique jobs from {len(messages)} emails")
+        return unique
 
     except Exception as e:
         print(f"    ⚠ Gmail LinkedIn: {e}")
+        import traceback
+        traceback.print_exc()
         return []
 
 # ─── JSEARCH FETCHER ──────────────────────────────────────────────────────────
@@ -836,7 +897,7 @@ Description: {(job.get('description') or '')[:1500]}"""
                 },
                 data=json.dumps({
                     "model": "claude-haiku-4-5-20251001",
-                    "max_tokens": 120,
+                    "max_tokens": 200,
                     "messages": [{"role": "user", "content": prompt}]
                 }).encode()
             )
@@ -848,10 +909,9 @@ Description: {(job.get('description') or '')[:1500]}"""
             job["category"]     = result.get("category", "ADJACENT").upper()
             job["score_reason"] = result.get("reason", "")
             job["score_method"] = "claude"
-            if job["score"] >= 5:
-                print(f"     [{job['score']}/10] [{job['category']}] {job['title'][:55]}")
-                if job.get("score_reason"):
-                    print(f"        → {job['score_reason'][:80]}")
+            print(f"     [{job['score']}/10] [{job['category']}] {job['title'][:55]}")
+            if job.get("score_reason") and job['score'] >= 4:
+                print(f"        → {job['score_reason'][:80]}")
             time.sleep(0.3)
         except Exception as e:
             print(f"     ⚠ scoring failed: {e}")
@@ -887,7 +947,12 @@ def process_jobs(raw_jobs):
         new_jobs = score_batch(new_jobs)
 
     kept = [j for j in new_jobs if (j.get("score") or 0) >= 3]
+    dropped = [j for j in new_jobs if (j.get("score") or 0) < 3]
     print(f"\n  → {len(kept)} total kept (score ≥ 3)")
+    if dropped:
+        print(f"  → {len(dropped)} dropped (score < 3):")
+        for j in dropped:
+            print(f"     [{j.get('score',0)}/10] {j.get('title','')[:55]} @ {j.get('company','')[:30]}")
 
     all_jobs = (kept + existing)[:300]
     save_json(DATA_FILE, all_jobs)
