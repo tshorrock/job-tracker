@@ -23,7 +23,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install beautifulsoup4
+        run: pip install beautifulsoup4 google-auth google-auth-oauthlib google-api-python-client
 
       - name: Run scraper
         env:
@@ -31,6 +31,9 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ADZUNA_APP_ID:  ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
+          GMAIL_CLIENT_ID:     ${{ secrets.GMAIL_CLIENT_ID }}
+          GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_CLIENT_SECRET }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           TO_EMAIL: ${{ secrets.TO_EMAIL }}

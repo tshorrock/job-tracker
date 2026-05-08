@@ -6,6 +6,7 @@ Three category lanes: CORE · ADJACENT
 """
 
 import json, os, re, hashlib, smtplib, urllib.request, urllib.parse, time, random
+import base64, email as email_lib
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
 from email.mime.multipart import MIMEMultipart
@@ -542,6 +543,130 @@ def fetch_weworkremotely():
 
     return jobs
 
+# ─── LINKEDIN EMAIL FETCHER (Gmail API) ───────────────────────────────────────
+
+def fetch_linkedin_email():
+    """
+    Parse LinkedIn Job Alert emails from Gmail.
+    LinkedIn sends daily digests from jobalerts-noreply@linkedin.com.
+    Uses OAuth refresh token — no browser needed, works in GitHub Actions.
+    """
+    jobs = []
+
+    refresh_token = os.environ.get("GMAIL_REFRESH_TOKEN", "")
+    client_id     = os.environ.get("GMAIL_CLIENT_ID", "")
+    client_secret = os.environ.get("GMAIL_CLIENT_SECRET", "")
+
+    if not all([refresh_token, client_id, client_secret]):
+        print("    Gmail: skipped (GMAIL_REFRESH_TOKEN / GMAIL_CLIENT_ID / GMAIL_CLIENT_SECRET not set)")
+        return jobs
+
+    try:
+        from google.oauth2.credentials import Credentials
+        from google.auth.transport.requests import Request
+        from googleapiclient.discovery import build
+
+        creds = Credentials(
+            token=None,
+            refresh_token=refresh_token,
+            client_id=client_id,
+            client_secret=client_secret,
+            token_uri="https://oauth2.googleapis.com/token",
+            scopes=["https://www.googleapis.com/auth/gmail.readonly"],
+        )
+        creds.refresh(Request())
+
+        service = build("gmail", "v1", credentials=creds, cache_discovery=False)
+
+        # Search for LinkedIn job alert emails from the last 2 days
+        results = service.users().messages().list(
+            userId="me",
+            q="from:jobalerts-noreply@linkedin.com newer_than:2d",
+            maxResults=20,
+        ).execute()
+
+        messages = results.get("messages", [])
+        print(f"    Gmail: found {len(messages)} LinkedIn alert email(s)")
+
+        def extract_body(payload):
+            if payload.get("body", {}).get("data"):
+                return base64.urlsafe_b64decode(payload["body"]["data"]).decode("utf-8", errors="replace")
+            for part in payload.get("parts", []):
+                result = extract_body(part)
+                if result:
+                    return result
+            return ""
+
+        for msg_meta in messages:
+            msg = service.users().messages().get(
+                userId="me",
+                id=msg_meta["id"],
+                format="full",
+            ).execute()
+
+            payload = msg.get("payload", {})
+            body = extract_body(payload)
+            if not body:
+                continue
+
+            # Parse job listings from LinkedIn alert HTML
+            soup = BeautifulSoup(body, "html.parser")
+
+            # LinkedIn alert emails contain job cards with title, company, location.
+            # Structure varies but typically has anchor tags with job titles.
+            job_links = soup.find_all("a", href=True)
+
+            for link in job_links:
+                href = link.get("href", "")
+                text = link.get_text(strip=True)
+
+                # LinkedIn job URLs contain /jobs/view/
+                if "/jobs/view/" not in href and "linkedin.com/jobs" not in href:
+                    continue
+
+                if not text or len(text) < 5:
+                    continue
+
+                clean_url = href.split("?")[0] if "?" in href else href
+                if not clean_url.startswith("http"):
+                    continue
+
+                # Try to get company from sibling/parent elements
+                company = ""
+                parent = link.parent
+                if parent:
+                    siblings = parent.find_all(["span", "p", "td"])
+                    for sib in siblings:
+                        sib_text = sib.get_text(strip=True)
+                        if sib_text and sib_text != text and len(sib_text) < 80:
+                            company = sib_text
+                            break
+
+                jobs.append({
+                    "title":       text,
+                    "company":     company,
+                    "url":         clean_url,
+                    "description": "",
+                    "salary":      "",
+                    "source":      "LinkedIn",
+                    "posted":      "",
+                })
+
+        # Deduplicate by URL
+        seen_urls_local = set()
+        unique_jobs = []
+        for j in jobs:
+            if j["url"] not in seen_urls_local:
+                seen_urls_local.add(j["url"])
+                unique_jobs.append(j)
+
+        print(f"    Gmail LinkedIn: {len(unique_jobs)} unique jobs parsed from emails")
+        return unique_jobs
+
+    except Exception as e:
+        print(f"    ⚠ Gmail LinkedIn: {e}")
+        return []
+
 # ─── JSEARCH FETCHER ──────────────────────────────────────────────────────────
 
 def fetch_jsearch(query, rapidapi_key, num_pages=1):
@@ -599,8 +724,17 @@ def fetch_all(rapidapi_key):
     adzuna_id  = os.environ.get("ADZUNA_APP_ID", "")
     adzuna_key = os.environ.get("ADZUNA_APP_KEY", "")
 
-    # ── LinkedIn (free, every day) ────────────────────────────────────────────
-    print("\n  LinkedIn guest API:")
+    # ── LinkedIn Email Alerts (Gmail API — primary LinkedIn source) ────────────
+    # Pre-filtered by Travis's LinkedIn Job Alert settings, so no remote/title-relevance
+    # post-check needed beyond title_ok.
+    print("\n  LinkedIn Job Alert emails (Gmail):")
+    email_jobs = fetch_linkedin_email()
+    fresh = [j for j in email_jobs if title_ok(j["title"]) and j["url"] not in seen_urls]
+    for j in fresh: seen_urls.add(j["url"])
+    all_jobs.extend(fresh)
+
+    # ── LinkedIn guest API (fallback — often blocked by datacenter IPs) ────────
+    print("\n  LinkedIn guest API (fallback):")
     for query in LINKEDIN_QUERIES:
         jobs = fetch_linkedin(query)
         # No has_remote_signal: LinkedIn pre-filters via f_WT=2 (Remote workplace flag)
