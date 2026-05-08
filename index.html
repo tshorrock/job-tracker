@@ -122,7 +122,7 @@ body{
 
 /* ── PAGE ────────────────────────────────────────────────────────────────── */
 .page{
-  max-width:920px;margin:0 auto;
+  max-width:860px;margin:0 auto;
   padding:24px 24px 80px;
 }
 
@@ -229,9 +229,12 @@ body{
   border-radius:12px;
   padding:16px 20px 16px 22px;
   cursor:pointer;
-  transition:transform 150ms, border-color 150ms, background 150ms;
+  transition:transform 150ms, border-color 150ms, background 150ms, box-shadow 150ms;
   overflow:hidden;
+  opacity:0;transform:translateY(8px);
+  animation:cardIn 220ms ease-out forwards;
 }
+@keyframes cardIn{to{opacity:1;transform:translateY(0)}}
 .jcard::before{
   content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
   background:var(--t4);
@@ -239,9 +242,10 @@ body{
 .jcard.cat-CORE::before{background:var(--teal)}
 .jcard.cat-ADJACENT::before{background:var(--purple)}
 .jcard:hover{
-  transform:translateY(-1px);
+  transform:translateY(-2px);
   border-color:var(--border2);
   background:var(--card2);
+  box-shadow:0 8px 24px rgba(0,0,0,0.35);
 }
 .jcard.dim{opacity:0.55}
 
@@ -256,7 +260,7 @@ body{
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
   overflow:hidden;
 }
-.jcard-score{
+.jcard-score, .score-pill{
   flex-shrink:0;
   display:inline-flex;align-items:center;gap:2px;
   font-family:'JetBrains Mono',monospace;
@@ -347,8 +351,9 @@ body{
   background:var(--card3);border-left:2px solid var(--border2);
   border-radius:0 8px 8px 0;
   font-size:13px;color:var(--t2);line-height:1.65;font-style:italic;
+  -webkit-line-clamp:3;display:none;-webkit-box-orient:vertical;overflow:hidden;
 }
-.jcard-reason.open{display:block}
+.jcard-reason.open{display:-webkit-box}
 
 @media(max-width:640px){
   .header{padding:0 16px}
@@ -789,6 +794,16 @@ function countSources() {
 const isNew = j => j.added && j.added.startsWith(TODAY);
 function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function escapeAttr(s) { return escapeHtml(s); }
+function scoreColor(s) {
+  if (s >= 7) return '#00E5CC';
+  if (s >= 4) return '#F5A623';
+  return '#445566';
+}
+function scoreBg(s) {
+  if (s >= 7) return 'rgba(0,229,204,0.12)';
+  if (s >= 4) return 'rgba(245,166,35,0.12)';
+  return 'rgba(68,85,102,0.12)';
+}
 
 function persistFilters() { localStorage.setItem(LS.filters, JSON.stringify(filters)); }
 function persistSaved()    { localStorage.setItem(LS.saved,     JSON.stringify([...saved])); }
@@ -919,13 +934,14 @@ function toggleReason(id, e) {
 function openCard(url) { if (url) window.open(url, '_blank', 'noopener'); }
 
 // ── CARD ──────────────────────────────────────────────────────────────────
-function makeCard(j) {
+function makeCard(j, idx = 0) {
   const sc      = j.score || 0;
   const scCls   = sc >= 7 ? 'score-high' : sc >= 4 ? 'score-mid' : '';
   const cat     = (j.category || 'CORE').toUpperCase();
   const jid     = j.id || '';
   const isSaved = saved.has(jid);
   const isDism  = dismissed.has(jid);
+  const delay   = Math.min(idx, 12) * 40;  // cap stagger at 480ms total
 
   const tags = [];
   tags.push(`<span class="tag tag-cat-${cat.toLowerCase()}">${cat}</span>`);
@@ -945,10 +961,10 @@ function makeCard(j) {
     : '';
 
   const url = j.url || '';
-  return `<article class="jcard cat-${cat} ${isDism ? 'dim' : ''}" onclick="openCard('${escapeAttr(url)}')" aria-label="${escapeAttr(j.title||'Job')} at ${escapeAttr(j.company||'Unknown')}">
+  return `<article class="jcard cat-${cat} ${isDism ? 'dim' : ''}" style="animation-delay:${delay}ms" onclick="openCard('${escapeAttr(url)}')" aria-label="${escapeAttr(j.title||'Job')} at ${escapeAttr(j.company||'Unknown')}">
     <div class="jcard-row">
       <h2 class="jcard-title">${escapeHtml(j.title || 'Untitled')}</h2>
-      <span class="jcard-score ${scCls}"><span class="sc-n">${sc}</span>/10</span>
+      <span class="jcard-score score-pill ${scCls}"><span class="sc-n">${sc}</span>/10</span>
     </div>
     <div class="jcard-meta">${meta.join(' ')}</div>
     <div class="jcard-footer">
@@ -981,19 +997,21 @@ function render() {
 
   // If sorted by score, group "new today" up top
   let html = '';
+  let i = 0;
+  const stagger = j => makeCard(j, i++);
   if (sortKey === 'score' && filters.state === 'active' && !filters.newOnly) {
     const newJobs = list.filter(isNew);
     const oldJobs = list.filter(j => !isNew(j));
     if (newJobs.length) {
       html += `<div class="feed-section-label">New today · ${newJobs.length}</div>`;
-      html += newJobs.map(makeCard).join('');
+      html += newJobs.map(stagger).join('');
     }
     if (oldJobs.length) {
       if (newJobs.length) html += `<div class="feed-section-label muted">Earlier · ${oldJobs.length}</div>`;
-      html += oldJobs.map(makeCard).join('');
+      html += oldJobs.map(stagger).join('');
     }
   } else {
-    html = list.map(makeCard).join('');
+    html = list.map(stagger).join('');
   }
   feed.innerHTML = html;
 }
