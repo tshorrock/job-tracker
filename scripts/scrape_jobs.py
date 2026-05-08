@@ -183,6 +183,17 @@ def is_remote_clean(job):
     text = ((job.get("title") or "") + " " + (job.get("description") or "")).lower()
     return not any(signal in text for signal in HYBRID_SIGNALS)
 
+REMOTE_SIGNALS = [
+    "remote", "work from home", "wfh", "fully distributed",
+    "anywhere", "telecommute", "telework", "distributed team",
+    "work from anywhere", "location independent",
+]
+
+def has_remote_signal(job):
+    """Require at least one positive remote signal in title or description."""
+    text = ((job.get("title") or "") + " " + (job.get("description") or "")).lower()
+    return any(signal in text for signal in REMOTE_SIGNALS)
+
 # ─── HELPERS ──────────────────────────────────────────────────────────────────
 
 def make_id(title, company):
@@ -276,6 +287,7 @@ def fetch_adzuna(query, app_id, app_key, country="us"):
         "app_id":           app_id,
         "app_key":          app_key,
         "what":             query,
+        "what_and":         "remote",
         "results_per_page": 50,
         "sort_by":          "date",
         "max_days_old":     3,
@@ -382,7 +394,7 @@ def fetch_all(rapidapi_key):
     print("\n  LinkedIn guest API:")
     for query in LINKEDIN_QUERIES:
         jobs = fetch_linkedin(query)
-        fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+        fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and has_remote_signal(j) and j["url"] not in seen_urls]
         for j in fresh: seen_urls.add(j["url"])
         all_jobs.extend(fresh)
 
@@ -391,12 +403,12 @@ def fetch_all(rapidapi_key):
         print("\n  Adzuna API:")
         for query in ADZUNA_QUERIES:
             jobs = fetch_adzuna(query, adzuna_id, adzuna_key, country="us")
-            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and has_remote_signal(j) and j["url"] not in seen_urls]
             for j in fresh: seen_urls.add(j["url"])
             all_jobs.extend(fresh)
         for query in ADZUNA_QUERIES[:2]:
             jobs = fetch_adzuna(query, adzuna_id, adzuna_key, country="ca")
-            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and has_remote_signal(j) and j["url"] not in seen_urls]
             for j in fresh: seen_urls.add(j["url"])
             all_jobs.extend(fresh)
     else:
@@ -409,7 +421,7 @@ def fetch_all(rapidapi_key):
         for query in JSEARCH_QUERIES:
             print(f"  → \"{query}\"")
             jobs = fetch_jsearch(query, rapidapi_key, num_pages=1)
-            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and has_remote_signal(j) and j["url"] not in seen_urls]
             for j in fresh: seen_urls.add(j["url"])
             print(f"     {len(jobs)} fetched · {len(fresh)} kept")
             all_jobs.extend(fresh)
