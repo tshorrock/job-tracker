@@ -662,27 +662,52 @@ def fetch_linkedin_email():
                             "posted":      "",
                         })
 
-                # Strategy 1b: Look for job title patterns in text even without job URL
-                # LinkedIn sometimes uses redirect URLs that don't contain /jobs/view/
+                # Strategy 1b: Look for job title patterns in text even without /jobs/view/ URL
+                # Strict filtering to avoid email scaffolding (buttons, footers, nav links)
                 if not email_jobs:
+                    # Garbage phrases that appear in LinkedIn email chrome, not job titles
+                    garbage_phrases = [
+                        "apply", "unsubscribe", "manage", "settings", "connections",
+                        "canada", "ontario", "toronto", "united states", "view all",
+                        "see more", "learn more", "click here", "sign in", "log in",
+                        "linkedin", "privacy", "terms", "help", "support", "profile",
+                        "resume", "salary", "dismiss", "not interested", "save",
+                        "easy apply", "promoted", "following", "connect",
+                    ]
+                    # Strong job title signals — must contain at least one
+                    strong_signals = [
+                        "creative director", "head of creative", "chief creative",
+                        "executive creative", "group creative", "vp creative",
+                        "chief brand", "head of brand", "brand director",
+                        "chief marketing", "head of marketing", "vp marketing",
+                        "head of content", "director of content", "content director",
+                        "head of experience", "narrative director", "chief experience",
+                        "creative technologist", "ai creative", "creative lead",
+                    ]
                     for a in soup.find_all("a", href=True):
                         href = a.get("href", "")
                         if "linkedin.com" not in href and "li.com" not in href:
                             continue
                         title = a.get_text(separator=" ", strip=True)
-                        job_keywords = ["director", "head of", "chief", "vp ", "v.p.", "creative",
-                                       "brand", "content", "marketing", "manager", "lead", "officer"]
-                        if (10 < len(title) < 120 and
-                            any(kw in title.lower() for kw in job_keywords)):
-                            email_jobs.append({
-                                "title":       title,
-                                "company":     "",
-                                "url":         href,
-                                "description": "",
-                                "salary":      "",
-                                "source":      "LinkedIn",
-                                "posted":      "",
-                            })
+                        title_lower = title.lower()
+                        # Must be reasonable title length
+                        if not (8 < len(title) < 100):
+                            continue
+                        # Must NOT be garbage UI chrome
+                        if any(g in title_lower for g in garbage_phrases):
+                            continue
+                        # Must contain a strong job title signal
+                        if not any(s in title_lower for s in strong_signals):
+                            continue
+                        email_jobs.append({
+                            "title":       title,
+                            "company":     "",
+                            "url":         href,
+                            "description": "",
+                            "salary":      "",
+                            "source":      "LinkedIn",
+                            "posted":      "",
+                        })
 
             # ── Strategy 2: Plain text parsing ────────────────────────────────
             if not email_jobs and body:
@@ -879,13 +904,40 @@ def score_batch(jobs, label=""):
 
     scored = []
     for job in jobs:
-        prompt = f"""{TRAVIS_PROFILE}
+        has_desc = bool((job.get('description') or '').strip())
+
+        if has_desc:
+            scoring_instruction = f"""{TRAVIS_PROFILE}
 
 JOB:
 Title: {job.get('title', '')}
 Company: {job.get('company', '')}
 Salary: {job.get('salary', '')}
 Description: {(job.get('description') or '')[:1500]}"""
+        else:
+            # Title-only scoring — no description available (e.g. LinkedIn email jobs)
+            # Score purely on title fit. Ignore remote/comp/timezone must-haves since
+            # we can't verify them from title alone. These will be reviewed by Travis.
+            scoring_instruction = f"""You are scoring a job title for Travis Shorrock, a senior Creative Director (25+ years, National CD at T&Pm/Havas/tms — Toyota, TELUS, Nissan, Diageo). He tracks CORE and ADJACENT roles.
+
+CORE: CD, ECD, GCD, ACD, VP Creative, Head of Creative, Head of Brand, Head of Content, Chief Brand Officer, CMO, Creative Partner, AI Creative Director, Creative Technologist Lead.
+ADJACENT: Head of Experience, Director of Immersive Experiences, Narrative Director, Head of Programming, Chief Experience Officer, Creative Lead at entertainment/gaming/hospitality.
+
+IMPORTANT: You have TITLE ONLY. No description. Score based purely on whether the title matches Travis's seniority and lane.
+- Score 7-10: Title is a direct senior match (Creative Director, Head of Creative, ECD, Chief Brand Officer, etc.)
+- Score 5-6: Good match but slightly off (Director of Brand, Head of Marketing, Creative Lead)
+- Score 3-4: Adjacent or interesting stretch
+- Score 1-2: Title suggests junior or wrong field
+- Score 0: Title is clearly wrong (designer, engineer, coordinator, or obviously non-creative)
+DO NOT penalize for lack of remote/comp/timezone info — you don't have that data.
+
+JOB:
+Title: {job.get('title', '')}
+Company: {job.get('company', '')}
+
+Respond ONLY with JSON: {{"score": 7, "category": "CORE", "reason": "one punchy sentence"}}"""
+
+        prompt = scoring_instruction
 
         try:
             req = urllib.request.Request(
@@ -904,7 +956,10 @@ Description: {(job.get('description') or '')[:1500]}"""
             with urllib.request.urlopen(req, timeout=20) as r:
                 data = json.loads(r.read())
             text = data["content"][0]["text"].strip()
-            result = json.loads(re.search(r'\{.*\}', text, re.DOTALL).group())
+            match = re.search(r'\{.*\}', text, re.DOTALL)
+            if not match:
+                raise ValueError(f"No JSON found in response: {text[:100]}")
+            result = json.loads(match.group())
             job["score"]        = int(result.get("score", 3))
             job["category"]     = result.get("category", "ADJACENT").upper()
             job["score_reason"] = result.get("reason", "")
@@ -1010,6 +1065,9 @@ def build_html(new_jobs, all_jobs):
 </div></body></html>"""
 
 def send_email(new_jobs, all_jobs):
+    # NOTE: If Gmail SMTP fails with "Username and Password not accepted",
+    # the Gmail app password needs to be regenerated at myaccount.google.com/apppasswords
+    # This is separate from the Gmail API OAuth used for reading job alert emails.
     user = os.environ.get("SMTP_USER", ""); pwd = os.environ.get("SMTP_PASS", "")
     to   = os.environ.get("TO_EMAIL", user)
     if not user or not pwd:
