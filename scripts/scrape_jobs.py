@@ -757,7 +757,8 @@ def fetch_linkedin_email():
                 # "X people clicked apply", etc.). Then dedup by job URL keeping the
                 # longest remaining title (usually the actual job title).
                 strategy_1a_garbage = [
-                    "actively hiring", "apply with resume", "apply now",
+                    "actively hiring", "actively recruiting", "now hiring",
+                    "apply with resume", "apply now",
                     "easy apply", "people clicked apply", "promoted by hirer",
                     "responses managed", "view all jobs", "see all",
                     "unsubscribe", "manage", "settings", "connections",
@@ -802,9 +803,12 @@ def fetch_linkedin_email():
                         if cand:
                             company = cand[0]
 
-                    # Keep the longest title we've seen per URL (likely the actual job title)
+                    # Keep the SHORTEST passing title per URL. LinkedIn email cards have
+                    # multiple anchors per job: the clean h3 ("Creative Director") plus
+                    # a longer "card blob" anchor that concatenates title + location +
+                    # status badge. Shortest passing wins → clean title.
                     existing = candidates_by_url.get(clean_url)
-                    if not existing or len(title) > len(existing["title"]):
+                    if not existing or len(title) < len(existing["title"]):
                         candidates_by_url[clean_url] = {
                             "title":       title,
                             "company":     company,
