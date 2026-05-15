@@ -721,19 +721,28 @@ def fetch_linkedin_email():
                 format="full",
             ).execute()
 
-            def extract_body(payload):
-                """Recursively extract HTML or plain text body."""
+            def collect_bodies(payload, acc):
+                """Walk MIME tree and collect all (mime_type, decoded_body) parts."""
                 mime = payload.get("mimeType", "")
                 data = payload.get("body", {}).get("data", "")
                 if data and mime in ("text/html", "text/plain"):
-                    return base64.urlsafe_b64decode(data).decode("utf-8", errors="replace"), mime
+                    try:
+                        acc.append((mime, base64.urlsafe_b64decode(data).decode("utf-8", errors="replace")))
+                    except Exception:
+                        pass
                 for part in payload.get("parts", []):
-                    result, found_mime = extract_body(part)
-                    if result:
-                        return result, found_mime
-                return "", ""
+                    collect_bodies(part, acc)
 
-            body, mime = extract_body(msg.get("payload", {}))
+            # Prefer HTML over plain text. LinkedIn multipart emails put plain text first
+            # which is what triggered the garbage-leak bug (Strategy 2 grabbing scaffolding lines).
+            all_bodies = []
+            collect_bodies(msg.get("payload", {}), all_bodies)
+            html_body  = next((b for m, b in all_bodies if m == "text/html"), "")
+            plain_body = next((b for m, b in all_bodies if m == "text/plain"), "")
+            if html_body:
+                body, mime = html_body, "text/html"
+            else:
+                body, mime = plain_body, "text/plain"
             if not body:
                 continue
 
@@ -859,6 +868,13 @@ def fetch_linkedin_email():
             if not email_jobs and body:
                 # LinkedIn plain text emails list jobs as:
                 # "Job Title at Company\nhttps://www.linkedin.com/jobs/view/XXXXX"
+                strategy_2_garbage = [
+                    "actively hiring", "apply with resume", "apply now",
+                    "easy apply", "people clicked apply", "promoted by",
+                    "view all jobs", "see all", "unsubscribe", "manage your",
+                    "view profile", "view company", "click here",
+                    "this company is", "you can also", "based on your",
+                ]
                 lines = body.split("\n")
                 for i, line in enumerate(lines):
                     line = line.strip()
@@ -868,16 +884,20 @@ def fetch_linkedin_email():
                             clean_url = url.group(0).split("?")[0]
                             title = lines[i-1].strip() if i > 0 else ""
                             company = lines[i-2].strip() if i > 1 else ""
-                            if title and len(title) > 4:
-                                email_jobs.append({
-                                    "title":       title,
-                                    "company":     company,
-                                    "url":         clean_url,
-                                    "description": "",
-                                    "salary":      "",
-                                    "source":      "LinkedIn",
-                                    "posted":      "",
-                                })
+                            if not title or len(title) <= 4:
+                                continue
+                            tlow = title.lower()
+                            if any(g in tlow for g in strategy_2_garbage):
+                                continue
+                            email_jobs.append({
+                                "title":       title,
+                                "company":     company,
+                                "url":         clean_url,
+                                "description": "",
+                                "salary":      "",
+                                "source":      "LinkedIn",
+                                "posted":      "",
+                            })
 
             jobs.extend(email_jobs)
             print(f"    Gmail email parsed: {len(email_jobs)} jobs")
