@@ -139,12 +139,14 @@ MUST-HAVES for high score:
 - 100% remote. Hybrid or on-site = score 2 max.
 - Senior level only. Junior/coordinator/mid-level = score 0.
 - Compensation in USD or CAD preferred. Other currencies = score lower.
-- Location/Timezone: Travis is moving to Costa Rica (Aug 2026). He cannot accept
-  jobs that require US residency, US citizenship, or US work authorization.
-  HARD RULE: If the posting explicitly says "US residents only", "must be a US citizen",
-  "must reside in the US", "authorized to work in the US", "no visa sponsorship",
-  "W-2 only", or any similar US-only restriction, AND does NOT also mention Canada,
-  North America, the Americas, LATAM, or "anywhere worldwide", score it 0.
+- Location/Timezone: Travis is moving to Costa Rica (Aug 2026).
+  HARD RULE: Only score 0 if the posting DISTINCTIVELY says US-only.
+  Distinctive examples: "US residents only", "US citizens only", "must be a US citizen",
+  "must reside in the US", "must be located in the United States", "US only",
+  "open only to US residents", "continental US only".
+  NOT distinctive (do NOT score 0 on these alone): "authorized to work in the US",
+  "no visa sponsorship", "W-2 only", "based in [US city]". These are boilerplate
+  that Canadians on TN/green card can satisfy.
   If the job mentions Canada, North America, Americas, LATAM, Mexico, Costa Rica,
   or "anywhere worldwide" alongside US, it's fine. Score normally.
   If location is not mentioned at all, assume open and do NOT penalize.
@@ -209,22 +211,29 @@ def has_remote_signal(job):
 # Travis is moving to Costa Rica (Aug 2026). Drop jobs that explicitly require
 # US residency / citizenship / work auth and don't mention Canada or the Americas.
 
+# Only patterns that DISTINCTIVELY restrict the role to US residents/citizens.
+# Boilerplate like "authorized to work in the US", "no visa sponsorship", "W-2 only"
+# is NOT included — a Canadian on TN/green card / Canadian incorporated as contractor
+# can satisfy those without being a US citizen.
 US_ONLY_PATTERNS = [
+    # "US citizens only" / "US residents only" / "US nationals only"
     r"\bu\.?s\.?\s*(citizens?|residents?|nationals?)\s+only\b",
-    r"\b(citizens?|residents?)\s+of\s+the\s+u\.?s\.?\b",
+    # "citizens of the US only" / "residents of the US only"
+    r"\b(citizens?|residents?)\s+of\s+the\s+(u\.?s\.?|united states|usa)\s+only\b",
+    # "must be a US citizen" / "must be a US resident" — distinctive
     r"\bmust\s+be\s+(a\s+)?u\.?s\.?\s*(citizen|resident|national)\b",
+    # "must be located/based/residing in the US"
     r"\bmust\s+be\s+(located|based|residing|living)\s+in\s+the\s+(u\.?s\.?|united states|usa)\b",
     r"\bmust\s+(reside|live|be located|be based)\s+in\s+the\s+(u\.?s\.?|united states|usa)\b",
-    r"\bauthorized\s+to\s+work\s+in\s+the\s+(u\.?s\.?|united states|usa)\b",
-    r"\bwork\s+authorization\s+in\s+the\s+(u\.?s\.?|united states|usa)\b",
+    # "US residents only" / "USA based only"
     r"\b(u\.?s\.?|united states|usa)\s+(residents?|citizens?|based)\s+only\b",
+    # "only open to US" / "open to US residents only" / "open only to US applicants"
     r"\bonly\s+open\s+to\s+(u\.?s\.?|united states|usa)\b",
     r"\bopen\s+(only\s+)?to\s+(u\.?s\.?|united states|usa)\s+(residents|citizens|applicants)\b",
+    # "continental United States only"
     r"\bcontinental\s+united states\s+only\b",
+    # "United States only" / "U.S. only" as a standalone sentence
     r"\b(u\.?s\.?|united states)\s+only\b",
-    r"\bcannot\s+sponsor\b.*\bvisa\b",
-    r"\bno\s+visa\s+sponsorship\b",
-    r"\bw-?2\s+only\b",
 ]
 
 AMERICAS_OPEN_PATTERNS = [
