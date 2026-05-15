@@ -317,6 +317,62 @@ LINKEDIN_UA_POOL = [
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
 ]
 
+_LINKEDIN_JOB_ID_PATTERNS = [
+    # ?currentJobId=4414195118
+    re.compile(r"currentJobId=(\d+)"),
+    # /jobs/view/4414195118 or /jobs/view/creative-director-at-liquid-agency-4414195118
+    re.compile(r"/(?:comm/)?jobs/view/[^/?\s#]*?(\d{6,})(?:[/?#]|$)"),
+    # /jobs/4414195118 (rarer)
+    re.compile(r"/jobs/(\d{6,})(?:[/?#]|$)"),
+    # Last resort: any trailing 7+ digit number before query string
+    re.compile(r"(\d{7,})(?:[/?#]|$)"),
+]
+
+def _extract_linkedin_job_id(url):
+    """Pull the numeric job ID out of any LinkedIn job URL variant."""
+    if not url:
+        return None
+    for pat in _LINKEDIN_JOB_ID_PATTERNS:
+        m = pat.search(url)
+        if m:
+            return m.group(1)
+    return None
+
+def fetch_linkedin_jd(url):
+    """
+    Fetch a LinkedIn job's description via the public guest job-posting endpoint.
+    Returns description text (str) or '' on failure. No auth required.
+    LinkedIn rate-limits aggressively; caller should sleep between calls.
+    """
+    job_id = _extract_linkedin_job_id(url)
+    if not job_id:
+        return ""
+
+    endpoint = f"https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/{job_id}"
+    headers = {
+        "User-Agent": random.choice(LINKEDIN_UA_POOL),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Referer": "https://www.linkedin.com/jobs/",
+    }
+    try:
+        req = urllib.request.Request(endpoint, headers=headers)
+        with urllib.request.urlopen(req, timeout=15) as r:
+            if r.status != 200:
+                return ""
+            html = r.read().decode("utf-8", errors="replace")
+        soup = BeautifulSoup(html, "html.parser")
+        # The JD body is in .show-more-less-html__markup (sometimes nested)
+        node = soup.find("div", class_="show-more-less-html__markup") \
+            or soup.find("section", class_="show-more-less-html") \
+            or soup.find("div", class_="description__text")
+        if not node:
+            # Fallback: full visible text of the page (will be noisier)
+            return soup.get_text(" ", strip=True)[:4000]
+        return node.get_text(" ", strip=True)[:4000]
+    except Exception:
+        return ""
+
 def fetch_linkedin(query, location=None):
     """Scrape LinkedIn public guest API — no login required."""
     jobs = []
@@ -802,6 +858,18 @@ def fetch_linkedin_email():
                 seen_local.add(j["url"])
                 unique.append(j)
 
+        # Enrich each job with its description via the LinkedIn public job-posting endpoint.
+        # Without this the is_us_only filter has nothing to filter on and Claude falls back
+        # to title-only scoring, which can't catch "must be based in the US" language.
+        print(f"    Gmail LinkedIn: enriching {len(unique)} jobs with descriptions...")
+        enriched_count = 0
+        for j in unique:
+            jd = fetch_linkedin_jd(j["url"])
+            if jd:
+                j["description"] = jd
+                enriched_count += 1
+            time.sleep(1.2)  # be polite to LinkedIn
+        print(f"    Gmail LinkedIn: {enriched_count}/{len(unique)} enriched with JD bodies")
         print(f"    Gmail LinkedIn total: {len(unique)} unique jobs from {len(messages)} emails")
         return unique
 
