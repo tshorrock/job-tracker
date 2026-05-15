@@ -139,12 +139,17 @@ MUST-HAVES for high score:
 - 100% remote. Hybrid or on-site = score 2 max.
 - Senior level only. Junior/coordinator/mid-level = score 0.
 - Compensation in USD or CAD preferred. Other currencies = score lower.
-- Location/Timezone: Strongly prefer North America (US, Canada).
-  If timezone is not mentioned, assume US-compatible and do NOT penalize.
-  If the posting is explicitly for a European, Asian, or other non-North-American team
-  with required overlap hours, score it 2 points lower than you otherwise would.
-  Do NOT score 0 purely on timezone unless hours are explicitly incompatible.
-  Remote roles open worldwide are fine — Travis can work from anywhere.
+- Location/Timezone: Travis is moving to Costa Rica (Aug 2026). He cannot accept
+  jobs that require US residency, US citizenship, or US work authorization.
+  HARD RULE: If the posting explicitly says "US residents only", "must be a US citizen",
+  "must reside in the US", "authorized to work in the US", "no visa sponsorship",
+  "W-2 only", or any similar US-only restriction, AND does NOT also mention Canada,
+  North America, the Americas, LATAM, or "anywhere worldwide", score it 0.
+  If the job mentions Canada, North America, Americas, LATAM, Mexico, Costa Rica,
+  or "anywhere worldwide" alongside US, it's fine. Score normally.
+  If location is not mentioned at all, assume open and do NOT penalize.
+  Strongly prefer postings that explicitly include Canada / Latin America / worldwide.
+  Penalize 2 points if posting requires European or Asian working hours specifically.
 
 Travis's background:
 - National CD at T&Pm 10yrs: Toyota Canada, TELUS — large-scale integrated campaigns
@@ -199,6 +204,59 @@ def has_remote_signal(job):
     """Require at least one positive remote signal in title or description."""
     text = ((job.get("title") or "") + " " + (job.get("description") or "")).lower()
     return any(signal in text for signal in REMOTE_SIGNALS)
+
+# ─── US-ONLY FILTER ───────────────────────────────────────────────────────────
+# Travis is moving to Costa Rica (Aug 2026). Drop jobs that explicitly require
+# US residency / citizenship / work auth and don't mention Canada or the Americas.
+
+US_ONLY_PATTERNS = [
+    r"\bu\.?s\.?\s*(citizens?|residents?|nationals?)\s+only\b",
+    r"\b(citizens?|residents?)\s+of\s+the\s+u\.?s\.?\b",
+    r"\bmust\s+be\s+(a\s+)?u\.?s\.?\s*(citizen|resident|national)\b",
+    r"\bmust\s+be\s+(located|based|residing|living)\s+in\s+the\s+(u\.?s\.?|united states|usa)\b",
+    r"\bmust\s+(reside|live|be located|be based)\s+in\s+the\s+(u\.?s\.?|united states|usa)\b",
+    r"\bauthorized\s+to\s+work\s+in\s+the\s+(u\.?s\.?|united states|usa)\b",
+    r"\bwork\s+authorization\s+in\s+the\s+(u\.?s\.?|united states|usa)\b",
+    r"\b(u\.?s\.?|united states|usa)\s+(residents?|citizens?|based)\s+only\b",
+    r"\bonly\s+open\s+to\s+(u\.?s\.?|united states|usa)\b",
+    r"\bopen\s+(only\s+)?to\s+(u\.?s\.?|united states|usa)\s+(residents|citizens|applicants)\b",
+    r"\bcontinental\s+united states\s+only\b",
+    r"\b(u\.?s\.?|united states)\s+only\b",
+    r"\bcannot\s+sponsor\b.*\bvisa\b",
+    r"\bno\s+visa\s+sponsorship\b",
+    r"\bw-?2\s+only\b",
+]
+
+AMERICAS_OPEN_PATTERNS = [
+    r"\bcanad(a|ian)\b",
+    r"\bnorth\s+america\b",
+    r"\bamericas\b",
+    r"\b(latam|latin america)\b",
+    r"\bworldwide\b",
+    r"\banywhere\s+(in\s+)?(the\s+)?(world|globe)\b",
+    r"\bglobal(ly)?\s+(remote|distributed)\b",
+    r"\bremote\s+(international|worldwide|global)\b",
+    r"\bopen\s+to\s+(applicants\s+)?(from\s+)?(any|all)\s+(country|countries|locations?)\b",
+    r"\bcosta\s+rica\b",
+    r"\bmexico\b",
+]
+
+_US_ONLY_RE = re.compile("|".join(US_ONLY_PATTERNS), re.IGNORECASE)
+_AMERICAS_OK_RE = re.compile("|".join(AMERICAS_OPEN_PATTERNS), re.IGNORECASE)
+
+def is_us_only(job):
+    """
+    True only if the description EXPLICITLY restricts to US residents/citizens
+    AND does NOT mention Canada, North America, or other Americas-friendly signals.
+    Returns False for jobs with no description (cannot confirm restriction).
+    Returns False if posting mentions Canada/NA even if it also mentions US.
+    """
+    desc = (job.get("description") or "").strip()
+    if not desc:
+        return False
+    if _AMERICAS_OK_RE.search(desc):
+        return False
+    return bool(_US_ONLY_RE.search(desc))
 
 # ─── SENIOR TITLE RELEVANCE ───────────────────────────────────────────────────
 # Used for sources that don't have query-based pre-filtering (RemoteOK, Remotive, WWR).
@@ -815,7 +873,7 @@ def fetch_all(rapidapi_key):
     # post-check needed beyond title_ok.
     print("\n  LinkedIn Job Alert emails (Gmail):")
     email_jobs = fetch_linkedin_email()
-    fresh = [j for j in email_jobs if title_ok(j["title"]) and j["url"] not in seen_urls]
+    fresh = [j for j in email_jobs if title_ok(j["title"]) and not is_us_only(j) and j["url"] not in seen_urls]
     for j in fresh: seen_urls.add(j["url"])
     all_jobs.extend(fresh)
 
@@ -825,49 +883,59 @@ def fetch_all(rapidapi_key):
         jobs = fetch_linkedin(query)
         # No has_remote_signal: LinkedIn pre-filters via f_WT=2 (Remote workplace flag)
         # and returns empty descriptions, so the keyword check would strip 90% of valid jobs.
-        fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+        fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and not is_us_only(j) and j["url"] not in seen_urls]
         for j in fresh: seen_urls.add(j["url"])
         all_jobs.extend(fresh)
 
     # ── Adzuna (free, every day) ──────────────────────────────────────────────
     if adzuna_id and adzuna_key:
         print("\n  Adzuna API:")
+        adz_dropped_us = 0
         for query in ADZUNA_QUERIES:
             jobs = fetch_adzuna(query, adzuna_id, adzuna_key, country="us")
-            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and has_remote_signal(j) and j["url"] not in seen_urls]
+            adz_dropped_us += sum(1 for j in jobs if is_us_only(j))
+            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and has_remote_signal(j) and not is_us_only(j) and j["url"] not in seen_urls]
             for j in fresh: seen_urls.add(j["url"])
             all_jobs.extend(fresh)
         for query in ADZUNA_QUERIES[:2]:
             jobs = fetch_adzuna(query, adzuna_id, adzuna_key, country="ca")
-            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and has_remote_signal(j) and j["url"] not in seen_urls]
+            adz_dropped_us += sum(1 for j in jobs if is_us_only(j))
+            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and has_remote_signal(j) and not is_us_only(j) and j["url"] not in seen_urls]
             for j in fresh: seen_urls.add(j["url"])
             all_jobs.extend(fresh)
+        if adz_dropped_us:
+            print(f"    Adzuna: dropped {adz_dropped_us} US-only role(s)")
     else:
         print("\n  Adzuna: skipped (ADZUNA_APP_ID / ADZUNA_APP_KEY not set)")
 
     # ── RemoteOK (free, every day) ────────────────────────────────────────────
     print("\n  RemoteOK:")
     jobs = fetch_remoteok()
-    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+    ro_dropped_us = sum(1 for j in jobs if is_us_only(j))
+    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and not is_us_only(j) and j["url"] not in seen_urls]
     for j in fresh: seen_urls.add(j["url"])
+    if ro_dropped_us:
+        print(f"    RemoteOK: dropped {ro_dropped_us} US-only role(s)")
     all_jobs.extend(fresh)
 
     # ── Remotive (free, every day) ────────────────────────────────────────────
     print("\n  Remotive:")
     jobs = fetch_remotive()
     before = len(jobs)
-    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and is_relevant_title(j) and j["url"] not in seen_urls]
+    rv_dropped_us = sum(1 for j in jobs if is_us_only(j))
+    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and is_relevant_title(j) and not is_us_only(j) and j["url"] not in seen_urls]
     for j in fresh: seen_urls.add(j["url"])
-    print(f"    Remotive → {before} fetched · {len(fresh)} relevant senior titles kept")
+    print(f"    Remotive → {before} fetched · {len(fresh)} kept · {rv_dropped_us} US-only dropped")
     all_jobs.extend(fresh)
 
     # ── We Work Remotely (free, every day) ────────────────────────────────────
     print("\n  We Work Remotely:")
     jobs = fetch_weworkremotely()
     before = len(jobs)
-    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and is_relevant_title(j) and j["url"] not in seen_urls]
+    wwr_dropped_us = sum(1 for j in jobs if is_us_only(j))
+    fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and is_relevant_title(j) and not is_us_only(j) and j["url"] not in seen_urls]
     for j in fresh: seen_urls.add(j["url"])
-    print(f"    WeWorkRemotely → {before} fetched · {len(fresh)} relevant senior titles kept")
+    print(f"    WeWorkRemotely → {before} fetched · {len(fresh)} kept · {wwr_dropped_us} US-only dropped")
     all_jobs.extend(fresh)
 
     # ── JSearch (throttled: every 3rd day only) ───────────────────────────────
@@ -878,7 +946,7 @@ def fetch_all(rapidapi_key):
             print(f"  → \"{query}\"")
             jobs = fetch_jsearch(query, rapidapi_key, num_pages=1)
             # No has_remote_signal: JSearch already enforces remote_jobs_only=true server-side.
-            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and j["url"] not in seen_urls]
+            fresh = [j for j in jobs if title_ok(j["title"]) and is_remote_clean(j) and not is_us_only(j) and j["url"] not in seen_urls]
             for j in fresh: seen_urls.add(j["url"])
             print(f"     {len(jobs)} fetched · {len(fresh)} kept")
             all_jobs.extend(fresh)
@@ -930,6 +998,8 @@ IMPORTANT: You have TITLE ONLY. No description. Score based purely on whether th
 - Score 1-2: Title suggests junior or wrong field
 - Score 0: Title is clearly wrong (designer, engineer, coordinator, or obviously non-creative)
 DO NOT penalize for lack of remote/comp/timezone info — you don't have that data.
+DO NOT penalize for lack of US-residency info — that gets checked downstream.
+Category must be CORE or ADJACENT only. Never return any other value.
 
 JOB:
 Title: {job.get('title', '')}
