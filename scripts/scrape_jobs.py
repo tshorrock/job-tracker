@@ -433,6 +433,18 @@ def fetch_linkedin(query, location=None):
     except Exception as e:
         print(f"    ⚠ LinkedIn [{query}] → {e}")
 
+    # Enrich each guest-API result with its JD body so is_us_only can filter
+    # and Claude scores against full context (not title-only fallback path).
+    enriched = 0
+    for j in jobs:
+        jd = fetch_linkedin_jd(j["url"])
+        if jd:
+            j["description"] = jd
+            enriched += 1
+        time.sleep(1.2)
+    if jobs:
+        print(f"    LinkedIn [{query}] → enriched {enriched}/{len(jobs)} with JD bodies")
+
     return jobs
 
 # ─── ADZUNA FETCHER ───────────────────────────────────────────────────────────
@@ -731,12 +743,22 @@ def fetch_linkedin_email():
             if "html" in mime or "<html" in body.lower():
                 soup = BeautifulSoup(body, "html.parser")
 
-                # Strategy 1a: Find all links containing linkedin.com/jobs
+                # Strategy 1a: Find all links containing linkedin.com/jobs.
+                # Skip anchor text that's obvious email scaffolding (Apply, location,
+                # "X people clicked apply", etc.). Then dedup by job URL keeping the
+                # longest remaining title (usually the actual job title).
+                strategy_1a_garbage = [
+                    "actively hiring", "apply with resume", "apply now",
+                    "easy apply", "people clicked apply", "promoted by hirer",
+                    "responses managed", "view all jobs", "see all",
+                    "unsubscribe", "manage", "settings", "connections",
+                    "view profile", "view company", "click here",
+                    "show more", "show less", "sign in", "log in",
+                    "follow", "save this job", "dismiss", "not interested",
+                ]
+                candidates_by_url = {}
                 for a in soup.find_all("a", href=True):
                     href = a.get("href", "")
-                    # LinkedIn tracking URLs redirect to the real job URL
-                    # They look like: https://www.linkedin.com/comm/jobs/view/XXXXXX
-                    # or: https://www.linkedin.com/jobs/view/XXXXXX
                     if "linkedin.com" not in href:
                         continue
                     if not any(x in href for x in ["/jobs/view/", "/comm/jobs/view/", "currentJobId="]):
@@ -745,10 +767,16 @@ def fetch_linkedin_email():
                     title = a.get_text(separator=" ", strip=True)
                     if not title or len(title) < 4 or len(title) > 200:
                         continue
+                    title_lower = title.lower()
+                    if any(g in title_lower for g in strategy_1a_garbage):
+                        continue
+                    # Skip pure-location anchor text (city / state names alone)
+                    if re.fullmatch(r"[a-z .,\-]{2,40}", title_lower) and \
+                       any(loc in title_lower for loc in ["canada", "united states", " usa", "ontario", "quebec", "california", "texas", "new york", "metropolitan area", "remote"]):
+                        continue
 
                     # Clean URL — strip tracking params but keep job ID
                     clean_url = href.split("?")[0] if "?" in href else href
-                    # Handle currentJobId format
                     if "currentJobId=" in href:
                         params = urllib.parse.parse_qs(urllib.parse.urlparse(href).query)
                         job_id = params.get("currentJobId", [""])[0]
@@ -761,12 +789,14 @@ def fetch_linkedin_email():
                     if parent:
                         all_text = [t.get_text(strip=True) for t in parent.find_all(["span", "p", "div", "td"])
                                    if t.get_text(strip=True) and t.get_text(strip=True) != title]
-                        candidates = [t for t in all_text if 1 < len(t) < 100 and t != title]
-                        if candidates:
-                            company = candidates[0]
+                        cand = [t for t in all_text if 1 < len(t) < 100 and t != title]
+                        if cand:
+                            company = cand[0]
 
-                    if clean_url:
-                        email_jobs.append({
+                    # Keep the longest title we've seen per URL (likely the actual job title)
+                    existing = candidates_by_url.get(clean_url)
+                    if not existing or len(title) > len(existing["title"]):
+                        candidates_by_url[clean_url] = {
                             "title":       title,
                             "company":     company,
                             "url":         clean_url,
@@ -774,7 +804,9 @@ def fetch_linkedin_email():
                             "salary":      "",
                             "source":      "LinkedIn",
                             "posted":      "",
-                        })
+                        }
+
+                email_jobs.extend(candidates_by_url.values())
 
                 # Strategy 1b: Look for job title patterns in text even without /jobs/view/ URL
                 # Strict filtering to avoid email scaffolding (buttons, footers, nav links)
