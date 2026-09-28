@@ -2,8 +2,9 @@ name: Daily Job Scraper
 
 on:
   schedule:
-    # Noon UTC = 7AM EST = 6AM CST (Costa Rica) — Mon-Fri
-    - cron: '0 12 * * 1-5'
+    # 10:23 UTC = 4:23AM Costa Rica, Mon-Fri. Off the hour on purpose: GitHub delays
+    # jobs scheduled at :00 by hours, and this gives the brief time to land before 6AM.
+    - cron: '23 10 * * 1-5'
   workflow_dispatch:
 
 permissions:
@@ -12,6 +13,7 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     steps:
       - name: Checkout repo
@@ -29,6 +31,9 @@ jobs:
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_LIMIT: ${{ vars.APIFY_LIMIT }}
+          SCORING_MODEL: ${{ vars.SCORING_MODEL }}
           ADZUNA_APP_ID:  ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
           GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
