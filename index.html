@@ -302,6 +302,9 @@ body{
 .tag-cat-core{background:var(--teal-dim);color:var(--teal);border-color:rgba(0,229,204,0.30)}
 .tag-cat-adjacent{background:var(--purple-dim);color:var(--purple);border-color:rgba(185,131,255,0.30)}
 .tag-source{background:var(--card3);color:var(--t3);border-color:var(--border)}
+.tag-geo{background:rgba(0,229,204,0.08);color:var(--teal);border-color:rgba(0,229,204,0.25)}
+.tag-flag{background:rgba(255,107,107,0.08);color:var(--err);border-color:rgba(255,107,107,0.25)}
+.jcard-meta .where{font-size:12px;color:var(--t3)}
 .tag-new{background:var(--amber);color:#080c14;border-color:transparent;font-weight:700}
 .tag-saved{background:var(--amber-dim);color:var(--amber);border-color:rgba(245,166,35,0.25)}
 .tag-dismissed{background:rgba(239,68,68,0.06);color:var(--err);border-color:rgba(239,68,68,0.18)}
@@ -586,6 +589,15 @@ function persistSaved()    { localStorage.setItem(LS.saved,     JSON.stringify([
 function persistDismissed(){ localStorage.setItem(LS.dismissed, JSON.stringify([...dismissed])); }
 function persistFilter()   { localStorage.setItem(LS.filter,    currentFilter); }
 
+// Send Save / Dismiss to the repo so they sync across devices and teach the daily scorer.
+function syncFeedback(action, id) {
+  const j = jobs.find(x => x.id === id) || {};
+  fetch(WORKER_URL + '/feedback', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action, id, title: j.title || '', company: j.company || '' }),
+  }).catch(() => {});
+}
+
 // ── EVALUATE ──────────────────────────────────────────────────────────────
 const WORKER_URL = 'https://job-eval-worker.travis-shorrock.workers.dev';
 
@@ -638,7 +650,7 @@ async function runEval(job) {
       body: JSON.stringify({
         title: job.title || '', company: job.company || '',
         description: job.description || '', salary: job.salary || '',
-        url: job.url || '',
+        url: job.url || '', location: job.location || '', where: job.where || '',
       })
     });
     if (!res.ok) throw new Error(`Worker returned ${res.status}`);
@@ -669,6 +681,7 @@ function renderEval(el, r) {
       <div class="eval-score-meta">
         <div class="eval-score-label">Match Score · ${escapeHtml(r.category || '')}</div>
         <div class="eval-verdict">${escapeHtml(r.verdict || '')}</div>
+        ${r.can_he_be_hired ? `<div class="eval-verdict" style="margin-top:6px;opacity:.8">📍 ${escapeHtml(r.can_he_be_hired)}</div>` : ''}
       </div>
     </div>
     <div class="eval-section">
@@ -707,7 +720,7 @@ async function triggerRun() {
     if (data.ok) {
       btn.textContent = '✓ Started';
       btn.style.background = 'var(--mint)';
-      let secsLeft = 210;
+      let secsLeft = 480;
       const countTick = setInterval(() => {
         secsLeft--;
         if (secsLeft > 0) btn.textContent = `↻ ${secsLeft}s`;
@@ -743,6 +756,12 @@ async function boot() {
     ]);
     jobs = await jr.json();
     meta = await mr.json();
+    try {  // merge Save/Dismiss made on other devices
+      const fb = await (await fetch('data/feedback.json?t=' + Date.now())).json();
+      Object.keys(fb.saved || {}).forEach(id => { saved.add(id); dismissed.delete(id); });
+      Object.keys(fb.dismissed || {}).forEach(id => { dismissed.add(id); saved.delete(id); });
+      persistSaved(); persistDismissed();
+    } catch (e) {}
   } catch (e) {
     jobs = []; meta = { updated: 'never', new_count: 0, total_count: 0 };
   }
@@ -820,7 +839,8 @@ function getFilteredJobs() {
   if (q) r = r.filter(j =>
     (j.title||'').toLowerCase().includes(q) ||
     (j.company||'').toLowerCase().includes(q) ||
-    (j.score_reason||'').toLowerCase().includes(q)
+    (j.score_reason||'').toLowerCase().includes(q) ||
+    (j.where||j.location||'').toLowerCase().includes(q)
   );
   // Sort by score desc, then newest
   r.sort((a,b) => {
@@ -876,8 +896,8 @@ function restoreAllDismissed() {
 }
 
 // ── ACTIONS ───────────────────────────────────────────────────────────────
-function toggleSave(id, e)    { if (e) { e.preventDefault(); e.stopPropagation(); } saved.has(id) ? saved.delete(id) : saved.add(id); persistSaved(); render(); countUp(); }
-function toggleDismiss(id, e) { if (e) { e.preventDefault(); e.stopPropagation(); } dismissed.has(id) ? dismissed.delete(id) : dismissed.add(id); persistDismissed(); render(); countUp(); }
+function toggleSave(id, e)    { if (e) { e.preventDefault(); e.stopPropagation(); } const on = !saved.has(id); on ? saved.add(id) : saved.delete(id); if (on) dismissed.delete(id); persistSaved(); persistDismissed(); syncFeedback(on ? 'save' : 'unsave', id); render(); countUp(); }
+function toggleDismiss(id, e) { if (e) { e.preventDefault(); e.stopPropagation(); } const on = !dismissed.has(id); on ? dismissed.add(id) : dismissed.delete(id); if (on) saved.delete(id); persistSaved(); persistDismissed(); syncFeedback(on ? 'dismiss' : 'undismiss', id); render(); countUp(); }
 function toggleReason(id, e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
   const r = document.getElementById('reason-' + id);
@@ -902,14 +922,21 @@ function makeCard(j, idx = 0) {
   tags.push(`<span class="tag tag-cat-${cat.toLowerCase()}">${cat}</span>`);
   if (j.source) tags.push(`<span class="tag tag-source">${escapeHtml(j.source)}</span>`);
   if (isNew(j)) tags.push(`<span class="tag tag-new">New</span>`);
+  const f = j.facts || {};
+  const GEO = { OPEN_ANYWHERE: 'Anywhere', AMERICAS_OR_LATAM: 'Americas', CANADA_OK: 'Canada OK', US_ONLY: 'US only', OTHER_REGION_ONLY: 'Other region' };
+  if (GEO[f.geo]) tags.push(`<span class="tag ${['US_ONLY','OTHER_REGION_ONLY'].includes(f.geo) ? 'tag-flag' : 'tag-geo'}">${GEO[f.geo]}</span>`);
+  if (f.remote === 'REMOTE_SOME_TRAVEL') tags.push(`<span class="tag tag-flag">Travel</span>`);
+  if (f.remote === 'HYBRID' || f.remote === 'ONSITE') tags.push(`<span class="tag tag-flag">${f.remote === 'HYBRID' ? 'Hybrid' : 'On-site'}</span>`);
   if (isSaved)  tags.push(`<span class="tag tag-saved">★ Saved</span>`);
   if (isDism)   tags.push(`<span class="tag tag-dismissed">Dismissed</span>`);
 
   const meta = [];
   if (j.company) meta.push(`<span class="company">${escapeHtml(j.company)}</span>`);
+  if (j.where || j.location) meta.push(`<span class="meta-sep">·</span><span class="where">${escapeHtml(j.where || j.location)}</span>`);
   if (j.salary)  meta.push(`<span class="meta-sep">·</span><span class="salary">${escapeHtml(j.salary)}</span>`);
 
-  const reasonHtml = j.score_reason ? `<div class="jcard-reason" id="reason-${jid}">"${escapeHtml(j.score_reason)}"</div>` : '';
+  const flagsTxt = (f.red_flags || []).filter(Boolean).slice(0, 3).map(x => '⚑ ' + escapeHtml(x)).join('<br>');
+  const reasonHtml = j.score_reason ? `<div class="jcard-reason" id="reason-${jid}">"${escapeHtml(j.score_reason)}"${flagsTxt ? `<br><span style="color:var(--err);font-style:normal">${flagsTxt}</span>` : ''}</div>` : '';
   const reasonBtn  = j.score_reason
     ? `<button class="reason-toggle" id="rtog-${jid}" onclick="toggleReason('${jid}',event)" title="Toggle match reason"><span class="caret">▸</span> Reason</button>`
     : '';

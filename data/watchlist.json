@@ -1,0 +1,565 @@
+{
+ "_note": "Company careers pages checked every run. ats = greenhouse | lever | ashby. slug = the company's board name in their careers URL. Add or remove freely.",
+ "companies": [
+  {
+   "ats": "greenhouse",
+   "slug": "duolingo",
+   "name": "Duolingo"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "figma",
+   "name": "Figma"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "airbnb",
+   "name": "Airbnb"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "reddit",
+   "name": "Reddit"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "discord",
+   "name": "Discord"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "dropbox",
+   "name": "Dropbox"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "pinterest",
+   "name": "Pinterest"
+  },
+  {
+   "ats": "lever",
+   "slug": "spotify",
+   "name": "Spotify"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "squarespace",
+   "name": "Squarespace"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "webflow",
+   "name": "Webflow"
+  },
+  {
+   "ats": "ashby",
+   "slug": "notion",
+   "name": "Notion"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "anthropic",
+   "name": "Anthropic"
+  },
+  {
+   "ats": "ashby",
+   "slug": "openai",
+   "name": "OpenAI"
+  },
+  {
+   "ats": "ashby",
+   "slug": "runway",
+   "name": "Runway"
+  },
+  {
+   "ats": "ashby",
+   "slug": "elevenlabs",
+   "name": "ElevenLabs"
+  },
+  {
+   "ats": "ashby",
+   "slug": "suno",
+   "name": "Suno"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "otterai",
+   "name": "Otter.ai"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "chime",
+   "name": "Chime"
+  },
+  {
+   "ats": "ashby",
+   "slug": "zapier",
+   "name": "Zapier"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "gitlab",
+   "name": "GitLab"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "peloton",
+   "name": "Peloton"
+  },
+  {
+   "ats": "ashby",
+   "slug": "strava",
+   "name": "Strava"
+  },
+  {
+   "ats": "ashby",
+   "slug": "whoop",
+   "name": "WHOOP"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "oura",
+   "name": "Oura"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "glossier",
+   "name": "Glossier"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "mejuri",
+   "name": "Mejuri"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "olipop",
+   "name": "Olipop"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "harrys",
+   "name": "Harry's"
+  },
+  {
+   "ats": "lever",
+   "slug": "ro",
+   "name": "Ro"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "masterclass",
+   "name": "Masterclass"
+  },
+  {
+   "ats": "ashby",
+   "slug": "patreon",
+   "name": "Patreon"
+  },
+  {
+   "ats": "ashby",
+   "slug": "substack",
+   "name": "Substack"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "descript",
+   "name": "Descript"
+  },
+  {
+   "ats": "ashby",
+   "slug": "pika",
+   "name": "Pika"
+  },
+  {
+   "ats": "ashby",
+   "slug": "lumaai",
+   "name": "Luma AI"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "stabilityai",
+   "name": "Stability AI"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "typeface",
+   "name": "Typeface"
+  },
+  {
+   "ats": "ashby",
+   "slug": "writer",
+   "name": "Writer"
+  },
+  {
+   "ats": "ashby",
+   "slug": "synthesia",
+   "name": "Synthesia"
+  },
+  {
+   "ats": "ashby",
+   "slug": "perplexity",
+   "name": "Perplexity"
+  },
+  {
+   "ats": "ashby",
+   "slug": "cursor",
+   "name": "Cursor"
+  },
+  {
+   "ats": "ashby",
+   "slug": "linear",
+   "name": "Linear"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "vercel",
+   "name": "Vercel"
+  },
+  {
+   "ats": "ashby",
+   "slug": "ramp",
+   "name": "Ramp"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "brex",
+   "name": "Brex"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "mercury",
+   "name": "Mercury"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "monzo",
+   "name": "Monzo"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "robinhood",
+   "name": "Robinhood"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "coinbase",
+   "name": "Coinbase"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "stripe",
+   "name": "Stripe"
+  },
+  {
+   "ats": "ashby",
+   "slug": "plaid",
+   "name": "Plaid"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "instacart",
+   "name": "Instacart"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "lyft",
+   "name": "Lyft"
+  },
+  {
+   "ats": "ashby",
+   "slug": "miro",
+   "name": "Miro"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "calendly",
+   "name": "Calendly"
+  },
+  {
+   "ats": "ashby",
+   "slug": "clickup",
+   "name": "ClickUp"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "asana",
+   "name": "Asana"
+  },
+  {
+   "ats": "lever",
+   "slug": "superside",
+   "name": "Superside"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "monks",
+   "name": "Monks"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "codeandtheory",
+   "name": "Code and Theory"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "vaynermedia",
+   "name": "VaynerMedia"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "twitch",
+   "name": "Twitch"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "roblox",
+   "name": "Roblox"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "epicgames",
+   "name": "Epic Games"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "riotgames",
+   "name": "Riot Games"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "a24",
+   "name": "A24"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "sweetgreen",
+   "name": "Sweetgreen"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "hellofresh",
+   "name": "HelloFresh"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "faire",
+   "name": "Faire"
+  },
+  {
+   "ats": "ashby",
+   "slug": "thumbtack",
+   "name": "Thumbtack"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "nextdoor",
+   "name": "Nextdoor"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "coursera",
+   "name": "Coursera"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "udemy",
+   "name": "Udemy"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "khanacademy",
+   "name": "Khan Academy"
+  },
+  {
+   "ats": "ashby",
+   "slug": "gamma",
+   "name": "Gamma"
+  },
+  {
+   "ats": "ashby",
+   "slug": "kit",
+   "name": "Kit"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "later",
+   "name": "Later"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "hootsuite",
+   "name": "Hootsuite"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "sproutsocial",
+   "name": "Sprout Social"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "klaviyo",
+   "name": "Klaviyo"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "attentive",
+   "name": "Attentive"
+  },
+  {
+   "ats": "ashby",
+   "slug": "gorgias",
+   "name": "Gorgias"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "yotpo",
+   "name": "Yotpo"
+  },
+  {
+   "ats": "ashby",
+   "slug": "recharge",
+   "name": "Recharge"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "affirm",
+   "name": "Affirm"
+  },
+  {
+   "ats": "ashby",
+   "slug": "nerdwallet",
+   "name": "NerdWallet"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "betterment",
+   "name": "Betterment"
+  },
+  {
+   "ats": "lever",
+   "slug": "wealthfront",
+   "name": "Wealthfront"
+  },
+  {
+   "ats": "ashby",
+   "slug": "acorns",
+   "name": "Acorns"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "block",
+   "name": "Block"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "toast",
+   "name": "Toast"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "gusto",
+   "name": "Gusto"
+  },
+  {
+   "ats": "ashby",
+   "slug": "andela",
+   "name": "Andela"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "turing",
+   "name": "Turing"
+  },
+  {
+   "ats": "lever",
+   "slug": "toptal",
+   "name": "Toptal"
+  },
+  {
+   "ats": "ashby",
+   "slug": "jobber",
+   "name": "Jobber"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "housecall",
+   "name": "Housecall Pro"
+  },
+  {
+   "ats": "ashby",
+   "slug": "angi",
+   "name": "Angi"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "tripadvisor",
+   "name": "Tripadvisor"
+  },
+  {
+   "ats": "ashby",
+   "slug": "hopper",
+   "name": "Hopper"
+  },
+  {
+   "ats": "ashby",
+   "slug": "sonder",
+   "name": "Sonder"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "classpass",
+   "name": "ClassPass"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "mindbody",
+   "name": "Mindbody"
+  },
+  {
+   "ats": "ashby",
+   "slug": "tonal",
+   "name": "Tonal"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "everlane",
+   "name": "Everlane"
+  },
+  {
+   "ats": "ashby",
+   "slug": "rothys",
+   "name": "Rothy's"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "bombas",
+   "name": "Bombas"
+  },
+  {
+   "ats": "ashby",
+   "slug": "brooklinen",
+   "name": "Brooklinen"
+  },
+  {
+   "ats": "ashby",
+   "slug": "eightsleep",
+   "name": "Eight Sleep"
+  },
+  {
+   "ats": "ashby",
+   "slug": "hinge-health",
+   "name": "Hinge Health"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "talkspace",
+   "name": "Talkspace"
+  },
+  {
+   "ats": "greenhouse",
+   "slug": "betterhelp",
+   "name": "BetterHelp"
+  }
+ ]
+}
