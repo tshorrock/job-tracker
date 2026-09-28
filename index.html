@@ -923,7 +923,7 @@ function makeCard(j, idx = 0) {
   if (j.source) tags.push(`<span class="tag tag-source">${escapeHtml(j.source)}</span>`);
   if (isNew(j)) tags.push(`<span class="tag tag-new">New</span>`);
   const f = j.facts || {};
-  const GEO = { OPEN_ANYWHERE: 'Anywhere', AMERICAS_OR_LATAM: 'Americas', CANADA_OK: 'Canada OK', US_ONLY: 'US only', OTHER_REGION_ONLY: 'Other region' };
+  const GEO = { OPEN_ANYWHERE: 'Anywhere', AMERICAS_OR_LATAM: 'Americas', CANADA_OK: 'Canada OK', US_REMOTE: 'US remote', US_ONLY: 'US only', OTHER_REGION_ONLY: 'Other region' };
   if (GEO[f.geo]) tags.push(`<span class="tag ${['US_ONLY','OTHER_REGION_ONLY'].includes(f.geo) ? 'tag-flag' : 'tag-geo'}">${GEO[f.geo]}</span>`);
   if (f.remote === 'REMOTE_SOME_TRAVEL') tags.push(`<span class="tag tag-flag">Travel</span>`);
   if (f.remote === 'HYBRID' || f.remote === 'ONSITE') tags.push(`<span class="tag tag-flag">${f.remote === 'HYBRID' ? 'Hybrid' : 'On-site'}</span>`);

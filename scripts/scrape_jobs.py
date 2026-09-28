@@ -109,6 +109,7 @@ STRONG_HYBRID_RE = re.compile(
     r"\bmust (live|reside|be located) within \d+\s*(miles|km)\b",
     re.IGNORECASE,
 )
+REMOTE_WORD_RE = re.compile(r"\bremote\b|work from home|\bwfh\b|fully distributed|work from anywhere|telecommut|remote-first", re.IGNORECASE)
 HYBRID_LOCATION_RE = re.compile(r"\b(hybrid|on-?site|in[- ]office)\b", re.IGNORECASE)
 
 US_ONLY_RE = re.compile("|".join([
@@ -271,7 +272,8 @@ def fetch_linkedin_search(query, location, page):
             if not (t and jid): continue
             jobs.append(new_job(title=t.get_text(strip=True), company=c.get_text(strip=True) if c else "",
                                 url=li_url(jid), li_id=jid, source="LinkedIn",
-                                location=loc.get_text(strip=True) if loc else "",
+                                # searched with LinkedIn's Remote filter (f_WT=2), so LinkedIn labels it Remote
+                                location=(loc.get_text(strip=True) + " · " if loc else "") + "Remote (LinkedIn label)",
                                 posted=tm.get("datetime", "") if tm else "",
                                 salary=sal.get_text(" ", strip=True) if sal else ""))
     except urllib.error.HTTPError as e:
@@ -568,7 +570,8 @@ def load_seen():
     out = {}
     for k, v in raw.items():
         try:
-            if datetime.fromisoformat(v) > cutoff: out[k] = v
+            if datetime.fromisoformat(v) > cutoff and not v.startswith("2026-09-28T18:"):
+                out[k] = v  # (the 28 Sep 18:xx run used a too-strict US rule; those get re-scored once)
         except Exception:
             pass
     return out
@@ -615,8 +618,9 @@ def enrich_linkedin(jobs):
         if d.get("description"):
             ok += 1
             j["description"] = d["description"]
-        for f in ("company", "location"):
-            if d.get(f) and not j[f]: j[f] = d[f]
+        if d.get("company") and not j["company"]: j["company"] = d["company"]
+        if d.get("location") and d["location"] not in j["location"]:
+            j["location"] = (d["location"] + " · " + j["location"]).strip(" ·")
         if d.get("salary"): j["salary"] = d["salary"]
         if d.get("seniority"): j["li_seniority"] = d["seniority"]
         time.sleep(1.0 + random.random() * 0.6)
@@ -646,12 +650,19 @@ LANES
   entertainment, gaming, hospitality, festivals.
 - NOT_A_FIT: anything else (designer IC roles, product design, engineering, sales, ops, junior).
 
+REMOTE RULES: he only wants 100% remote. "Remote (LinkedIn label)" in the location means the employer
+tagged it Remote on LinkedIn; treat that as FULLY_REMOTE unless the description mentions office days,
+hybrid, or on-site work, which always win.
+
 GEO RULES (be careful — this decides whether he can actually be hired)
 - OPEN_ANYWHERE: worldwide / anywhere / any country.
 - AMERICAS_OR_LATAM: Americas, LATAM, North & South America, or lists Costa Rica/Mexico etc.
 - CANADA_OK: Canada is explicitly allowed (alone or with the US).
-- US_ONLY: says candidates must live in / be located in / be citizens of the US. A posting that only lists
-  US cities or "Remote - US" counts as US_ONLY. "Authorized to work in the US" alone does NOT.
+- US_REMOTE: remote in the US ("Remote - US", "US", a list of US cities or states) but no explicit rule
+  that candidates must live in the US. This is common and NOT a dealbreaker; he may be hired as a contractor.
+- US_ONLY: the posting EXPLICITLY requires US residence or citizenship ("must reside in the US",
+  "US citizens only", "must be located in the United States"). "Authorized to work in the US",
+  "no visa sponsorship" or "W-2" alone do NOT count; use US_REMOTE for those.
 - OTHER_REGION_ONLY: limited to Europe, UK, Asia, Australia etc.
 - NOT_STATED: nothing said about where candidates can live.
 
@@ -665,9 +676,11 @@ SCHEMA = {
                  "comp_text", "location_text", "fit", "headline", "red_flags"],
     "properties": {
         "lane":          {"type": "string", "enum": ["CORE", "ADJACENT", "NOT_A_FIT"]},
-        "seniority":     {"type": "string", "enum": ["EXECUTIVE", "SENIOR_LEADER", "MID", "JUNIOR"]},
-        "remote":        {"type": "string", "enum": ["FULLY_REMOTE", "REMOTE_SOME_TRAVEL", "HYBRID", "ONSITE", "UNCLEAR"]},
-        "geo":           {"type": "string", "enum": ["OPEN_ANYWHERE", "AMERICAS_OR_LATAM", "CANADA_OK", "US_ONLY", "OTHER_REGION_ONLY", "NOT_STATED"]},
+        "seniority":     {"type": "string", "enum": ["EXECUTIVE", "SENIOR_LEADER", "MID", "JUNIOR"],
+                          "description": "EXECUTIVE = C-level, VP, Head of; SENIOR_LEADER = CD, ECD, GCD, ACD, Director, senior lead; MID = manager or senior individual contributor; JUNIOR = below that"},
+        "remote":        {"type": "string", "enum": ["FULLY_REMOTE", "REMOTE_SOME_TRAVEL", "HYBRID", "ONSITE", "UNCLEAR"],
+                          "description": "FULLY_REMOTE only if the posting says remote with no required office days. Any required office days = HYBRID. A city with no mention of remote = ONSITE."},
+        "geo":           {"type": "string", "enum": ["OPEN_ANYWHERE", "AMERICAS_OR_LATAM", "CANADA_OK", "US_REMOTE", "US_ONLY", "OTHER_REGION_ONLY", "NOT_STATED"]},
         "timezone":      {"type": "string", "enum": ["AMERICAS_HOURS", "PACIFIC_HOURS", "EUROPE_ASIA_HOURS", "NOT_STATED"]},
         "comp_min_usd":  {"type": "integer", "description": "Annual base pay floor in USD, 0 if not stated"},
         "comp_max_usd":  {"type": "integer", "description": "Annual base pay ceiling in USD, 0 if not stated"},
@@ -716,6 +729,7 @@ def compute_score(f):
     if f["remote"] in ("HYBRID", "ONSITE"): s = min(s, 2)
     if f["remote"] == "REMOTE_SOME_TRAVEL": s -= 1
     if f["geo"] in ("US_ONLY", "OTHER_REGION_ONLY"): s = min(s, 3)
+    if f["geo"] == "US_REMOTE":             s -= 1
     if f["geo"] in ("OPEN_ANYWHERE", "AMERICAS_OR_LATAM") and s >= 5: s += 1
     if f["timezone"] == "EUROPE_ASIA_HOURS": s -= 2
     hi, lo = f.get("comp_max_usd") or 0, f.get("comp_min_usd") or 0
@@ -751,6 +765,9 @@ def score_one(job, system_text, state):
         return job
     f.setdefault("red_flags", [])
     job["score"]        = compute_score(f)
+    # Travis only wants 100% remote: if Claude can't confirm it and the posting never says "remote", drop it.
+    if f["remote"] == "UNCLEAR" and not REMOTE_WORD_RE.search(" ".join([job["title"], job["location"], job["description"]])):
+        job["score"] = min(job["score"], 2)
     job["category"]     = "ADJACENT" if f["lane"] == "ADJACENT" else "CORE"
     job["score_reason"] = f.get("headline", "")
     job["score_method"] = state["model"]
@@ -802,6 +819,11 @@ def process(stats):
             if k: seen[k] = now
     kept = []
     existing = load_json(DATA_FILE, [])
+    before = len(existing)
+    existing = [j for j in existing
+                if (j.get("facts") or {}).get("remote") not in ("HYBRID", "ONSITE") and not is_clearly_hybrid({
+                    "title": j.get("title", ""), "location": j.get("location", ""), "description": j.get("description", "")})]
+    if before != len(existing): print(f"  → removed {before - len(existing)} hybrid/on-site jobs already on the dashboard")
     existing_ids = {j.get("id") for j in existing}
     for j in scored:
         if j.get("score", 0) < SCORE_FLOOR: continue
@@ -811,6 +833,9 @@ def process(stats):
         kept.append(j)
     print(f"\n  → kept {len(kept)} (score ≥ {SCORE_FLOOR}), dropped {len(scored) - len(kept)}")
 
+    rejected = sorted([j for j in scored if j.get("score", 0) < SCORE_FLOOR], key=lambda j: -j.get("score", 0))[:150]
+    save_json(Path("data/rejected.json"), [{k: j.get(k) for k in ("title", "company", "url", "source", "score", "score_method",
+                                            "score_reason", "facts", "where", "salary")} for j in rejected])
     all_jobs = (kept + existing)[:MAX_JOBS]
     save_json(DATA_FILE, all_jobs)
     save_json(SEEN_FILE, seen)
