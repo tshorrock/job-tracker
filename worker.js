@@ -2,6 +2,7 @@
  * Travis Shorrock — Job Tracker Worker (Cloudflare)
  *   POST /          → evaluate one job with Claude (the ⚡ button)
  *   POST /run       → trigger the GitHub Action ("Run Now")
+ *   POST /apply     → build a tailored application package for a job URL (apply.yml)
  *   POST /feedback  → record a Save / Dismiss in data/feedback.json so it syncs across
  *                     devices and teaches the daily scorer what you like
  * Deploy:  wrangler deploy
@@ -84,6 +85,20 @@ async function evaluate(body, env) {
   return json(r);
 }
 
+// Build a tailored application package for one job URL (apply.yml)
+async function buildApplication(body, env) {
+  const url = String(body.url || '').trim();
+  if (!/^https?:\/\//.test(url)) return json({ error: 'Send a job URL' }, 400);
+  const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/apply.yml/dispatches`, {
+    method: 'POST',
+    headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+               'Content-Type': 'application/json', 'User-Agent': 'job-eval-worker' },
+    body: JSON.stringify({ ref: 'main', inputs: { url, posting_text: String(body.posting_text || '').slice(0, 60000) } }),
+  });
+  if (r.status === 204 || r.ok) return json({ ok: true });
+  throw new Error(`GitHub API ${r.status}: ${await r.text()}`);
+}
+
 async function runWorkflow(env) {
   const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/daily_scrape.yml/dispatches`, {
     method: 'POST',
@@ -136,6 +151,7 @@ export default {
       if (pathname === '/run') return await runWorkflow(env);
       const body = await request.json().catch(() => ({}));
       if (pathname === '/feedback') return await feedback(body, env);
+      if (pathname === '/apply') return await buildApplication(body, env);
       return await evaluate(body, env);
     } catch (err) {
       return json({ error: err.message }, 500);

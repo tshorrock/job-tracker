@@ -113,6 +113,13 @@ body{
 }
 .btn-primary:hover{filter:brightness(1.1);transform:scale(1.02)}
 .btn-primary:active{transform:scale(0.98)}
+.apply-bar{display:flex;gap:10px;margin:0 0 18px;align-items:center}
+.apply-bar input{flex:1;min-width:0;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--t1);font-size:14px;font-family:inherit}
+.apply-bar input:focus{outline:none;border-color:rgba(0,229,204,.45)}
+.btn-apply{background:transparent;border:1px solid rgba(0,229,204,.45);color:var(--teal);border-radius:12px;padding:12px 16px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;font-family:inherit}
+.btn-apply:hover{background:rgba(0,229,204,.08)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0f1a26;border:1px solid rgba(0,229,204,.35);color:var(--t1);padding:12px 18px;border-radius:12px;font-size:13px;z-index:500;max-width:92vw;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+@media (max-width:640px){.apply-bar{flex-direction:column;align-items:stretch}}
 
 /* ── PAGE ────────────────────────────────────────────────────────────────── */
 .page{
@@ -528,6 +535,12 @@ body{
     </div>
   </div>
 
+  <!-- BUILD AN APPLICATION FROM ANY URL -->
+  <div class="apply-bar">
+    <input id="apply-url" type="url" placeholder="Paste any job URL to build a tailored application…" aria-label="Job URL">
+    <button class="btn-apply" onclick="buildApplication(document.getElementById('apply-url').value)">📄 Build application</button>
+  </div>
+
   <!-- FILTER ROW -->
   <div class="filter-row">
     <div class="filter-links" id="filter-links"></div>
@@ -705,6 +718,28 @@ function renderEval(el, r) {
         Open Role →
       </a>
     </div>`;
+}
+
+// ── BUILD APPLICATION ─────────────────────────────────────────────────────
+function toast(msg, ms = 6000) {
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), ms);
+}
+async function buildApplication(url) {
+  url = (url || '').trim();
+  if (!/^https?:\/\//.test(url)) { toast('Paste a full job URL first.'); return; }
+  toast('Building your application… it lands in your inbox in about 5 minutes.');
+  try {
+    const r = await fetch(WORKER_URL + '/apply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'failed');
+    const box = document.getElementById('apply-url'); if (box) box.value = '';
+  } catch (e) {
+    // Worker not updated yet: fall back to running it by hand on GitHub
+    try { await navigator.clipboard.writeText(url); } catch (_) {}
+    toast('Couldn\u2019t start it automatically. URL copied: on the GitHub page, click Run workflow and paste it.', 9000);
+    window.open('https://github.com/tshorrock/job-tracker/actions/workflows/apply.yml', '_blank', 'noopener');
+  }
 }
 
 // ── TRIGGER RUN ───────────────────────────────────────────────────────────
@@ -922,6 +957,8 @@ function makeCard(j, idx = 0) {
   tags.push(`<span class="tag tag-cat-${cat.toLowerCase()}">${cat}</span>`);
   if (j.source) tags.push(`<span class="tag tag-source">${escapeHtml(j.source)}</span>`);
   if (isNew(j)) tags.push(`<span class="tag tag-new">New</span>`);
+  const ageD = j.age_days ?? (j.posted ? Math.floor((Date.now() - new Date(j.posted)) / 864e5) : null);
+  if (ageD !== null && !isNaN(ageD) && ageD <= 3) tags.push(`<span class="tag tag-geo">Fresh</span>`);
   const f = j.facts || {};
   const GEO = { OPEN_ANYWHERE: 'Anywhere', AMERICAS_OR_LATAM: 'Americas', CANADA_OK: 'Canada OK', US_REMOTE: 'US remote', US_ONLY: 'US only', OTHER_REGION_ONLY: 'Other region' };
   if (GEO[f.geo]) tags.push(`<span class="tag ${['US_ONLY','OTHER_REGION_ONLY'].includes(f.geo) ? 'tag-flag' : 'tag-geo'}">${GEO[f.geo]}</span>`);
@@ -959,6 +996,7 @@ function makeCard(j, idx = 0) {
         ${reasonBtn}
         <button class="act-btn ${isSaved ? 'toggled' : ''}" onclick="toggleSave('${jid}',event)" title="${isSaved ? 'Unsave' : 'Save'}">${isSaved ? '★' : '☆'}</button>
         <button class="act-btn eval" onclick="evalJob('${jid}',event)" title="Evaluate with Claude">⚡</button>
+        <button class="act-btn" onclick="event.preventDefault();event.stopPropagation();buildApplication('${escapeAttr(url)}')" title="Build tailored application (resume, cover letter, emails)">📄</button>
         <button class="act-btn dismiss" onclick="toggleDismiss('${jid}',event)" title="${isDism ? 'Restore' : 'Dismiss'}">✕</button>
       </div>
     </div>
