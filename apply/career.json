@@ -1,121 +1,168 @@
 {
-  "_note": "SINGLE SOURCE OF TRUTH for every resume, cover letter and email. The pipeline may only select from, reorder and lightly adapt what's here. Every fact must stay true. Edit this file to change the base.",
-
-  "person": {
-    "name": "Travis Shorrock",
-    "email": "hello@travisshorrock.com",
-    "site": "travisshorrock.com",
-    "linkedin": "linkedin.com/in/travisshorrock",
-    "linkedin_url": "https://www.linkedin.com/in/travisshorrock/",
-    "location_line": "Remote  ·  Central Time (UTC-6)",
-    "portfolio_url": "https://travisshorrock.com"
+ "_note": "SINGLE SOURCE OF TRUTH for every resume, cover letter and email. The pipeline may only select from, reorder and lightly adapt what's here. Every fact must stay true. Edit this file to change the base.",
+ "person": {
+  "name": "Travis Shorrock",
+  "email": "hello@travisshorrock.com",
+  "site": "travisshorrock.com",
+  "linkedin": "linkedin.com/in/travisshorrock",
+  "linkedin_url": "https://www.linkedin.com/in/travisshorrock/",
+  "location_line": "Remote  ·  Central Time (UTC-6)",
+  "portfolio_url": "https://travisshorrock.com"
+ },
+ "rules": [
+  "Never state career length: no '25+ years', '30+ years', 'decades', 'a decade', 'ten years'. No graduation years.",
+  "Dated roles start at tms (2008). Havas is 'Earlier career' with no dates. The 1998-2001 designer years are left out.",
+  "Team size is '15+ creatives'.",
+  "Never name AI tools. Say 'the latest image and video platforms', 'generative image and video pipeline', 'production pipeline', 'workflow automation'.",
+  "Never invent facts, metrics, clients, SaaS experience, DAM systems or anything not in this file. If the posting wants something not here, list it under check_before_sending instead.",
+  "Location: never state a city or country. Use the location_line. Never answer a residency question falsely; flag knockout questions for Travis to answer himself.",
+  "Voice: conversational, direct, senior, plain. Contractions always. NO em dashes or en dashes in prose. No 'thrilled', 'excited', 'passionate', 'leverage', 'delve', 'I am writing to', 'great fit'. No neat aphorisms ('The real job isn't X. It's Y.'), no tidy lists of three. Self-deprecation at 20%.",
+  "Answer what the posting actually says. If the company or product isn't named, don't guess at it.",
+  "Salary target is not up for discussion; don't argue him out of applying."
+ ],
+ "variants": {
+  "agency_ecd": {
+   "label": "Agency ECD / GCD / CD",
+   "tagline": "Creative Director  ·  Integrated Campaigns  ·  Brand Building",
+   "profile": "Creative director who builds teams, wins trust on big national brands and still gets obsessive about the craft. Built creative teams from scratch at more than one agency, led 15+ creatives, and now run my own generative image and video pipeline."
   },
-
-  "rules": [
-    "Never state career length: no '25+ years', '30+ years', 'decades', 'a decade', 'ten years'. No graduation years.",
-    "Dated roles start at tms (2008). Havas is 'Earlier career' with no dates. The 1998-2001 designer years are left out.",
-    "Team size is '15+ creatives'.",
-    "Never name AI tools. Say 'the latest image and video platforms', 'generative image and video pipeline', 'production pipeline', 'workflow automation'.",
-    "Never invent facts, metrics, clients, SaaS experience, DAM systems or anything not in this file. If the posting wants something not here, list it under check_before_sending instead.",
-    "Location: never state a city or country. Use the location_line. Never answer a residency question falsely; flag knockout questions for Travis to answer himself.",
-    "Voice: conversational, direct, senior, plain. Contractions always. NO em dashes or en dashes in prose. No 'thrilled', 'excited', 'passionate', 'leverage', 'delve', 'I am writing to', 'great fit'. No neat aphorisms ('The real job isn't X. It's Y.'), no tidy lists of three. Self-deprecation at 20%.",
-    "Answer what the posting actually says. If the company or product isn't named, don't guess at it.",
-    "Salary target is not up for discussion; don't argue him out of applying."
-  ],
-
-  "variants": {
-    "agency_ecd": {
-      "label": "Agency ECD / GCD / CD",
-      "tagline": "Creative Director  ·  Integrated Campaigns  ·  Brand Building",
-      "profile": "Creative director who builds departments, wins trust on big national brands and still gets obsessive about the craft. Built a creative department from the first hire, led 15+ creatives, and now run my own generative image and video pipeline."
-    },
-    "inhouse_head": {
-      "label": "In-house Head of Creative / VP Brand Creative",
-      "tagline": "Creative Director  ·  Brand Systems  ·  Creative Operations",
-      "profile": "Creative director who builds visual identity systems that hold up at volume, and runs the teams, workflows, agencies and budgets behind them. Built a creative department from the first hire, led 15+ creatives, and now run my own generative image and video pipeline."
-    },
-    "ai_production": {
-      "label": "AI creative / content production leadership",
-      "tagline": "Creative Director  ·  AI Production  ·  Content at Scale",
-      "profile": "Creative director who pairs big-brand craft with a production pipeline I designed and run myself. Led 15+ creatives and 1,000+ assets a month on Toyota Canada. Now I make brand-accurate image and video at a speed and cost that used to need a full crew."
-    }
+  "inhouse_head": {
+   "label": "In-house Head of Creative / VP Brand Creative",
+   "tagline": "Creative Director  ·  Brand Systems  ·  Creative Operations",
+   "profile": "Creative director who builds visual identity systems that hold up at volume, and runs the teams, workflows, agencies and budgets behind them. Built creative teams from scratch more than once, led 15+ creatives, and now run my own generative image and video pipeline."
   },
-
-  "jobs": [
-    {
-      "key": "shorrock",
-      "title": "Principal & Creative Director",
-      "company": "Shorrock & Co.  ·  Remote",
-      "dates": "2024 – Present",
-      "bullets": {
-        "s_consult":  "Creative direction for agencies and brands: campaigns, brand platforms and pitches.",
-        "s_stuff":    "Built Stuff & Company, a DTC brand, end to end: identity, product, e-commerce and content.",
-        "s_pipeline": "Designed a generative image and video pipeline that takes work from brief to final asset.",
-        "s_system":   "Built an automated content system: scripts, video and publishing, run from one dashboard.",
-        "s_cost":     "Brand-accurate imagery and video at a fraction of traditional production cost."
-      }
-    },
-    {
-      "key": "tpm",
-      "title": "National Creative Director",
-      "company": "T&Pm (The&Partnership)  ·  Toronto",
-      "dates": "2014 – 2025",
-      "bullets": {
-        "t_built":    "First creative hire in Canada. Built the department and led 15+ creatives.",
-        "t_zero":     "Built the creative department from zero, with no ECD above me for the first years.",
-        "t_toyota":   "Toyota Canada: brand platform to tactical for 280+ dealers, 1,000+ assets a month.",
-        "t_kantar":   "One Toyota TV spot ranked 4th in the world for effectiveness by Kantar.",
-        "t_telus":    "National TELUS work across retail, OOH, digital and TV. Brand work for JPMorgan Chase.",
-        "t_partners": "Managed partner agencies, freelancers, production vendors and creative budgets.",
-        "t_zones":    "Led teams across multiple agencies and time zones while staying hands-on.",
-        "t_rep":      "Built the agency's creative reputation from scratch, with no legacy accounts."
-      }
-    },
-    {
-      "key": "tms",
-      "title": "Creative Director",
-      "company": "tms (The Marketing Store)  ·  Toronto",
-      "dates": "2008 – 2014",
-      "bullets": {
-        "m_diageo":  "Led Diageo (Guinness, Smirnoff, Strongbow) across TV, OOH, packaging, retail and events.",
-        "m_nissan":  "Led Nissan and Infiniti North America CRM, print and digital, across a six-year run.",
-        "m_yeti":    "Led Yeti creative, extending the brand from outdoor cult status into lifestyle.",
-        "m_awards":  "Work recognized at LIA, New York Festivals, ADCC, Communication Arts and Graphis."
-      }
-    },
-    {
-      "key": "havas",
-      "title": "Creative Group Head",
-      "company": "Havas Worldwide  ·  Toronto",
-      "dates": "Earlier career",
-      "bullets": {
-        "h_volvo": "Built the Volvo Canada group and led it to six straight years of award-winning work."
-      }
-    }
-  ],
-
-  "skills": {
-    "brand": ["Brand identity systems", "Design systems", "Brand standards", "Art direction", "Copy direction", "Integrated campaigns", "Social-first creative", "DTC creative", "Events & experiential", "Packaging", "TV & video", "Motion", "OOH", "CRM"],
-    "leadership": ["Building creative teams", "Player-coach leadership", "Creative operations", "Workflow automation", "Agency & freelance management", "Budget management", "Stakeholder management", "Pitching & presenting", "Mentoring"],
-    "tools": ["Adobe Creative Suite", "Figma", "Generative image & video pipelines", "AI-assisted production", "Workflow automation"]
+  "ai_production": {
+   "label": "AI creative / content production leadership",
+   "tagline": "Creative Director  ·  AI Production  ·  Content at Scale",
+   "profile": "Creative director who pairs big-brand craft with a production pipeline I designed and run myself. Led 15+ creatives and 1,000+ assets a month on Toyota Canada. Now I make brand-accurate image and video at a speed and cost that used to need a full crew."
+  }
+ },
+ "jobs": [
+  {
+   "key": "shorrock",
+   "title": "Principal & Creative Director",
+   "company": "Shorrock & Co.  ·  Remote",
+   "dates": "2024 – Present",
+   "bullets": {
+    "s_consult": "Creative direction for agencies and brands: campaigns, brand platforms and pitches.",
+    "s_stuff": "Built Stuff & Company, a DTC brand, end to end: identity, product, e-commerce and content.",
+    "s_pipeline": "Designed a generative image and video pipeline that takes work from brief to final asset.",
+    "s_system": "Built an automated content system: scripts, video and publishing, run from one dashboard.",
+    "s_cost": "Brand-accurate imagery and video at a fraction of traditional production cost."
+   }
   },
-
-  "brands": ["Toyota", "TELUS", "JPMorgan Chase", "Guinness", "Smirnoff", "Volvo", "Nissan", "Infiniti", "Yeti", "Intel", "Dell", "McDonald's", "Mars", "Xerox", "Strongbow"],
-  "awards": ["LIA", "New York Festivals", "ADCC", "Communication Arts", "Graphis", "Lürzer's Archive"],
-  "education": "Sheridan College, Graphic Design (Honours)",
-
-  "proof_points_for_letters": [
-    "First creative hire at T&Pm's Canadian launch; built the department from nothing and led it; 15+ creatives across agencies and time zones.",
-    "Toyota Canada for six years: brand platform to tactical for 280+ dealerships, 1,000+ assets a month, every one on brand.",
-    "A Toyota TV spot ranked 4th in the world for effectiveness by Kantar.",
-    "National TELUS work across retail, OOH, digital and TV; brand campaigns for JPMorgan Chase.",
-    "Diageo portfolio (Guinness, Smirnoff, Strongbow) across TV, OOH, packaging, retail and experiential, in Canada and internationally.",
-    "Nissan and Infiniti North America CRM over a six-year run.",
-    "Built and led the Volvo Canada group at Havas to six straight years of award-winning work.",
-    "Runs his own studio since late 2024; built Stuff & Company, a DTC brand, end to end with no crew or outside budget.",
-    "Designed and runs his own production pipeline on the latest image and video platforms: brief to finished asset, at a fraction of traditional cost.",
-    "Awards: LIA, New York Festivals, ADCC, Communication Arts, Graphis, Lürzer's Archive."
+  {
+   "key": "tpm",
+   "title": "National Creative Director",
+   "company": "T&Pm (The&Partnership)  ·  Toronto",
+   "dates": "2014 – 2025",
+   "bullets": {
+    "t_built": "First creative hire in Canada. Built the department and led 15+ creatives.",
+    "t_zero": "Built the creative department from zero, with no ECD above me for the first years.",
+    "t_toyota": "Toyota Canada: brand platform to tactical for 280+ dealers, 1,000+ assets a month.",
+    "t_kantar": "One Toyota TV spot ranked 4th in the world for effectiveness by Kantar.",
+    "t_telus": "National TELUS work across retail, OOH, digital and TV. Brand work for JPMorgan Chase.",
+    "t_partners": "Managed partner agencies, freelancers, production vendors and creative budgets.",
+    "t_zones": "Led teams across multiple agencies and time zones while staying hands-on.",
+    "t_rep": "Built the agency's creative reputation from scratch, with no legacy accounts."
+   }
+  },
+  {
+   "key": "tms",
+   "title": "Creative Director",
+   "company": "tms (The Marketing Store)  ·  Toronto",
+   "dates": "2008 – 2014",
+   "bullets": {
+    "m_diageo": "Led Diageo (Guinness, Smirnoff, Strongbow) across TV, OOH, packaging, retail and events.",
+    "m_nissan": "Led Nissan and Infiniti North America CRM, print and digital, across a six-year run.",
+    "m_yeti": "Led Yeti creative, extending the brand from outdoor cult status into lifestyle.",
+    "m_awards": "Work recognized at LIA, New York Festivals, ADCC, Communication Arts and Graphis."
+   }
+  },
+  {
+   "key": "havas",
+   "title": "Creative Group Head",
+   "company": "Havas Worldwide  ·  Toronto",
+   "dates": "Earlier career",
+   "bullets": {
+    "h_volvo": "Built the Volvo Canada group and led it to six straight years of award-winning work."
+   }
+  }
+ ],
+ "skills": {
+  "brand": [
+   "Brand identity systems",
+   "Design systems",
+   "Brand standards",
+   "Art direction",
+   "Copy direction",
+   "Integrated campaigns",
+   "Social-first creative",
+   "DTC creative",
+   "Events & experiential",
+   "Packaging",
+   "TV & video",
+   "Motion",
+   "OOH",
+   "CRM"
   ],
-
-  "quote": "“You’re the only person I’ve ever told to care 20% less.”  Ron Smrczek, Executive Creative Director"
+  "leadership": [
+   "Building creative teams",
+   "Player-coach leadership",
+   "Creative operations",
+   "Workflow automation",
+   "Agency & freelance management",
+   "Budget management",
+   "Stakeholder management",
+   "Pitching & presenting",
+   "Mentoring"
+  ],
+  "tools": [
+   "Adobe Creative Suite",
+   "Figma",
+   "Generative image & video pipelines",
+   "AI-assisted production",
+   "Workflow automation"
+  ]
+ },
+ "brands": [
+  "Toyota",
+  "TELUS",
+  "JPMorgan Chase",
+  "Guinness",
+  "Smirnoff",
+  "Volvo",
+  "Nissan",
+  "Infiniti",
+  "Yeti",
+  "Intel",
+  "Dell",
+  "McDonald's",
+  "Mars",
+  "Xerox",
+  "Strongbow"
+ ],
+ "awards": [
+  "LIA",
+  "New York Festivals",
+  "ADCC",
+  "Communication Arts",
+  "Graphis",
+  "Lürzer's Archive"
+ ],
+ "education": "Sheridan College, Graphic Design (Honours)",
+ "proof_points_for_letters": [
+  "Has built creative teams and departments from scratch at several agencies (T&Pm from the first hire; the Volvo group at Havas); don't frame it as a one-time thing.",
+  "First creative hire at T&Pm's Canadian launch; built the department from nothing and led it; 15+ creatives across agencies and time zones.",
+  "Toyota Canada for six years: brand platform to tactical for 280+ dealerships, 1,000+ assets a month, every one on brand.",
+  "A Toyota TV spot ranked 4th in the world for effectiveness by Kantar.",
+  "National TELUS work across retail, OOH, digital and TV; brand campaigns for JPMorgan Chase.",
+  "Diageo portfolio (Guinness, Smirnoff, Strongbow) across TV, OOH, packaging, retail and experiential, in Canada and internationally.",
+  "Nissan and Infiniti North America CRM over a six-year run.",
+  "Built and led the Volvo Canada group at Havas to six straight years of award-winning work.",
+  "Runs his own studio since late 2024; built Stuff & Company, a DTC brand, end to end with no crew or outside budget.",
+  "Designed and runs his own production pipeline on the latest image and video platforms: brief to finished asset, at a fraction of traditional cost.",
+  "Awards: LIA, New York Festivals, ADCC, Communication Arts, Graphis, Lürzer's Archive."
+ ],
+ "quote": "“You’re the only person I’ve ever told to care 20% less.”  Ron Smrczek, Executive Creative Director"
 }
