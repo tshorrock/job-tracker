@@ -386,6 +386,19 @@ def fetch_linkedin_email():
 
 REMOTE_LOC_RE = re.compile(r"remote|anywhere|distributed|north america|americas|canada|latam|united states|usa|\bus\b", re.I)
 
+def age_days(posted):
+    """Days since posting, or None if unknown."""
+    if not posted: return None
+    try:
+        if isinstance(posted, (int, float)) or str(posted).isdigit():
+            dt = datetime.fromtimestamp(float(posted) / 1000, timezone.utc)
+        else:
+            dt = datetime.fromisoformat(str(posted).replace("Z", "+00:00"))
+            if dt.tzinfo is None: dt = dt.replace(tzinfo=timezone.utc)
+        return max(0, (datetime.now(timezone.utc) - dt).days)
+    except Exception:
+        return None
+
 def _ats_recent(posted, days=30):
     try:
         if isinstance(posted, (int, float)):
@@ -765,6 +778,10 @@ def score_one(job, system_text, state):
         return job
     f.setdefault("red_flags", [])
     job["score"]        = compute_score(f)
+    age = age_days(job.get("posted"))
+    if age is not None:
+        job["age_days"] = age
+        if age > 14: job["score"] = max(0, job["score"] - 1)   # stale: shortlists fill in the first days
     # Travis only wants 100% remote: if Claude can't confirm it and the posting never says "remote", drop it.
     if f["remote"] == "UNCLEAR" and not REMOTE_WORD_RE.search(" ".join([job["title"], job["location"], job["description"]])):
         job["score"] = min(job["score"], 2)

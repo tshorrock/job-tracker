@@ -37,3 +37,22 @@ Dashboard: https://tshorrock.github.io/job-tracker/
 
 `worker.js` on Cloudflare. Deploy with `npx wrangler deploy`. Secrets: `ANTHROPIC_API_KEY`, `GITHUB_TOKEN`
 (fine-grained token for this repo with **Actions: read/write** and **Contents: read/write**).
+
+## Application builder (paste a URL, get a tailored package)
+
+Three ways to run it:
+1. **Dashboard:** click 📄 on any job card, or paste any job URL into the box and hit *Build application*.
+2. **GitHub:** Actions → *Build Application* → Run workflow → paste the URL (optionally paste the job text if the page won't load).
+3. **Claude chat / Claude Code:** give Claude the URL. It writes the tailoring itself and runs
+   `python apply/build_application.py "<url>" --tailoring t.json --research r.json`.
+
+What you get by email (never committed, since this repo is public):
+- Resume (PDF for most portals, DOCX for Workday/iCIMS/Taleo) and cover letter, both one page, tailored to the role
+- `brief.md`: honest fit read, screening questions to expect, likely hiring leader and recruiter, LinkedIn searches
+  for your 1st/2nd-degree connections there, the hiring-leader note, a referral ask and a follow-up, questions for the first call
+
+Guardrails built in: content comes only from `apply/career.json` (bullets are picked by ID, never invented);
+automatic checks for one page, widows and single words on a line, em dashes, career-length numbers, AI tool names,
+location giveaways and banned phrases.
+
+**To change the base content, edit `apply/career.json`.** Every future application picks it up.

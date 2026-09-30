@@ -1,0 +1,50 @@
+name: Build Application
+
+# Paste a job URL -> tailored resume, cover letter, outreach emails and contact brief, emailed to you.
+# Triggered from the dashboard's "Build application" button (via the worker) or by hand:
+# Actions -> Build Application -> Run workflow -> paste the URL.
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Job posting URL'
+        required: true
+      posting_text:
+        description: 'Optional: paste the job description if the page cannot be read'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install
+        run: |
+          pip install beautifulsoup4 python-docx pypdfium2 playwright markdown
+          python -m playwright install --with-deps chromium
+
+      - name: Build the application package
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          APPLY_MODEL: ${{ vars.APPLY_MODEL }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
+          JOB_URL: ${{ github.event.inputs.url }}
+          POSTING_TEXT: ${{ github.event.inputs.posting_text }}
+        run: |
+          if [ -n "$POSTING_TEXT" ]; then printf '%s' "$POSTING_TEXT" > /tmp/posting.txt; EXTRA="--text /tmp/posting.txt"; fi
+          python apply/build_application.py "$JOB_URL" --out /tmp/applications $EXTRA
+        # The package is emailed to you. It is deliberately NOT committed or uploaded as an artifact,
+        # because this repository is public.
