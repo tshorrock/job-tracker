@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-01T15:14:43.547238+00:00",
+  "updated": "2026-10-01T17:07:43.557287+00:00",
   "new_count": 5,
   "total_count": 300,
   "model": "claude-sonnet-5",
@@ -9,19 +9,19 @@
       "new": 3
     },
     "LinkedIn alerts": {
-      "fetched": 2,
+      "fetched": 3,
       "new": 0
     },
     "LinkedIn guest": {
-      "fetched": 559,
-      "new": 161
+      "fetched": 560,
+      "new": 45
     },
     "Careers pages": {
-      "fetched": 28,
-      "new": 5
+      "fetched": 26,
+      "new": 2
     },
     "Adzuna": {
-      "fetched": 135,
+      "fetched": 138,
       "new": 0
     },
     "JSearch": {
@@ -42,7 +42,7 @@
     }
   },
   "prefilter_dropped": {
-    "hybrid": 18,
-    "us_only": 1
+    "hybrid": 3,
+    "us_only": 0
   }
 }
