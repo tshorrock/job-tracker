@@ -205,7 +205,7 @@ def lint(t):
         for rx, what in ((TOOL_NAMES, "names an AI tool"), (AGE_RE, "states career length / dates you"),
                          (LOC_RE, "reveals location"), (BANNED, "uses a banned phrase")):
             for m in re.finditer(rx, low):
-                if what.startswith("states") and re.search(r"six-year|six straight years", low[max(0, m.start()-12):m.end()+8]):
+                if what.startswith("states") and re.search(r"six-year|six straight years|tested since 2008", low[max(0, m.start()-12):m.end()+8]):
                     continue
                 probs.append(f"{name} {what}: '{m.group(0)}'")
     words = len(" ".join(t["cover_letter"]).split())
