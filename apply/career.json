@@ -11,7 +11,7 @@
  },
  "rules": [
   "Never state career length: no '25+ years', '30+ years', 'decades', 'a decade', 'ten years'. No graduation years.",
-  "Dated roles start at tms (2008). Havas is 'Earlier career' with no dates. The 1998-2001 designer years are left out.",
+  "List every employer from Havas onward with its real dates (Havas 2001-2007). Never hide where he worked or use 'Earlier career'. The 1998-2001 junior designer years are left off the resume.",
   "Team size is '15+ creatives'.",
   "Never name AI tools. Say 'the latest image and video platforms', 'generative image and video pipeline', 'production pipeline', 'workflow automation'.",
   "Never invent facts, metrics, clients, SaaS experience, DAM systems or anything not in this file. If the posting wants something not here, list it under check_before_sending instead.",
@@ -81,9 +81,9 @@
   },
   {
    "key": "havas",
-   "title": "Creative Group Head",
+   "title": "Art Director → Creative Group Head",
    "company": "Havas Worldwide  ·  Toronto",
-   "dates": "Earlier career",
+   "dates": "2001 – 2007",
    "bullets": {
     "h_volvo": "Built the Volvo Canada group and led it to six straight years of award-winning work."
    }
