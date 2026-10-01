@@ -6,14 +6,13 @@
   "site": "travisshorrock.com",
   "linkedin": "linkedin.com/in/travisshorrock",
   "linkedin_url": "https://www.linkedin.com/in/travisshorrock/",
-  "location_line": "Remote  ·  Central Time (UTC-6)",
   "portfolio_url": "https://travisshorrock.com"
  },
  "rules": [
   "Never state career length: no '25+ years', '30+ years', 'decades', 'a decade', 'ten years'. No graduation years.",
   "List every employer from Havas onward with its real dates (Havas 2001-2007). Never hide where he worked or use 'Earlier career'. The 1998-2001 junior designer years are left off the resume.",
   "Team size is '15+ creatives'.",
-  "Never name AI tools. Say 'the latest image and video platforms', 'generative image and video pipeline', 'production pipeline', 'workflow automation'.",
+  "Never name AI tools in prose (profile, cover letter, emails). Say 'the latest image and video platforms', 'generative image and video production'. The Tools row on the resume may list them.",
   "Never invent facts, metrics, clients, SaaS experience, DAM systems or anything not in this file. If the posting wants something not here, list it under check_before_sending instead.",
   "Location: never state a city or country. Use the location_line. Never answer a residency question falsely; flag knockout questions for Travis to answer himself.",
   "Voice: conversational, direct, senior, plain. Contractions always. NO em dashes or en dashes in prose. No 'thrilled', 'excited', 'passionate', 'leverage', 'delve', 'I am writing to', 'great fit'. No neat aphorisms ('The real job isn't X. It's Y.'), no tidy lists of three. Self-deprecation at 20%.",
@@ -24,17 +23,17 @@
   "agency_ecd": {
    "label": "Agency ECD / GCD / CD",
    "tagline": "Creative Director  ·  Integrated Campaigns  ·  Brand Building",
-   "profile": "Creative director who builds teams, wins trust on big national brands and still gets obsessive about the craft. Built creative teams from scratch at more than one agency, led 15+ creatives, and now run my own generative image and video pipeline."
+   "profile": "Senior creative leader who builds teams, wins trust and awards, and takes one idea through every channel. Built creative teams from scratch more than once and led 15+ creatives. Now developing the next phase of generative image and video production."
   },
   "inhouse_head": {
    "label": "In-house Head of Creative / VP Brand Creative",
    "tagline": "Creative Director  ·  Brand Systems  ·  Creative Operations",
-   "profile": "Creative director who builds visual identity systems that hold up at volume, and runs the teams, workflows, agencies and budgets behind them. Built creative teams from scratch more than once, led 15+ creatives, and now run my own generative image and video pipeline."
+   "profile": "Senior creative leader who builds brand systems that hold up at volume, and the teams, workflows and partners behind them. Built creative teams from scratch more than once and led 15+ creatives. Now developing the next phase of generative image and video production."
   },
   "ai_production": {
    "label": "AI creative / content production leadership",
    "tagline": "Creative Director  ·  AI Production  ·  Content at Scale",
-   "profile": "Creative director who pairs big-brand craft with a production pipeline I designed and run myself. Led 15+ creatives and 1,000+ assets a month on Toyota Canada. Now I make brand-accurate image and video at a speed and cost that used to need a full crew."
+   "profile": "Senior creative leader who pairs big-brand craft with production I design and run myself. Built creative teams from scratch more than once and led 15+ creatives. Now developing the next phase of generative image and video production, at a speed and cost that used to need a full crew."
   }
  },
  "jobs": [
@@ -90,21 +89,22 @@
   }
  ],
  "skills": {
-  "brand": [
+  "creative": [
    "Brand identity systems",
-   "Design systems",
-   "Brand standards",
-   "Art direction",
-   "Copy direction",
    "Integrated campaigns",
    "Social-first creative",
+   "Art direction",
+   "Copy direction",
+   "Design systems",
    "DTC creative",
-   "Events & experiential",
-   "Packaging",
-   "TV & video",
-   "Motion",
-   "OOH",
-   "CRM"
+   "Content strategy"
+  ],
+  "ai": [
+   "AI art direction",
+   "Generative image & video production",
+   "Automated content pipelines",
+   "Prompt & model direction",
+   "AI-powered creative workflows"
   ],
   "leadership": [
    "Building creative teams",
@@ -118,11 +118,15 @@
    "Mentoring"
   ],
   "tools": [
+   "Midjourney",
+   "Runway",
+   "Kling",
+   "Veo",
+   "Higgsfield",
+   "ComfyUI",
+   "ElevenLabs",
    "Adobe Creative Suite",
-   "Figma",
-   "Generative image & video pipelines",
-   "AI-assisted production",
-   "Workflow automation"
+   "Figma"
   ]
  },
  "brands": [

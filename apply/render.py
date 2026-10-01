@@ -70,8 +70,8 @@ def items(parts):
 def header(d):
     p = d["person"]
     return f"""<div class="header"><div><h1>{e(p['name'])}</h1><div class="tagline">{e(d['tagline'])}</div></div>
-<div class="contact"><a href="https://{e(p['site'])}">{e(p['site'])}</a><br><a href="mailto:{e(p['email'])}">{e(p['email'])}</a><br>
-<a href="{e(p['linkedin_url'])}">{e(p['linkedin'])}</a><br>{e(p['location_line'])}</div></div>"""
+<div class="contact"><a href="https://{e(p['site'])}" target="_blank">{e(p['site'])}</a><br><a href="mailto:{e(p['email'])}">{e(p['email'])}</a><br>
+<a href="{e(p['linkedin_url'])}">{e(p['linkedin'])}</a></div></div>"""
 
 
 def resume_html(d):
@@ -164,6 +164,4 @@ def render_all(d, outdir, stem):
     (outdir / f"{stem} - Cover Letter.html").write_text(lh)
     rep = asyncio.run(_render([("resume", rh, outdir / f"{stem} - Resume.pdf"),
                                ("letter", lh, outdir / f"{stem} - Cover Letter.pdf")]))
-    docx_resume(d, outdir / f"{stem} - Resume.docx")
-    docx_letter(d, outdir / f"{stem} - Cover Letter.docx")
     return rep
