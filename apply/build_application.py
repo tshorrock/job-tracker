@@ -147,7 +147,7 @@ def tailor_schema():
     return {
         "type": "object", "additionalProperties": False,
         "required": ["company_display", "role_display", "variant", "fit_read", "tagline", "profile", "bullets",
-                     "skills_brand", "skills_leadership", "skills_tools", "brands", "cover_letter",
+                     "skills_creative", "skills_ai", "skills_leadership", "skills_tools", "brands", "cover_letter",
                      "hiring_leader_email", "referral_ask", "follow_up", "knockout_notes",
                      "check_before_sending", "questions_for_first_call", "keywords_matched"],
         "properties": {
@@ -160,7 +160,7 @@ def tailor_schema():
             "bullets": {"type": "object", "additionalProperties": False, "required": list(job_ids),
                         "properties": {k: arr(v) for k, v in job_ids.items()},
                         "description": "Ordered bullet IDs per job, most relevant first. shorrock 2-3, tpm 4-5, tms 2-3, havas 1."},
-            "skills_brand": arr(S["brand"]), "skills_leadership": arr(S["leadership"]), "skills_tools": arr(S["tools"]),
+            "skills_creative": arr(S["creative"]), "skills_ai": arr(S["ai"]), "skills_leadership": arr(S["leadership"]), "skills_tools": arr(S["tools"]),
             "brands": arr(CAREER["brands"]),
             "cover_letter": {"type": "array", "items": {"type": "string"},
                              "description": "Paragraphs. First is the greeting ('Hello,' or 'Hi <First name>,' if the hiring leader is known with high confidence). Last is 'Thanks,'. 170-240 words total."},
@@ -205,7 +205,7 @@ def lint(t):
         for rx, what in ((TOOL_NAMES, "names an AI tool"), (AGE_RE, "states career length / dates you"),
                          (LOC_RE, "reveals location"), (BANNED, "uses a banned phrase")):
             for m in re.finditer(rx, low):
-                if what.startswith("states") and re.search(r"six-year|six straight years", low[max(0, m.start()-12):m.end()+8]):
+                if what.startswith("states") and re.search(r"six-year|six straight years|tested since 2008", low[max(0, m.start()-12):m.end()+8]):
                     continue
                 probs.append(f"{name} {what}: '{m.group(0)}'")
     words = len(" ".join(t["cover_letter"]).split())
@@ -231,9 +231,10 @@ def assemble(t, posting):
     today = datetime.date.today()
     return {
         "person": CAREER["person"], "tagline": t["tagline"], "profile": t["profile"], "jobs": jobs,
-        "skills": [("Brand & design", pick(t["skills_brand"], CAREER["skills"]["brand"])[:8]),
+        "skills": [("Creative", pick(t.get("skills_creative", []), CAREER["skills"]["creative"])[:7]),
+                   ("AI production", pick(t.get("skills_ai", []), CAREER["skills"]["ai"])[:4]),
                    ("Leadership & ops", pick(t["skills_leadership"], CAREER["skills"]["leadership"])[:6]),
-                   ("Tools", pick(t["skills_tools"], CAREER["skills"]["tools"])[:4])],
+                   ("Tools", CAREER["skills"]["tools"])],
         "brands": pick(t["brands"], CAREER["brands"])[:12], "awards": CAREER["awards"], "education": CAREER["education"],
         "letter": t["cover_letter"], "date": today.strftime("%B %Y"),
         "re": f"Re: {t['role_display']}  ·  {t['company_display']}",
@@ -268,7 +269,7 @@ def brief_md(url, posting, intel, t, d, layout, issues, stem):
     L.append(f"**Posting:** {url}  \n**Base version used:** {CAREER['variants'][t['variant']]['label']}  \n**Built:** {datetime.date.today()}\n")
     L.append(f"## Honest read\n{t['fit_read']}\n")
     L.append("## Do this, in this order\n1. Find a warm path in (links below). If you know someone, send the referral ask first and wait a day.\n"
-             "2. Apply with the **Resume.docx** on Workday/iCIMS/Taleo portals, the **Resume.pdf** everywhere else. Attach the cover letter if there's a field.\n"
+             "2. Apply with the **Resume.pdf**. Attach the cover letter if there's a field.\n"
              "3. Same day, send the hiring-leader note (below).\n4. Follow up in 5-7 business days if you hear nothing.\n")
     if t["knockout_notes"]:
         L.append("## Screening questions to expect\n" + "\n".join(f"- {x}" for x in t["knockout_notes"]) +
@@ -317,7 +318,7 @@ def email_package(outdir, stem, t, brief):
         body = f"<pre style='white-space:pre-wrap'>{htmllib.escape(brief)}</pre>"
     msg.attach(MIMEText(f"<html><body style='font-family:Helvetica,Arial;max-width:680px'>{body}</body></html>", "html", "utf-8"))
     for f in sorted(Path(outdir).glob(f"{stem} - *")):
-        if f.suffix in (".pdf", ".docx"):
+        if f.suffix == ".pdf":
             part = MIMEApplication(f.read_bytes(), Name=f.name)
             part["Content-Disposition"] = f'attachment; filename="{f.name}"'
             msg.attach(part)
