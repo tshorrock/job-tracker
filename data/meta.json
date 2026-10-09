@@ -1,48 +1,48 @@
 {
-  "updated": "2026-10-08T17:32:51.009497+00:00",
-  "new_count": 5,
+  "updated": "2026-10-09T17:10:22.210122+00:00",
+  "new_count": 13,
   "total_count": 300,
   "model": "claude-sonnet-5",
   "sources": {
     "Apify LinkedIn": {
-      "fetched": 10,
-      "new": 9
+      "fetched": 19,
+      "new": 14
     },
     "LinkedIn alerts": {
-      "fetched": 12,
-      "new": 7
+      "fetched": 8,
+      "new": 5
     },
     "LinkedIn guest": {
-      "fetched": 510,
-      "new": 149
+      "fetched": 537,
+      "new": 147
     },
     "Careers pages": {
-      "fetched": 28,
-      "new": 3
+      "fetched": 23,
+      "new": 0
     },
     "Adzuna": {
-      "fetched": 181,
-      "new": 9
+      "fetched": 211,
+      "new": 7
     },
     "JSearch": {
-      "fetched": 0,
-      "new": 0
+      "fetched": 47,
+      "new": 14
     },
     "RemoteOK": {
       "fetched": 99,
       "new": 0
     },
     "Remotive": {
-      "fetched": 76,
+      "fetched": 68,
       "new": 0
     },
     "We Work Remotely": {
-      "fetched": 138,
-      "new": 1
+      "fetched": 143,
+      "new": 0
     }
   },
   "prefilter_dropped": {
-    "hybrid": 24,
+    "hybrid": 17,
     "us_only": 0
   }
 }
