@@ -62,5 +62,8 @@ jobs:
           git config user.email "bot@job-tracker.local"
           git add data/
           git diff --staged --quiet || git commit -m "Update job data — $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          git pull origin main --rebase
+          # If main moved while we were scraping, keep this run's freshly scraped data for
+          # conflicting data/ files instead of failing. (During a rebase, "theirs" = our replayed
+          # commit.) The next run re-applies any filters from the newer code anyway.
+          git pull origin main --rebase -X theirs || { git rebase --abort; git pull origin main -X ours --no-edit; }
           git push
