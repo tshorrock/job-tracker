@@ -670,6 +670,11 @@ def collect(seen):
             k_li = f"li:{j['li_id']}" if j["li_id"] else None
             k_tc = make_id(j["title"], j["company"]) if j["company"] else None
             if any(k and (k in seen or k in keys) for k in (k_li, k_tc, j["url"])):
+                # A NEW LinkedIn posting id for a title+company we already know = the company
+                # reposted the role. Worth tracking: reposting means it wasn't filled.
+                if k_li and k_tc and k_li not in seen and k_li not in keys and k_tc in seen:
+                    stats.setdefault("_repost_ids", set()).add(k_tc)
+                    seen[k_li] = datetime.now(timezone.utc).isoformat()  # don't count the same repost twice
                 continue
             for k in (k_li, k_tc, j["url"]):
                 if k: keys.add(k)
@@ -1014,6 +1019,12 @@ def process(stats):
         dropped["us_payroll"] = before - len(existing) - len(scored)
         print(f"  → dropped {dropped['us_payroll']} US-payroll-only roles (no US work authorization)")
     for j in existing + scored: j["board"] = assign_board(j)
+    repost_ids = stats.pop("_repost_ids", set())
+    for j in existing:
+        if j.get("id") in repost_ids:
+            j["repost_count"] = j.get("repost_count", 0) + 1
+            j["last_repost"] = now[:10]
+            print(f"  ↻ reposted: {j['title'][:50]} @ {j['company'][:25]} (×{j['repost_count']})")
     for j in existing + scored: scrub(j)
     existing_ids = {j.get("id") for j in existing}
     for j in scored:
@@ -1055,7 +1066,8 @@ def save_picks(kept, all_jobs, now):
         return {"title": j["title"], "company": j["company"], "url": j["url"], "score": j["score"],
                 "salary": j.get("salary", ""), "where": j.get("where") or j.get("location", ""),
                 "remote": f.get("remote"), "geo": f.get("geo"), "hire_path": f.get("hire_path"),
-                "pay_currency": f.get("pay_currency"), "board": j.get("board", "us"), "why": j.get("score_reason", ""),
+                "pay_currency": f.get("pay_currency"), "board": j.get("board", "us"),
+                "age_days": age_days(j.get("posted")), "repost_count": j.get("repost_count", 0), "why": j.get("score_reason", ""),
                 "red_flags": f.get("red_flags", []), "added": j.get("added", "")[:10]}
     today = sorted([j for j in kept if j.get("score", 0) >= 7], key=lambda j: -j["score"])[:8]
     cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()

@@ -41,6 +41,11 @@ Simplify (no public API; its listings are mostly the same ATS postings the watch
 
 ## Settings you can change without code
 
+Every card shows how many days ago the role was posted (grey chip; red past 30 days, when shortlists are
+usually set). If a company reposts a role the tracker already knows (a fresh LinkedIn posting id for the same
+title and company), the card gets an orange *↻ Reposted ×N* chip instead of a duplicate — reposting usually
+means the role wasn't filled.
+
 - `data/watchlist.json` — add/remove companies (ats = greenhouse | lever | ashby, slug = name in their careers URL)
 - Repo → Settings → Secrets and variables → Actions → **Variables**:
   - `APIFY_LIMIT` (default 35 jobs/day — keeps you inside Apify's free $5)

@@ -316,6 +316,8 @@ body{
 .tag-cat-adjacent{background:var(--purple-dim);color:var(--purple);border-color:rgba(185,131,255,0.30)}
 .tag-source{background:var(--card3);color:var(--t3);border-color:var(--border)}
 .tag-geo{background:rgba(0,229,204,0.08);color:var(--teal);border-color:rgba(0,229,204,0.25)}
+.tag-age{background:rgba(136,153,170,0.08);color:var(--t3,#8899aa);border-color:rgba(136,153,170,0.2)}
+.tag-repost{background:rgba(245,166,35,0.1);color:#F5A623;border-color:rgba(245,166,35,0.3)}
 .tag-flag{background:rgba(255,107,107,0.08);color:var(--err);border-color:rgba(255,107,107,0.25)}
 .jcard-meta .where{font-size:12px;color:var(--t3)}
 .tag-new{background:var(--amber);color:#080c14;border-color:transparent;font-weight:700}
@@ -976,8 +978,13 @@ function makeCard(j, idx = 0) {
   tags.push(`<span class="tag tag-cat-${cat.toLowerCase()}">${cat}</span>`);
   if (j.source) tags.push(`<span class="tag tag-source">${escapeHtml(j.source)}</span>`);
   if (isNew(j)) tags.push(`<span class="tag tag-new">New</span>`);
-  const ageD = j.age_days ?? (j.posted ? Math.floor((Date.now() - new Date(j.posted)) / 864e5) : null);
-  if (ageD !== null && !isNaN(ageD) && ageD <= 3) tags.push(`<span class="tag tag-geo">Fresh</span>`);
+  const ageD = (j.posted && !isNaN(new Date(j.posted))) ? Math.floor((Date.now() - new Date(j.posted)) / 864e5) : (j.age_days ?? null);
+  if (ageD !== null && !isNaN(ageD)) {
+    const ageCls = ageD <= 3 ? 'tag-geo' : ageD > 30 ? 'tag-flag' : 'tag-age';
+    const ageTxt = ageD <= 0 ? 'Today' : `${ageD}d`;
+    tags.push(`<span class="tag ${ageCls}" title="Posted ${ageD <= 0 ? 'today' : ageD + ' days ago'}${ageD > 30 ? ' — shortlists usually form in the first two weeks' : ''}">${ageTxt}</span>`);
+  }
+  if (j.repost_count) tags.push(`<span class="tag tag-repost" title="The company has reposted this role ${j.repost_count} time${j.repost_count > 1 ? 's' : ''} since it first appeared${j.last_repost ? ' (last ' + j.last_repost + ')' : ''}. Reposting usually means it wasn't filled — still open, or churning.">↻ Reposted${j.repost_count > 1 ? ' ×' + j.repost_count : ''}</span>`);
   const f = j.facts || {};
   const GEO = { OPEN_ANYWHERE: 'Anywhere', AMERICAS_OR_LATAM: 'Americas', CANADA_OK: 'Canada OK', US_REMOTE: 'US remote', US_ONLY: 'US only', OTHER_REGION_ONLY: 'Other region' };
   if (GEO[f.geo]) tags.push(`<span class="tag ${['US_ONLY','OTHER_REGION_ONLY'].includes(f.geo) ? 'tag-flag' : 'tag-geo'}">${GEO[f.geo]}</span>`);
