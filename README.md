@@ -34,8 +34,9 @@ Simplify (no public API; its listings are mostly the same ATS postings the watch
    for anywhere/contract USD roles, capped at 6 when the only route in is a Canadian payroll) and **Canada**
    (Canadian employer, role in Canada, or CAD pay — kept visible side by side, never mixed into the US ranking).
    Full-time US-payroll-only roles need US work authorization, so they are dropped and never shown.
-   Postings that only arrive as a snippet (Adzuna, some JSearch) are opened and read in full before scoring;
-   if that fails the card is tagged *Snippet only*.
+   Postings that only arrive as a snippet (Adzuna, some JSearch) are opened and read in full before scoring.
+   Pages that block plain requests get a second try through Scrapling's stealth browser; if the posting still
+   can't be read the card is tagged *Snippet only*.
 5. Your ☆ Save / ✕ Dismiss clicks are written to `data/feedback.json` (via the worker) and fed to the scorer as examples.
 
 ## Settings you can change without code

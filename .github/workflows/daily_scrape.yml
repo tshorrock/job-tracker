@@ -33,7 +33,11 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install beautifulsoup4 google-auth google-auth-oauthlib google-api-python-client
+        run: |
+          pip install beautifulsoup4 google-auth google-auth-oauthlib google-api-python-client
+          # Scrapling is the fallback fetcher for pages that block plain requests. Best-effort:
+          # if install fails the scraper still runs, it just skips the stealth retries.
+          pip install scrapling && scrapling install || echo "scrapling unavailable — continuing without it"
 
       - name: Run scraper
         env:

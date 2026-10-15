@@ -730,6 +730,18 @@ def _posting_text(page):
         text = main.get_text(" ", strip=True)
     return text
 
+def stealth_get(url):
+    """Fallback fetch with Scrapling when a plain request is blocked or comes back empty.
+    Scrapling is optional: if it isn't installed or its browser can't start, this quietly returns ""."""
+    try:
+        from scrapling.fetchers import StealthyFetcher
+        page = StealthyFetcher.fetch(url, headless=True, network_idle=True, timeout=45000)
+        if page and getattr(page, "status", 0) == 200:
+            return page.html_content or ""
+    except Exception:
+        pass
+    return ""
+
 def fetch_full_posting(url):
     m = re.search(r"jobs\.lever\.co/([^/]+)/([0-9a-f-]{36})", url or "")
     try:
@@ -738,9 +750,13 @@ def fetch_full_posting(url):
             lists = " ".join(f"{x.get('text','')}: {html_to_text(x.get('content',''))}" for x in d.get("lists", []))
             return " ".join([d.get("descriptionPlain", ""), lists, d.get("additionalPlain", ""),
                              f"Workplace: {d.get('workplaceType','')}", json.dumps(d.get("salaryRange") or {})])
-        return _posting_text(http_get(url, {"User-Agent": UA, "Accept": "text/html"}, 20))
+        text = _posting_text(http_get(url, {"User-Agent": UA, "Accept": "text/html"}, 20))
     except Exception:
-        return ""
+        text = ""
+    if len(text) < 800:   # blocked, empty or a JS-only shell: retry with the stealth browser
+        stealth = stealth_get(url)
+        if stealth: text = _posting_text(stealth) or text
+    return text
 
 def enrich_short(jobs):
     need = [j for j in jobs if len(j.get("description") or "") < SHORT_DESC and j.get("url")
