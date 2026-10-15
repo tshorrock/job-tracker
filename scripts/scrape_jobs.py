@@ -606,6 +606,41 @@ def load_seen():
             pass
     return out
 
+def fetch_working_nomads():
+    """workingnomads.com free public feed — simple JSON, no key."""
+    out = []
+    try:
+        for j in http_json("https://www.workingnomads.com/api/exposed_jobs/"):
+            out.append(new_job(title=j.get("title", ""), company=j.get("company_name", ""),
+                               url=j.get("url", ""), description=html_to_text(j.get("description", "")),
+                               location=j.get("location", ""), posted=j.get("pub_date", ""),
+                               source="Working Nomads"))
+    except Exception as e:
+        print(f"    ⚠ Working Nomads {e}")
+    print(f"    Working Nomads: {len(out)}")
+    return out
+
+def fetch_himalayas():
+    """himalayas.app free public API — includes salary, seniority and country restrictions."""
+    out = []
+    try:
+        d = http_json("https://himalayas.app/jobs/api?limit=100")
+        for j in d.get("jobs", []):
+            locs = ", ".join(j.get("locationRestrictions") or []) or "Worldwide"
+            posted = j.get("pubDate", "")
+            if isinstance(posted, (int, float)):
+                posted = datetime.fromtimestamp(posted, timezone.utc).isoformat()
+            out.append(new_job(title=j.get("title", ""), company=j.get("companyName", ""),
+                               url=j.get("applicationLink") or j.get("guid", ""),
+                               description=html_to_text(j.get("description", "")),
+                               salary=fmt_money(j.get("minSalary"), j.get("maxSalary"),
+                                                j.get("currency") or "USD", j.get("salaryPeriod") or "YEAR"),
+                               location=locs, posted=str(posted), source="Himalayas"))
+    except Exception as e:
+        print(f"    ⚠ Himalayas {e}")
+    print(f"    Himalayas: {len(out)}")
+    return out
+
 def collect(seen):
     stats = {}
     # strict=False: the source already searched by title (LinkedIn), so only drop obvious noise.
@@ -614,7 +649,9 @@ def collect(seen):
         ("Apify LinkedIn", fetch_apify_linkedin, False), ("LinkedIn alerts", fetch_linkedin_email, False),
         ("LinkedIn guest", fetch_linkedin_guest, False), ("Careers pages", fetch_watchlist, True),
         ("Adzuna", fetch_adzuna, True), ("JSearch", fetch_jsearch, True),
-        # RemoteOK, Remotive and We Work Remotely were dropped 15 Oct 2026: 1 new role in 15 runs.
+        # RemoteOK re-added 15 Oct 2026 (Travis asked for it); Remotive and WWR stay dropped (1 new role in 15 runs).
+        ("RemoteOK", fetch_remoteok, True),
+        ("Working Nomads", fetch_working_nomads, True), ("Himalayas", fetch_himalayas, True),
     ]
     picked, keys = [], set()
     for label, fn, strict in sources:

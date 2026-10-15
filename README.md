@@ -14,7 +14,12 @@ Dashboard: https://tshorrock.github.io/job-tracker/
 | LinkedIn guest search (backup), US + Canada, 2 pages per query | free | — |
 | LinkedIn job-alert emails in Gmail | free | `GMAIL_*` |
 | Company careers pages (Greenhouse / Lever / Ashby), list in `data/watchlist.json` | free | — |
-| Adzuna, JSearch (every 3rd day), RemoteOK, Remotive, We Work Remotely | free | `ADZUNA_*`, `RAPIDAPI_KEY` |
+| Adzuna, JSearch (every 3rd day — covers Indeed, Glassdoor, SimplyHired via Google for Jobs) | free | `ADZUNA_*`, `RAPIDAPI_KEY` |
+| RemoteOK, Working Nomads, Himalayas (free public APIs) | free | — |
+
+Not scrapeable, checked 15 Oct 2026: FlexJobs (paywalled membership), Handshake (login-only, student/early-career),
+Simplify (no public API; its listings are mostly the same ATS postings the watchlist already covers), AIApply
+(an auto-apply tool, not a job board — this repo's `apply/` pipeline is our version of it).
 
 ## How scoring works
 
