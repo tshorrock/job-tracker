@@ -1,0 +1,143 @@
+{
+  "updated": "2026-10-15T15:58:19.128534+00:00",
+  "new_today": 0,
+  "today": [],
+  "this_week": [
+    {
+      "title": "Creative Director, Art & Film",
+      "company": "Microsoft",
+      "url": "https://www.linkedin.com/jobs/view/4479823643/",
+      "score": 7,
+      "salary": "USD $142,800 - $296,400/yr (higher in SF Bay/NYC)",
+      "where": "Mountain View, CA; listed Remote on LinkedIn",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "why": "A textbook senior agency CD role (integrated film/ad campaigns) at Microsoft, tagged remote with strong pay, but based in a specific US city which may mean hidden hybrid expectations.",
+      "red_flags": [
+        "Posted with a physical Mountain View HQ location despite remote tag, suggesting possible hybrid reality",
+        "No explicit statement allowing non-US residency",
+        "Heavy in-house tech/brand culture may differ from agency pace he's used to"
+      ],
+      "added": "2026-10-15"
+    },
+    {
+      "title": "Creative Director, PV Brand Partnership Studio",
+      "company": "Amazon",
+      "url": "https://www.linkedin.com/jobs/view/4479813697/",
+      "score": 7,
+      "salary": "$141,000\u2013$190,700 USD annually",
+      "where": "Santa Monica, CA, remote-labeled",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "why": "Strong CD role leveraging AI-driven brand campaigns, but tied to a specific US city salary band raises remote/geo questions.",
+      "red_flags": [
+        "Salary explicitly tied to Santa Monica, CA location despite 'remote' label",
+        "No explicit mention of work hours or travel requirements, may still expect some on-site presence",
+        "Heavy operational/project-management focus could dilute pure creative leadership role"
+      ],
+      "added": "2026-10-15"
+    },
+    {
+      "title": "Creative Director, Art",
+      "company": "OpenAI",
+      "url": "https://www.linkedin.com/jobs/view/4478820248/",
+      "score": 7,
+      "salary": "$287,000.00/yr - $318,000.00/yr",
+      "where": "San Francisco, CA or remote",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "why": "Strong pay and senior CD scope but it's a B2B/enterprise art-direction role at a tech company rather than classic brand/campaign leadership.",
+      "red_flags": [
+        "Focus is narrowly B2B/enterprise storytelling, not broad brand creative",
+        "Geo says SF with remote label but no explicit non-US allowance",
+        "Heavy emphasis on design/art craft and Figma vs. his big-campaign CD background"
+      ],
+      "added": "2026-10-15"
+    },
+    {
+      "title": "Senior Creative Director (Agency)",
+      "company": "times10",
+      "url": "https://www.linkedin.com/jobs/view/4479719151/",
+      "score": 7,
+      "salary": "",
+      "where": "Burbank, CA / Remote (LinkedIn label)",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "why": "Strong senior CD role matching his agency leadership background, though pay and geo rules are unstated and cultural/sports/fashion focus is a slight stretch.",
+      "red_flags": [
+        "No pay listed",
+        "Geo eligibility not stated\u2014could require US residency in practice",
+        "Culture/sports/fashion/youth focus differs somewhat from his automotive/CPG background"
+      ],
+      "added": "2026-10-15"
+    },
+    {
+      "title": "Director of Brand & Creative Marketing",
+      "company": "Reflex Media",
+      "url": "https://www.adzuna.com/details/5927284191?utm_medium=api&utm_source=757a890e",
+      "score": 7,
+      "salary": "$150K\u2013$210K/yr",
+      "where": "Remote (U.S.)",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "why": "Strong pay and remote brand-creative leadership role, but company is a sugar-dating platform which may be a reputational concern.",
+      "red_flags": [
+        "Company 'Seeking' is a sugar-dating/adult-adjacent platform, potential brand reputation concern",
+        "Role described as hands-on 'operator', not pure strategic leadership",
+        "No explicit mention of timezone expectations despite remote US label"
+      ],
+      "added": "2026-10-15"
+    },
+    {
+      "title": "Creative Director",
+      "company": "HugeInc",
+      "url": "https://www.adzuna.com/details/5927006029?utm_medium=api&utm_source=757a890e",
+      "score": 7,
+      "salary": "$130K\u2013$160K/yr",
+      "where": "Remote within the United States",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "why": "Strong CD marketing/brand role fully remote in US, close to Travis's exact experience and pay target.",
+      "red_flags": [
+        "Geo may restrict non-US candidates despite remote label",
+        "Travis is Canadian based in his location, not US resident",
+        "Pay slightly below his stated minimum at low end"
+      ],
+      "added": "2026-10-15"
+    },
+    {
+      "title": "Creative Director",
+      "company": "BBDO Worldwide",
+      "url": "https://www.linkedin.com/jobs/view/4478121773/",
+      "score": 7,
+      "salary": "",
+      "where": "Los Angeles, CA; remote label, no office days stated",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "why": "Classic agency CD role at a top network matches his exact background, but missing details make it a gamble.",
+      "red_flags": [
+        "No job description to verify actual remote policy or scope",
+        "No compensation information provided",
+        "LinkedIn remote tag could still mean hybrid in practice"
+      ],
+      "added": "2026-10-13"
+    },
+    {
+      "title": "Director of Brand & Creative Marketing",
+      "company": "Reflex Media, Inc.",
+      "url": "https://www.adzuna.com/details/5925323496?utm_medium=api&utm_source=757a890e",
+      "score": 7,
+      "salary": "$126K\u2013$126K/yr",
+      "where": "Remote (U.S.)",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "why": "Strong remote U.S. creative leadership role with solid pay, but framed as a hands-on operator rather than traditional CD oversight.",
+      "red_flags": [
+        "Conflicting pay data ($126K vs $150-210K)",
+        "Role explicitly says 'not a traditional management role' suggesting heavy individual execution",
+        "US-based remote only, no mention of Canada/Latin America eligibility"
+      ],
+      "added": "2026-10-13"
+    }
+  ]
+}
