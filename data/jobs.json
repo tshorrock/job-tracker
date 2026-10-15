@@ -3482,7 +3482,7 @@
     "source": "JSearch",
     "posted": "2026-10-05T20:00:00.000Z",
     "li_id": "",
-    "score": 8,
+    "score": 7,
     "age_days": 0,
     "category": "CORE",
     "score_reason": "A true CD brand-platform role at a major fintech brand, squarely in his wheelhouse, but missing pay and location specifics.",
@@ -3491,7 +3491,7 @@
       "lane": "CORE",
       "seniority": "SENIOR_LEADER",
       "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
+      "geo": "US_REMOTE",
       "timezone": "NOT_STATED",
       "fit": 8,
       "comp_min_usd": 0,
@@ -3500,7 +3500,8 @@
         "No stated location or geo eligibility",
         "No compensation listed",
         "Unclear if truly 100% remote or has hybrid expectations"
-      ]
+      ],
+      "hire_path": "CANADA_POSSIBLE"
     },
     "where": "Not specified, remote labeled",
     "id": "70e23332ce94",
@@ -4668,7 +4669,7 @@
     "facts": {
       "lane": "CORE",
       "seniority": "SENIOR_LEADER",
-      "remote": "UNCLEAR",
+      "remote": "FULLY_REMOTE",
       "geo": "US_REMOTE",
       "timezone": "AMERICAS_HOURS",
       "fit": 8,
@@ -4678,7 +4679,8 @@
         "Location explicitly listed as New York, NY despite remote work mention",
         "Role is framed as individual contributor despite Director title",
         "No explicit confirmation of full remote eligibility or non-US residency"
-      ]
+      ],
+      "hire_path": "CANADA_POSSIBLE"
     },
     "where": "New York, NY listed; remote work mentioned as benefit",
     "id": "5600b61df560",
@@ -5034,14 +5036,14 @@
     "source": "Careers",
     "posted": "2026-09-03T12:09:29-04:00",
     "li_id": "",
-    "score": 8,
+    "score": 7,
     "category": "CORE",
     "score_reason": "Strong agency-caliber CD fit and excellent pay, but role is IC-only and location/remote status is ambiguous.",
     "score_method": "claude-sonnet-5",
     "facts": {
       "lane": "CORE",
       "seniority": "SENIOR_LEADER",
-      "remote": "UNCLEAR",
+      "remote": "FULLY_REMOTE",
       "geo": "US_REMOTE",
       "timezone": "AMERICAS_HOURS",
       "fit": 8,
@@ -5051,7 +5053,8 @@
         "Listed as New York, NY with no explicit remote policy for the role",
         "Individual contributor role despite CD title, less team leadership scope",
         "Music/tech industry context differs from his agency brand campaign background"
-      ]
+      ],
+      "hire_path": "CANADA_POSSIBLE"
     },
     "where": "New York, NY (remote work listed as benefit)",
     "id": "f59742d24dab",

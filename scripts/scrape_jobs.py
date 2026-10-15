@@ -690,13 +690,24 @@ GEO RULES (be careful — this decides whether he can actually be hired)
 - OPEN_ANYWHERE: worldwide / anywhere / any country.
 - AMERICAS_OR_LATAM: Americas, LATAM, North & South America, or lists Central American / Latin American countries.
 - CANADA_OK: Canada is explicitly allowed (alone or with the US).
-- US_REMOTE: remote in the US ("Remote - US", "US", a list of US cities or states) but no explicit rule
-  that candidates must live in the US. This is common and NOT a dealbreaker; he may be hired as a contractor.
+- US_REMOTE: remote in the US ("Remote - US", "Remote, USA", a list of US cities, states or US pay zones)
+  but no explicit rule that candidates must live in the US.
 - US_ONLY: the posting EXPLICITLY requires US residence or citizenship ("must reside in the US",
   "US citizens only", "must be located in the United States"). "Authorized to work in the US",
   "no visa sponsorship" or "W-2" alone do NOT count; use US_REMOTE for those.
 - OTHER_REGION_ONLY: limited to Europe, UK, Asia, Australia etc.
 - NOT_STATED: nothing said about where candidates can live.
+
+HIRE PATH (decides whether a Canadian living outside the US can actually take the job. He does NOT hold
+US work authorization, so a full-time US-payroll job is only open to him if the company can hire him
+another way.)
+- OPEN_GLOBAL: posting says it hires in any country, uses an employer of record, or "work from anywhere".
+- CANADA_POSSIBLE: US-anchored, but the posting signals the company also employs people in Canada or in
+  "the countries where we operate", lists Canadian locations or pay, or offers a choice of countries.
+- CONTRACT: freelance, contract, consultant or agency-of-record work, where he could invoice from abroad.
+- US_EMPLOYEE: full-time employee role tied to the US (US city or "Remote, USA" location, US pay zones,
+  401(k), HSA, W-2) with nothing suggesting another country is possible.
+- UNCLEAR: can't tell.
 
 FIT (0-10) = how well Travis's background matches the actual job, ignoring logistics:
 9-10 his exact sweet spot; 7-8 strong; 5-6 decent with gaps; 3-4 stretch; 0-2 wrong job."""
@@ -704,7 +715,7 @@ FIT (0-10) = how well Travis's background matches the actual job, ignoring logis
 SCHEMA = {
     "type": "object",
     "additionalProperties": False,
-    "required": ["lane", "seniority", "remote", "geo", "timezone", "comp_min_usd", "comp_max_usd",
+    "required": ["lane", "seniority", "remote", "geo", "hire_path", "timezone", "comp_min_usd", "comp_max_usd",
                  "comp_text", "location_text", "fit", "headline", "red_flags"],
     "properties": {
         "lane":          {"type": "string", "enum": ["CORE", "ADJACENT", "NOT_A_FIT"]},
@@ -713,6 +724,7 @@ SCHEMA = {
         "remote":        {"type": "string", "enum": ["FULLY_REMOTE", "REMOTE_SOME_TRAVEL", "HYBRID", "ONSITE", "UNCLEAR"],
                           "description": "FULLY_REMOTE only if the posting says remote with no required office days. Any required office days = HYBRID. A city with no mention of remote = ONSITE."},
         "geo":           {"type": "string", "enum": ["OPEN_ANYWHERE", "AMERICAS_OR_LATAM", "CANADA_OK", "US_REMOTE", "US_ONLY", "OTHER_REGION_ONLY", "NOT_STATED"]},
+        "hire_path":     {"type": "string", "enum": ["OPEN_GLOBAL", "CANADA_POSSIBLE", "CONTRACT", "US_EMPLOYEE", "UNCLEAR"]},
         "timezone":      {"type": "string", "enum": ["AMERICAS_HOURS", "PACIFIC_HOURS", "EUROPE_ASIA_HOURS", "NOT_STATED"]},
         "comp_min_usd":  {"type": "integer", "description": "Annual base pay floor in USD, 0 if not stated"},
         "comp_max_usd":  {"type": "integer", "description": "Annual base pay ceiling in USD, 0 if not stated"},
@@ -767,6 +779,11 @@ def compute_score(f):
     hi, lo = f.get("comp_max_usd") or 0, f.get("comp_min_usd") or 0
     if hi and hi < 120000: s -= 2
     elif lo >= 150000 and s >= 5: s += 1
+    # He can't take a US-payroll job without US work authorization. Keep the role visible
+    # (great roles are worth asking about) but it can't outrank roles he can actually be hired for.
+    hp = f.get("hire_path")
+    if hp == "US_EMPLOYEE" and f["geo"] in ("US_REMOTE", "NOT_STATED"): s = min(s, 5)
+    if hp == "CANADA_POSSIBLE" and f["geo"] == "US_REMOTE":          s = min(s, 7)
     return max(0, min(10, s))
 
 def score_one(job, system_text, state):
@@ -810,7 +827,7 @@ def score_one(job, system_text, state):
     job["category"]     = "ADJACENT" if f["lane"] == "ADJACENT" else "CORE"
     job["score_reason"] = f.get("headline", "")
     job["score_method"] = state["model"]
-    job["facts"]        = {k: f.get(k) for k in ("lane", "seniority", "remote", "geo", "timezone", "fit",
+    job["facts"]        = {k: f.get(k) for k in ("lane", "seniority", "remote", "geo", "hire_path", "timezone", "fit",
                                                   "comp_min_usd", "comp_max_usd", "red_flags")}
     if f.get("comp_text") and not job["salary"]: job["salary"] = f["comp_text"]
     if f.get("location_text"): job["where"] = f["location_text"]
@@ -895,7 +912,7 @@ def save_picks(kept, all_jobs, now):
         f = j.get("facts") or {}
         return {"title": j["title"], "company": j["company"], "url": j["url"], "score": j["score"],
                 "salary": j.get("salary", ""), "where": j.get("where") or j.get("location", ""),
-                "remote": f.get("remote"), "geo": f.get("geo"), "why": j.get("score_reason", ""),
+                "remote": f.get("remote"), "geo": f.get("geo"), "hire_path": f.get("hire_path"), "why": j.get("score_reason", ""),
                 "red_flags": f.get("red_flags", []), "added": j.get("added", "")[:10]}
     today = sorted([j for j in kept if j.get("score", 0) >= 7], key=lambda j: -j["score"])[:8]
     cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
@@ -910,7 +927,10 @@ def build_html(new_jobs):
     today = datetime.now().strftime("%A, %B %d, %Y")
     def row(j, color):
         sub = " · ".join(filter(None, [j.get("company"), j.get("where") or j.get("location"), j.get("salary")]))
-        flags = (j.get("facts") or {}).get("red_flags") or []
+        flags = list((j.get("facts") or {}).get("red_flags") or [])
+        hp = (j.get("facts") or {}).get("hire_path")
+        if hp == "US_EMPLOYEE":     flags.insert(0, "Needs US work authorization")
+        if hp == "CANADA_POSSIBLE": flags.insert(0, "US-based; ask the recruiter about hiring in Canada")
         flag_html = f'<br><span style="color:#b36b6b;font-size:11px;">⚑ {"; ".join(flags[:2])}</span>' if flags else ""
         return f"""<tr><td style="padding:12px 10px;border-bottom:1px solid #1c2a3a;">
           <a href="{j['url']}" style="color:{color};font-weight:700;font-size:14px;text-decoration:none;">{htmllib.escape(j['title'])}</a><br>

@@ -34,6 +34,9 @@ WHO HE IS
 HOW TO JUDGE
 Read the whole posting, including the fine print at the bottom about location, pay and remote rules.
 Be direct, not diplomatic. If it's US-only, hybrid, or junior, say so plainly.
+He does NOT hold US work authorization. A full-time "Remote, USA" or US-city employee role only works if
+the company can hire him through a Canadian entity, an employer of record, or as a contractor. Say which
+applies, and if the company hires in Canada, tell him to raise a Canada hire with the recruiter early.
 
 HOW HE WRITES (for the cover letter opening)
 Conversational, dry, a little self-deprecating, allergic to corporate language. Confident without bragging.
@@ -49,7 +52,7 @@ const EVAL_SCHEMA = {
     score: { type: 'integer', description: '0-10 overall worth-applying score' },
     category: { type: 'string', enum: ['CORE', 'ADJACENT', 'WILDCARD'] },
     verdict: { type: 'string', description: '2-3 honest sentences' },
-    can_he_be_hired: { type: 'string', description: 'One sentence on remote, location and timezone eligibility for a Canadian on Central time working outside the US' },
+    can_he_be_hired: { type: 'string', description: 'One or two sentences on whether a Canadian without US work authorization, on Central time, can be hired: US payroll only, Canada possible, contract, or open globally' },
     cover_letter_hook: { type: 'string', description: 'Opening paragraph, 3-4 sentences, in his voice, no em dashes' },
     cv_angle: { type: 'string', description: 'One sentence on how to position his background' },
     talking_points: { type: 'array', items: { type: 'string' } },
