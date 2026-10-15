@@ -850,7 +850,6 @@ def compute_score(f):
     hp, cur, base = f.get("hire_path"), f.get("pay_currency"), f.get("employer_base")
     # What he wants: a US company paying USD, hiring from anywhere or on contract.
     if hp in ("OPEN_GLOBAL", "CONTRACT") and (cur == "USD" or base == "US") and s >= 6: s += 1
-    if cur == "CAD": s -= 1
     if hp == "US_EMPLOYEE" and f["geo"] in ("US_REMOTE", "NOT_STATED"): s = min(s, 5)
     # US role, but the way in is probably a Canadian payroll in CAD. Possible, not what he's after.
     if hp == "CANADA_POSSIBLE" and f["geo"] == "US_REMOTE":          s = min(s, 6)
@@ -955,6 +954,13 @@ def process(stats):
     existing = [j for j in existing if company_ok(j.get("company")) and domain_ok(j.get("url", ""))]
     for j in existing:
         if (j.get("facts") or {}).get("remote") == "UNCLEAR" and j.get("score", 0) > 6: j["score"] = 6
+    before = len(existing) + len(scored)
+    existing = [j for j in existing if assign_board(j)]
+    scored   = [j for j in scored   if assign_board(j)]
+    if before != len(existing) + len(scored):
+        dropped["us_payroll"] = before - len(existing) - len(scored)
+        print(f"  → dropped {dropped['us_payroll']} US-payroll-only roles (no US work authorization)")
+    for j in existing + scored: j["board"] = assign_board(j)
     for j in existing + scored: scrub(j)
     existing_ids = {j.get("id") for j in existing}
     for j in scored:
@@ -976,6 +982,17 @@ def process(stats):
     save_picks(kept, all_jobs, now)
     return kept, all_jobs
 
+def assign_board(j):
+    """Which board a job belongs on. None = don't show it at all.
+    - US board: US/global jobs that pay USD and can plausibly hire him (anywhere, contract, Canada-eligible).
+    - Canada board: anything Canadian — Canadian employer, role in Canada, or CAD pay. Kept visible, ranked
+      only against each other, never mixed into the US ranking.
+    - US-payroll-only roles need US work authorization he doesn't have, so they're not shown."""
+    f = j.get("facts") or {}
+    if f.get("hire_path") == "US_EMPLOYEE":                                 return None
+    if f.get("employer_base") == "CANADA" or f.get("pay_currency") == "CAD": return "canada"
+    return "us"
+
 PICKS_FILE = Path("data/picks.json")
 
 def save_picks(kept, all_jobs, now):
@@ -985,7 +1002,7 @@ def save_picks(kept, all_jobs, now):
         return {"title": j["title"], "company": j["company"], "url": j["url"], "score": j["score"],
                 "salary": j.get("salary", ""), "where": j.get("where") or j.get("location", ""),
                 "remote": f.get("remote"), "geo": f.get("geo"), "hire_path": f.get("hire_path"),
-                "pay_currency": f.get("pay_currency"), "why": j.get("score_reason", ""),
+                "pay_currency": f.get("pay_currency"), "board": j.get("board", "us"), "why": j.get("score_reason", ""),
                 "red_flags": f.get("red_flags", []), "added": j.get("added", "")[:10]}
     today = sorted([j for j in kept if j.get("score", 0) >= 7], key=lambda j: -j["score"])[:8]
     cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
@@ -1014,8 +1031,9 @@ def build_html(new_jobs):
         if not jobs: return ""
         rows = "".join(row(j, color) for j in sorted(jobs, key=lambda j: -j.get("score", 0))[:12])
         return f'<div style="margin-bottom:28px;"><div style="font-size:10px;letter-spacing:3px;color:{color};font-family:monospace;text-transform:uppercase;margin-bottom:12px;">{title}</div><table style="width:100%;border-collapse:collapse;">{rows}</table></div>'
-    core = [j for j in new_jobs if j.get("category") == "CORE"]
-    adj  = [j for j in new_jobs if j.get("category") == "ADJACENT"]
+    ca   = [j for j in new_jobs if j.get("board") == "canada"]
+    core = [j for j in new_jobs if j.get("category") == "CORE" and j.get("board") != "canada"]
+    adj  = [j for j in new_jobs if j.get("category") == "ADJACENT" and j.get("board") != "canada"]
     return f"""<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="margin:0;background:#080c14;font-family:Helvetica,Arial,sans-serif;color:#c8d8e8;">
 <div style="max-width:660px;margin:0 auto;padding:28px 20px;">
   <div style="border-bottom:2px solid #00E5CC;padding-bottom:16px;margin-bottom:24px;">
@@ -1023,8 +1041,9 @@ def build_html(new_jobs):
     <div style="font-size:26px;font-weight:700;color:#fff;">Travis Shorrock</div>
     <div style="font-size:12px;color:#556677;margin-top:4px;">{today} · <a href="https://tshorrock.github.io/job-tracker/" style="color:#00E5CC;">open dashboard</a></div>
   </div>
-  {section("Core Roles", core, "#00E5CC")}
+  {section("Core Roles · US / USD", core, "#00E5CC")}
   {section("Adjacent Roles", adj, "#B983FF")}
+  {section("Canada Roles", ca, "#F5A623")}
 </div></body></html>"""
 
 def send_email(new_jobs):

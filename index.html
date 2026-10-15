@@ -214,6 +214,12 @@ body{
   gap:14px;align-items:start;
 }
 .column{display:flex;flex-direction:column;gap:12px}
+.col-head{display:flex;align-items:center;gap:10px;font-family:monospace;font-size:11px;letter-spacing:3px;
+  text-transform:uppercase;padding:4px 2px 8px;border-bottom:1px solid var(--line,#1c2a3a);margin-bottom:4px}
+.col-head.us{color:var(--teal)}
+.col-head.ca{color:#F5A623}
+.col-count{font-size:10px;opacity:.7;background:rgba(255,255,255,0.05);border-radius:10px;padding:1px 8px}
+.col-empty{color:var(--t5,#445566);font-size:13px;padding:18px 4px;font-style:italic}
 
 /* ── JOB CARD ────────────────────────────────────────────────────────────── */
 .jcard{
@@ -789,7 +795,7 @@ async function boot() {
       fetch('data/jobs.json?t=' + Date.now()),
       fetch('data/meta.json?t=' + Date.now()),
     ]);
-    jobs = await jr.json();
+    jobs = (await jr.json()).filter(j => boardOf(j) !== 'hidden');
     meta = await mr.json();
     try {  // merge Save/Dismiss made on other devices
       const fb = await (await fetch('data/feedback.json?t=' + Date.now())).json();
@@ -861,12 +867,25 @@ function scoreBg(s) {
   return 'rgba(68,85,102,0.12)';
 }
 
+// ── BOARDS ────────────────────────────────────────────────────────────────
+// US board: US/global roles paying USD that can plausibly hire a Canadian.
+// Canada board: Canadian employer / CAD pay — shown side by side, never mixed into the US ranking.
+// US-payroll-only roles (need US work authorization) are not shown at all.
+function boardOf(j) {
+  if (j.board) return j.board;
+  const f = j.facts || {};
+  if (f.hire_path === 'US_EMPLOYEE') return 'hidden';
+  if (f.employer_base === 'CANADA' || f.pay_currency === 'CAD') return 'canada';
+  return 'us';
+}
+
 // ── FILTER LOGIC ──────────────────────────────────────────────────────────
 function getFilteredJobs() {
   const q = (document.getElementById('q').value || '').trim().toLowerCase();
   let r;
   switch (currentFilter) {
     case 'new':       r = jobs.filter(j => !dismissed.has(j.id||'') && isNew(j) && (j.score||0) >= 3); break;
+    // (US-payroll-only roles are filtered out at load — see boot())
     case 'saved':     r = jobs.filter(j => saved.has(j.id||'') && (j.score||0) >= 3); break;
     case 'dismissed': r = jobs.filter(j => dismissed.has(j.id||'')); break;
     default:          r = jobs.filter(j => !dismissed.has(j.id||'') && (j.score||0) >= 3);
@@ -962,8 +981,7 @@ function makeCard(j, idx = 0) {
   const f = j.facts || {};
   const GEO = { OPEN_ANYWHERE: 'Anywhere', AMERICAS_OR_LATAM: 'Americas', CANADA_OK: 'Canada OK', US_REMOTE: 'US remote', US_ONLY: 'US only', OTHER_REGION_ONLY: 'Other region' };
   if (GEO[f.geo]) tags.push(`<span class="tag ${['US_ONLY','OTHER_REGION_ONLY'].includes(f.geo) ? 'tag-flag' : 'tag-geo'}">${GEO[f.geo]}</span>`);
-  if (f.hire_path === 'US_EMPLOYEE') tags.push(`<span class="tag tag-flag" title="Full-time US payroll role. Needs US work authorization.">US work auth</span>`);
-  if (f.hire_path === 'CANADA_POSSIBLE') tags.push(`<span class="tag tag-flag" title="US-based. A Canada hire may be possible, but it would likely be Canadian payroll in CAD.">Canada hire · CAD?</span>`);
+  if (f.hire_path === 'CANADA_POSSIBLE') tags.push(`<span class="tag tag-geo" title="US company. A Canada hire looks possible — likely Canadian payroll in CAD. Raise it with the recruiter early.">Canada route</span>`);
   if (f.pay_currency === 'USD' && ['OPEN_GLOBAL','CONTRACT'].includes(f.hire_path)) tags.push(`<span class="tag tag-geo">USD from anywhere</span>`);
   if (f.pay_currency === 'CAD') tags.push(`<span class="tag tag-flag">CAD pay</span>`);
   if (j.snippet_only) tags.push(`<span class="tag tag-flag" title="Only a short snippet was available, so this score is a guess. Open the posting.">Snippet only</span>`);
@@ -1043,12 +1061,14 @@ function render() {
     return;
   }
 
-  const [col1, col2] = distributeColumns(list);
+  const us = list.filter(j => boardOf(j) === 'us');
+  const ca = list.filter(j => boardOf(j) === 'canada');
   let i = 0;
-  const paintCol = arr => arr.map(j => makeCard(j, i++)).join('');
+  const paint = arr => arr.map(j => makeCard(j, i++)).join('');
+  const head = (label, n, cls) => `<div class="col-head ${cls}">${label}<span class="col-count">${n}</span></div>`;
   root.innerHTML = `
-    <div class="column">${paintCol(col1)}</div>
-    <div class="column">${paintCol(col2)}</div>
+    <div class="column board-us">${head('US &amp; Global · USD', us.length, 'us')}${paint(us) || '<div class="col-empty">Nothing here right now.</div>'}</div>
+    <div class="column board-ca">${head('Canada', ca.length, 'ca')}${paint(ca) || '<div class="col-empty">No Canadian roles on the board.</div>'}</div>
   `;
 }
 
