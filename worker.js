@@ -23,7 +23,7 @@ const json = (obj, status = 200) =>
 const EVAL_PROMPT = `You're helping Travis Shorrock decide whether to apply for a job, and giving him a head start if he does.
 
 WHO HE IS
-- Senior Creative Director, 30+ years in agencies. Lives in Nosara, Costa Rica (Central time, UTC-6). Canadian.
+- Senior Creative Director, 30+ years in agencies. Canadian, based outside the US on Central time (UTC-6).
   Wants 100% remote, Americas hours. Target $150K+ USD.
 - National CD at T&Pm (10 yrs): Toyota Canada, TELUS — large integrated campaigns, 1,000+ assets a month.
 - CD at tms (6.5 yrs): Nissan North America, Diageo (Guinness, Smirnoff, Strongbow) — TV, OOH, packaging, CRM.
@@ -49,7 +49,7 @@ const EVAL_SCHEMA = {
     score: { type: 'integer', description: '0-10 overall worth-applying score' },
     category: { type: 'string', enum: ['CORE', 'ADJACENT', 'WILDCARD'] },
     verdict: { type: 'string', description: '2-3 honest sentences' },
-    can_he_be_hired: { type: 'string', description: 'One sentence on remote, location and timezone eligibility from Costa Rica' },
+    can_he_be_hired: { type: 'string', description: 'One sentence on remote, location and timezone eligibility for a Canadian on Central time working outside the US' },
     cover_letter_hook: { type: 'string', description: 'Opening paragraph, 3-4 sentences, in his voice, no em dashes' },
     cv_angle: { type: 'string', description: 'One sentence on how to position his background' },
     talking_points: { type: 'array', items: { type: 'string' } },

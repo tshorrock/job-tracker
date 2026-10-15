@@ -1,7 +1,7 @@
 # Job Tracker
 
 Daily scraper for remote senior creative leadership roles (CD / ECD / GCD / Head of Creative / Brand / AI creative).
-Runs Mon–Fri at about 4:30am Costa Rica time on GitHub Actions, scores every new role with Claude, updates the
+Runs overnight Mon–Fri (Central time) on GitHub Actions, scores every new role with Claude, updates the
 dashboard and emails a brief.
 
 Dashboard: https://tshorrock.github.io/job-tracker/

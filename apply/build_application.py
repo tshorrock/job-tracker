@@ -191,7 +191,8 @@ def tailor(posting, url, intel, feedback=""):
 
 TOOL_NAMES = r"\b(midjourney|runway|higgsfield|comfyui|claude|kling|veo|elevenlabs|seedance|magnific|n8n|chatgpt|openai|sora|nano banana|weavy|flux|stable diffusion)\b"
 AGE_RE = r"\b(\d{2}\+?\s*(years|yrs)|decades?|a decade|ten years|twenty years|since (19|20)\d\d)\b"
-LOC_RE = r"\b(costa rica|nosara|guanacaste)\b"
+# Place names that must never appear in his materials (encoded so this public file doesn't list them).
+LOC_RE = r"\b(" + __import__("base64").b64decode("Y29zdGEgcmljYXxub3NhcmF8Z3VhbmFjYXN0ZQ==").decode() + r")\b"
 BANNED = r"\b(thrilled|excited|passionate|leverage|delve|i am writing to|great fit|perfect fit)\b"
 
 def lint(t):

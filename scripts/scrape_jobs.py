@@ -132,7 +132,24 @@ BLOCKED_DOMAINS = {
     'starterparadise.com', 'lovestoblog.com', 'iceiy.com', 'hiresociall.com', 'jaabz.com',
     'learn4good.com', 'jooble.org', 'whatjobs.com', 'bebee.com', 'theelitejob.com', 'lensa.com',
     'jobleads.com', 'talent.com', 'gusher.co', 'career.zycto.com', 'wfh.hiresociall.com',
+    'remotejobs.dedyn.io', 'mysmartpros.com', 'vacancyglobalpro.up.railway.app', 'jobgether.com',
 }
+# Reposting agencies: the same role is already in the feed from the real employer, or it's bait.
+BLOCKED_COMPANIES = {'jobgether', 'remote quest jobs', 'vacancy global pro', 'remotepromsp', 'skill',
+                     'remoterush', 'lensa'}
+
+# Where Travis lives stays out of this public repo's text (encoded so the file doesn't list it).
+PRIVATE_RE = re.compile(r"\b(" + base64.b64decode("Y29zdGEgcmljYXxub3NhcmF8Z3VhbmFjYXN0ZQ==").decode() + r")\b( resident)?", re.I)
+
+def scrub(job):
+    if job.get("score_reason"): job["score_reason"] = PRIVATE_RE.sub("his location", job["score_reason"])
+    f = job.get("facts") or {}
+    if f.get("red_flags"): f["red_flags"] = [PRIVATE_RE.sub("his location", x) for x in f["red_flags"]]
+    return job
+
+def company_ok(company):
+    return (company or '').strip().lower() not in BLOCKED_COMPANIES
+
 
 def domain_ok(url):
     try:
@@ -596,8 +613,8 @@ def collect(seen):
     sources = [
         ("Apify LinkedIn", fetch_apify_linkedin, False), ("LinkedIn alerts", fetch_linkedin_email, False),
         ("LinkedIn guest", fetch_linkedin_guest, False), ("Careers pages", fetch_watchlist, True),
-        ("Adzuna", fetch_adzuna, True), ("JSearch", fetch_jsearch, True), ("RemoteOK", fetch_remoteok, True),
-        ("Remotive", fetch_remotive, True), ("We Work Remotely", fetch_wwr, True),
+        ("Adzuna", fetch_adzuna, True), ("JSearch", fetch_jsearch, True),
+        # RemoteOK, Remotive and We Work Remotely were dropped 15 Oct 2026: 1 new role in 15 runs.
     ]
     picked, keys = [], set()
     for label, fn, strict in sources:
@@ -606,6 +623,8 @@ def collect(seen):
         kept = 0
         for j in got:
             if not (j["title"] and j["url"]) or not title_ok(j["title"]):
+                continue
+            if not domain_ok(j["url"]) or not company_ok(j["company"]):
                 continue
             if strict and not is_relevant_title(j["title"]):
                 continue
@@ -623,7 +642,7 @@ def collect(seen):
     return picked, stats
 
 def enrich_linkedin(jobs):
-    need = [j for j in jobs if j["li_id"] and len(j["description"]) < 500][:MAX_LI_FETCHES]
+    need = [j for j in jobs if j["li_id"] and (len(j["description"]) < 500 or not j["company"])][:MAX_LI_FETCHES]
     print(f"\n  Fetching full LinkedIn descriptions for {len(need)} new jobs…")
     ok = 0
     for j in need:
@@ -646,8 +665,8 @@ remote rules are usually near the bottom) and report the facts. Be literal: only
 if the posting says it.
 
 WHO TRAVIS IS
-- Senior Creative Director, 30+ years in agencies. Lives in Nosara, Costa Rica (Central time, UTC-6).
-  Canadian. Wants 100% remote work. Can work Americas business hours (Eastern/Central easily, Pacific fine).
+- Senior Creative Director, 30+ years in agencies. Canadian, based outside the US on Central time (UTC-6).
+   Wants 100% remote work. Can work Americas business hours (Eastern/Central easily, Pacific fine).
 - National CD at T&Pm (10 yrs): Toyota Canada, TELUS — large integrated campaigns, 1,000+ assets/month.
 - CD at tms (6.5 yrs): Nissan North America, Diageo (Guinness, Smirnoff, Strongbow) — TV, OOH, packaging, CRM.
 - Creative Group Head at Havas: Volvo Canada. One TV spot ranked 4th globally for effectiveness by Kantar.
@@ -669,7 +688,7 @@ hybrid, or on-site work, which always win.
 
 GEO RULES (be careful — this decides whether he can actually be hired)
 - OPEN_ANYWHERE: worldwide / anywhere / any country.
-- AMERICAS_OR_LATAM: Americas, LATAM, North & South America, or lists Costa Rica/Mexico etc.
+- AMERICAS_OR_LATAM: Americas, LATAM, North & South America, or lists Central American / Latin American countries.
 - CANADA_OK: Canada is explicitly allowed (alone or with the US).
 - US_REMOTE: remote in the US ("Remote - US", "US", a list of US cities or states) but no explicit rule
   that candidates must live in the US. This is common and NOT a dealbreaker; he may be hired as a contractor.
@@ -785,6 +804,9 @@ def score_one(job, system_text, state):
     # Travis only wants 100% remote: if Claude can't confirm it and the posting never says "remote", drop it.
     if f["remote"] == "UNCLEAR" and not REMOTE_WORD_RE.search(" ".join([job["title"], job["location"], job["description"]])):
         job["score"] = min(job["score"], 2)
+    # Remote not confirmed in the posting: keep it, but it can't outrank roles that are confirmed remote.
+    if f["remote"] == "UNCLEAR":
+        job["score"] = min(job["score"], 6)
     job["category"]     = "ADJACENT" if f["lane"] == "ADJACENT" else "CORE"
     job["score_reason"] = f.get("headline", "")
     job["score_method"] = state["model"]
@@ -841,6 +863,10 @@ def process(stats):
                 if (j.get("facts") or {}).get("remote") not in ("HYBRID", "ONSITE") and not is_clearly_hybrid({
                     "title": j.get("title", ""), "location": j.get("location", ""), "description": j.get("description", "")})]
     if before != len(existing): print(f"  → removed {before - len(existing)} hybrid/on-site jobs already on the dashboard")
+    existing = [j for j in existing if company_ok(j.get("company")) and domain_ok(j.get("url", ""))]
+    for j in existing:
+        if (j.get("facts") or {}).get("remote") == "UNCLEAR" and j.get("score", 0) > 6: j["score"] = 6
+    for j in existing + scored: scrub(j)
     existing_ids = {j.get("id") for j in existing}
     for j in scored:
         if j.get("score", 0) < SCORE_FLOOR: continue
@@ -858,7 +884,25 @@ def process(stats):
     save_json(SEEN_FILE, seen)
     save_json(META_FILE, {"updated": now, "new_count": len(kept), "total_count": len(all_jobs),
                           "model": SCORING_MODEL, "sources": stats, "prefilter_dropped": dropped})
+    save_picks(kept, all_jobs, now)
     return kept, all_jobs
+
+PICKS_FILE = Path("data/picks.json")
+
+def save_picks(kept, all_jobs, now):
+    """Small file the 5am Daily Brief reads: today's best new roles, plus strong ones from the last week."""
+    def slim(j):
+        f = j.get("facts") or {}
+        return {"title": j["title"], "company": j["company"], "url": j["url"], "score": j["score"],
+                "salary": j.get("salary", ""), "where": j.get("where") or j.get("location", ""),
+                "remote": f.get("remote"), "geo": f.get("geo"), "why": j.get("score_reason", ""),
+                "red_flags": f.get("red_flags", []), "added": j.get("added", "")[:10]}
+    today = sorted([j for j in kept if j.get("score", 0) >= 7], key=lambda j: -j["score"])[:8]
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+    week = sorted([j for j in all_jobs if j.get("score", 0) >= 7 and j.get("added", "") >= cutoff and j not in today],
+                  key=lambda j: -j["score"])[:8]
+    save_json(PICKS_FILE, {"updated": now, "new_today": len(kept), "today": [slim(j) for j in today],
+                           "this_week": [slim(j) for j in week]})
 
 # ─── EMAIL ───────────────────────────────────────────────────────────────────
 
@@ -894,7 +938,7 @@ def send_email(new_jobs):
     user, pwd = os.environ.get("SMTP_USER", ""), os.environ.get("SMTP_PASS", "")
     to = os.environ.get("TO_EMAIL", user)
     if not (user and pwd):
-        print("  ⚠ Email skipped — no credentials"); return
+        print("  ⚠ Email skipped — no credentials"); return "skipped: SMTP_USER / SMTP_PASS not set"
     top = [j for j in new_jobs if j.get("score", 0) >= 7]
     msg = MIMEMultipart("alternative")
     msg["Subject"] = f"🎯 Jobs {datetime.now():%b %d} — {len(top)} strong · {len(new_jobs)} new"
@@ -904,8 +948,10 @@ def send_email(new_jobs):
         with smtplib.SMTP("smtp.gmail.com", 587) as s:
             s.starttls(); s.login(user, pwd); s.sendmail(user, to, msg.as_string())
         print(f"  ✓ Email → {to}")
+        return "sent"
     except Exception as e:
         print(f"  ⚠ Email failed: {e}")
+        return f"failed: {type(e).__name__}: {str(e)[:160]}"
 
 # ─── MAIN ────────────────────────────────────────────────────────────────────
 
@@ -913,8 +959,18 @@ if __name__ == "__main__":
     print("=" * 60)
     print(f"Travis Shorrock Job Scraper v2 — {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC")
     print("=" * 60)
+    # GitHub delays scheduled runs by hours, so the workflow fires several times overnight.
+    # Only the first one that starts on a given night does the work.
+    if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+        last = load_json(META_FILE, {}).get("updated", "")
+        try:
+            if last and datetime.now(timezone.utc) - datetime.fromisoformat(last) < timedelta(hours=12):
+                print(f"Already ran at {last} — skipping this scheduled start."); raise SystemExit(0)
+        except ValueError:
+            pass
     new_jobs, _ = process({})
     print("\n[email]")
-    if new_jobs: send_email(new_jobs)
-    else: print("  → No new jobs today, skipping email")
+    status = send_email(new_jobs) if new_jobs else "skipped: no new jobs"
+    print(f"  → {status}")
+    meta = load_json(META_FILE, {}); meta["email"] = status; save_json(META_FILE, meta)
     print("\n✅ Done.")
