@@ -658,6 +658,67 @@ def enrich_linkedin(jobs):
         time.sleep(1.0 + random.random() * 0.6)
     print(f"    {ok}/{len(need)} descriptions fetched")
 
+# ─── FULL POSTINGS FOR SHORT SNIPPETS ────────────────────────────────────────
+# Adzuna gives 500-character teasers and JSearch often gives summaries. The pay, location and
+# "who can we hire" rules sit at the bottom of the real posting, so open it and read the whole thing.
+
+SHORT_DESC     = 2500   # anything shorter than this is treated as a snippet
+MAX_PAGE_FETCH = 80
+
+def _jsonld_posting(soup):
+    for tag in soup.find_all("script", type="application/ld+json"):
+        try: data = json.loads(tag.string or "")
+        except Exception: continue
+        items = data if isinstance(data, list) else data.get("@graph", [data]) if isinstance(data, dict) else []
+        for it in items:
+            if isinstance(it, dict) and "JobPosting" in str(it.get("@type", "")):
+                return it
+    return None
+
+def _posting_text(page):
+    soup = BeautifulSoup(page, "html.parser")
+    jp = _jsonld_posting(soup)
+    parts = []
+    if jp:
+        parts.append(html_to_text(jp.get("description", "")))
+        loc = jp.get("jobLocationType") or ""
+        req = jp.get("applicantLocationRequirements")
+        if loc or req: parts.append(f"Location type: {loc}. Applicant location requirements: {json.dumps(req)}")
+        sal = jp.get("baseSalary")
+        if sal: parts.append(f"Base salary: {json.dumps(sal)}")
+    text = " ".join(p for p in parts if p)
+    if len(text) < 800:   # no structured data: fall back to the page's readable text
+        for t in soup(["script", "style", "nav", "header", "footer", "noscript", "svg", "form"]): t.decompose()
+        main = soup.find("main") or soup.find("article") or soup.body or soup
+        text = main.get_text(" ", strip=True)
+    return text
+
+def fetch_full_posting(url):
+    m = re.search(r"jobs\.lever\.co/([^/]+)/([0-9a-f-]{36})", url or "")
+    try:
+        if m:
+            d = http_json(f"https://api.lever.co/v0/postings/{m.group(1)}/{m.group(2)}")
+            lists = " ".join(f"{x.get('text','')}: {html_to_text(x.get('content',''))}" for x in d.get("lists", []))
+            return " ".join([d.get("descriptionPlain", ""), lists, d.get("additionalPlain", ""),
+                             f"Workplace: {d.get('workplaceType','')}", json.dumps(d.get("salaryRange") or {})])
+        return _posting_text(http_get(url, {"User-Agent": UA, "Accept": "text/html"}, 20))
+    except Exception:
+        return ""
+
+def enrich_short(jobs):
+    need = [j for j in jobs if len(j.get("description") or "") < SHORT_DESC and j.get("url")
+            and "linkedin.com" not in j["url"]][:MAX_PAGE_FETCH]
+    print(f"\n  Opening {len(need)} postings that only came with a snippet…")
+    ok = 0
+    for j in need:
+        text = fetch_full_posting(j["url"])
+        if len(text) > len(j.get("description") or "") + 300:
+            j["description"] = text[:DESC_CHARS]; ok += 1
+        time.sleep(0.5)
+    for j in jobs:
+        j["snippet_only"] = len(j.get("description") or "") < SHORT_DESC
+    print(f"    {ok}/{len(need)} full postings read")
+
 # ─── CLAUDE: EXTRACT FACTS, THEN SCORE IN CODE ───────────────────────────────
 
 PROFILE = """You are screening job postings for Travis Shorrock. Read the WHOLE posting (location, pay and
@@ -674,6 +735,8 @@ WHO TRAVIS IS
 - Hands-on daily with AI creative tools (Midjourney, Runway, Higgsfield, ComfyUI, Claude Code). Strong fit
   for AI-enabled creative, content at scale, brand studios, performance creative, AI companies' brand teams.
 - Target pay: $150K+ USD. Not interested in UX/UI/product design, pure sales, or junior roles.
+- Strongly prefers working for US companies and being paid in US dollars. Being hired through a Canadian
+  entity on Canadian pay (CAD) is a step down for him, not a win.
 
 LANES
 - CORE: senior creative leadership — CD, ECD, GCD, ACD, VP/Head of Creative, Head of Brand/Content,
@@ -704,6 +767,7 @@ another way.)
 - OPEN_GLOBAL: posting says it hires in any country, uses an employer of record, or "work from anywhere".
 - CANADA_POSSIBLE: US-anchored, but the posting signals the company also employs people in Canada or in
   "the countries where we operate", lists Canadian locations or pay, or offers a choice of countries.
+  (Usually means a Canadian payroll in CAD, which he likes less.)
 - CONTRACT: freelance, contract, consultant or agency-of-record work, where he could invoice from abroad.
 - US_EMPLOYEE: full-time employee role tied to the US (US city or "Remote, USA" location, US pay zones,
   401(k), HSA, W-2) with nothing suggesting another country is possible.
@@ -715,7 +779,7 @@ FIT (0-10) = how well Travis's background matches the actual job, ignoring logis
 SCHEMA = {
     "type": "object",
     "additionalProperties": False,
-    "required": ["lane", "seniority", "remote", "geo", "hire_path", "timezone", "comp_min_usd", "comp_max_usd",
+    "required": ["lane", "seniority", "remote", "geo", "hire_path", "employer_base", "pay_currency", "timezone", "comp_min_usd", "comp_max_usd",
                  "comp_text", "location_text", "fit", "headline", "red_flags"],
     "properties": {
         "lane":          {"type": "string", "enum": ["CORE", "ADJACENT", "NOT_A_FIT"]},
@@ -725,6 +789,8 @@ SCHEMA = {
                           "description": "FULLY_REMOTE only if the posting says remote with no required office days. Any required office days = HYBRID. A city with no mention of remote = ONSITE."},
         "geo":           {"type": "string", "enum": ["OPEN_ANYWHERE", "AMERICAS_OR_LATAM", "CANADA_OK", "US_REMOTE", "US_ONLY", "OTHER_REGION_ONLY", "NOT_STATED"]},
         "hire_path":     {"type": "string", "enum": ["OPEN_GLOBAL", "CANADA_POSSIBLE", "CONTRACT", "US_EMPLOYEE", "UNCLEAR"]},
+        "employer_base": {"type": "string", "enum": ["US", "CANADA", "OTHER", "UNCLEAR"], "description": "Where the hiring company is headquartered"},
+        "pay_currency":  {"type": "string", "enum": ["USD", "CAD", "OTHER", "NOT_STATED"], "description": "Currency of the stated pay"},
         "timezone":      {"type": "string", "enum": ["AMERICAS_HOURS", "PACIFIC_HOURS", "EUROPE_ASIA_HOURS", "NOT_STATED"]},
         "comp_min_usd":  {"type": "integer", "description": "Annual base pay floor in USD, 0 if not stated"},
         "comp_max_usd":  {"type": "integer", "description": "Annual base pay ceiling in USD, 0 if not stated"},
@@ -781,15 +847,20 @@ def compute_score(f):
     elif lo >= 150000 and s >= 5: s += 1
     # He can't take a US-payroll job without US work authorization. Keep the role visible
     # (great roles are worth asking about) but it can't outrank roles he can actually be hired for.
-    hp = f.get("hire_path")
+    hp, cur, base = f.get("hire_path"), f.get("pay_currency"), f.get("employer_base")
+    # What he wants: a US company paying USD, hiring from anywhere or on contract.
+    if hp in ("OPEN_GLOBAL", "CONTRACT") and (cur == "USD" or base == "US") and s >= 6: s += 1
+    if cur == "CAD": s -= 1
     if hp == "US_EMPLOYEE" and f["geo"] in ("US_REMOTE", "NOT_STATED"): s = min(s, 5)
-    if hp == "CANADA_POSSIBLE" and f["geo"] == "US_REMOTE":          s = min(s, 7)
+    # US role, but the way in is probably a Canadian payroll in CAD. Possible, not what he's after.
+    if hp == "CANADA_POSSIBLE" and f["geo"] == "US_REMOTE":          s = min(s, 6)
     return max(0, min(10, s))
 
 def score_one(job, system_text, state):
     user = (f"JOB POSTING\nTitle: {job['title']}\nCompany: {job['company']}\nLocation (as listed): {job['location']}\n"
             f"Pay (as listed): {job['salary']}\nLinkedIn seniority: {job.get('li_seniority','')}\n"
-            f"Source: {job['source']}\n\nDescription:\n{job['description'] or '(no description available — judge from the title only and use NOT_STATED / UNCLEAR)'}")
+            f"Source: {job['source']}\n"
+            f"{'NOTE: only a short snippet of this posting was available. Use NOT_STATED / UNCLEAR for anything it does not say.' if job.get('snippet_only') else 'Full posting below. Read all of it, including the fine print at the end.'}\n\nDescription:\n{job['description'] or '(no description available — judge from the title only and use NOT_STATED / UNCLEAR)'}")
     for attempt in range(3):
         try:
             f = call_claude(system_text, user, state["model"], state["structured"])
@@ -827,7 +898,7 @@ def score_one(job, system_text, state):
     job["category"]     = "ADJACENT" if f["lane"] == "ADJACENT" else "CORE"
     job["score_reason"] = f.get("headline", "")
     job["score_method"] = state["model"]
-    job["facts"]        = {k: f.get(k) for k in ("lane", "seniority", "remote", "geo", "hire_path", "timezone", "fit",
+    job["facts"]        = {k: f.get(k) for k in ("lane", "seniority", "remote", "geo", "hire_path", "employer_base", "pay_currency", "timezone", "fit",
                                                   "comp_min_usd", "comp_max_usd", "red_flags")}
     if f.get("comp_text") and not job["salary"]: job["salary"] = f["comp_text"]
     if f.get("location_text"): job["where"] = f["location_text"]
@@ -856,6 +927,7 @@ def process(stats):
     raw, stats = collect(seen)
     print(f"\n  → {len(raw)} new candidates across all sources")
     enrich_linkedin(raw)
+    enrich_short(raw)
 
     cand, dropped = [], {"hybrid": 0, "us_only": 0}
     for j in raw:
@@ -912,7 +984,8 @@ def save_picks(kept, all_jobs, now):
         f = j.get("facts") or {}
         return {"title": j["title"], "company": j["company"], "url": j["url"], "score": j["score"],
                 "salary": j.get("salary", ""), "where": j.get("where") or j.get("location", ""),
-                "remote": f.get("remote"), "geo": f.get("geo"), "hire_path": f.get("hire_path"), "why": j.get("score_reason", ""),
+                "remote": f.get("remote"), "geo": f.get("geo"), "hire_path": f.get("hire_path"),
+                "pay_currency": f.get("pay_currency"), "why": j.get("score_reason", ""),
                 "red_flags": f.get("red_flags", []), "added": j.get("added", "")[:10]}
     today = sorted([j for j in kept if j.get("score", 0) >= 7], key=lambda j: -j["score"])[:8]
     cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
@@ -930,7 +1003,7 @@ def build_html(new_jobs):
         flags = list((j.get("facts") or {}).get("red_flags") or [])
         hp = (j.get("facts") or {}).get("hire_path")
         if hp == "US_EMPLOYEE":     flags.insert(0, "Needs US work authorization")
-        if hp == "CANADA_POSSIBLE": flags.insert(0, "US-based; ask the recruiter about hiring in Canada")
+        if hp == "CANADA_POSSIBLE": flags.insert(0, "US-based; Canada hire possible but likely CAD pay")
         flag_html = f'<br><span style="color:#b36b6b;font-size:11px;">⚑ {"; ".join(flags[:2])}</span>' if flags else ""
         return f"""<tr><td style="padding:12px 10px;border-bottom:1px solid #1c2a3a;">
           <a href="{j['url']}" style="color:{color};font-weight:700;font-size:14px;text-decoration:none;">{htmllib.escape(j['title'])}</a><br>

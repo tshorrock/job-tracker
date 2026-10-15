@@ -25,8 +25,10 @@ Dashboard: https://tshorrock.github.io/job-tracker/
 4. The score is calculated in code from those facts (see `compute_score`), so it's consistent and explainable.
    Hybrid/on-site, US-only and junior roles are capped low; Americas/worldwide-open and $150K+ get a bump.
    Claude also reports a hire path. Full-time US-payroll roles ("Remote, USA") need US work authorization,
-   so they're capped at 5 and tagged *US work auth*. US-based roles at companies that also hire in Canada are
-   capped at 7 and tagged *Ask re: Canada*.
+   so they're capped at 5 and tagged *US work auth*. US-based roles where the likely route is a Canadian
+   payroll in CAD are capped at 6. US companies paying USD that hire from anywhere or on contract get a bump.
+   Postings that only arrive as a snippet (Adzuna, some JSearch) are opened and read in full before scoring;
+   if that fails the card is tagged *Snippet only*.
 5. Your ☆ Save / ✕ Dismiss clicks are written to `data/feedback.json` (via the worker) and fed to the scorer as examples.
 
 ## Settings you can change without code

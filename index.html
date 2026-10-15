@@ -963,7 +963,10 @@ function makeCard(j, idx = 0) {
   const GEO = { OPEN_ANYWHERE: 'Anywhere', AMERICAS_OR_LATAM: 'Americas', CANADA_OK: 'Canada OK', US_REMOTE: 'US remote', US_ONLY: 'US only', OTHER_REGION_ONLY: 'Other region' };
   if (GEO[f.geo]) tags.push(`<span class="tag ${['US_ONLY','OTHER_REGION_ONLY'].includes(f.geo) ? 'tag-flag' : 'tag-geo'}">${GEO[f.geo]}</span>`);
   if (f.hire_path === 'US_EMPLOYEE') tags.push(`<span class="tag tag-flag" title="Full-time US payroll role. Needs US work authorization.">US work auth</span>`);
-  if (f.hire_path === 'CANADA_POSSIBLE') tags.push(`<span class="tag tag-geo" title="US-based, but the company hires in other countries. Ask the recruiter about a Canada hire.">Ask re: Canada</span>`);
+  if (f.hire_path === 'CANADA_POSSIBLE') tags.push(`<span class="tag tag-flag" title="US-based. A Canada hire may be possible, but it would likely be Canadian payroll in CAD.">Canada hire · CAD?</span>`);
+  if (f.pay_currency === 'USD' && ['OPEN_GLOBAL','CONTRACT'].includes(f.hire_path)) tags.push(`<span class="tag tag-geo">USD from anywhere</span>`);
+  if (f.pay_currency === 'CAD') tags.push(`<span class="tag tag-flag">CAD pay</span>`);
+  if (j.snippet_only) tags.push(`<span class="tag tag-flag" title="Only a short snippet was available, so this score is a guess. Open the posting.">Snippet only</span>`);
   if (f.hire_path === 'CONTRACT') tags.push(`<span class="tag tag-geo">Contract</span>`);
   if (f.remote === 'REMOTE_SOME_TRAVEL') tags.push(`<span class="tag tag-flag">Travel</span>`);
   if (f.remote === 'UNCLEAR') tags.push(`<span class="tag tag-flag">Remote unconfirmed</span>`);
