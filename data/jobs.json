@@ -1,5 +1,83 @@
 [
   {
+    "title": "Chief Marketing Officer",
+    "company": "hussh \ud83e\udd2b",
+    "url": "https://www.linkedin.com/jobs/view/4479318320/",
+    "description": "Hussh is not entering categories. We are building them.\n\nCategory one: personal private agents. Private Agent One \u2014 a private agent for every person. It works only for its owner, earns for its owner, and moves only with its owner's consent. Your information belongs to you.\n\nCategory two: personal and business supercomputers, for everybody, at the lowest possible cost. Supercomputing has been a privilege of institutions. We are making it a household utility \u2014 beginning with Puppy One.\n\nCategory three \u2014 the new one, and the most disruptive: information as a subscription. Information as a service, offered by the owner of the information. Today, other people sell your information and keep the money. We are building the world where the owner sells it \u2014 as a subscription, with consent, at their price \u2014 and businesses subscribe to the person. Around these categories sit the products that carry them: Private Agent One, the Hussh money app, Puppy One, Hussh Shop, and the marketplace where owners and businesses meet directly.\n\nNone of these categories has a name the world uses yet. Giving them their names \u2014 and making the world repeat them \u2014 is this job.\n\nWe are hiring our first Chief Marketing Officer to build marketing at Hussh from zero to one. You will name the categories, build the brand, and lead go-to-market across every product line. You will work directly with the founder. There is no department to inherit, no playbook to run, and no committee to hide behind. There is a story the world has not heard yet, and it is yours to tell.\n\nYou have built a marketing function from nothing before. You have created a category, or carried one into the world. You write and think in few, exact words. You believe the product is the marketing.\n\nStart by studying the work. Read hushh.ai end to end. Study our public code on GitHub. If the three categories pull at you, apply \u2014 and show us, in your application, the category you built and how you named it.\n\nEvery applicant is invited to join the Hussh network and claim their star \u2014 whether or not we work together, your information should work for you.",
+    "salary": "",
+    "location": "Remote OK \u00b7 San Francisco, California, United States",
+    "source": "LinkedIn+",
+    "posted": "2026-10-16T03:55:55",
+    "li_id": "4479318320",
+    "snippet_only": true,
+    "score": 5,
+    "age_days": 0,
+    "category": "CORE",
+    "score_reason": "A CMO-from-zero role at an unproven, grandiose startup is a big stretch from Travis's agency CD background.",
+    "score_method": "claude-sonnet-5",
+    "facts": {
+      "lane": "CORE",
+      "seniority": "EXECUTIVE",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "US",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 5,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "No stated compensation",
+        "Very early-stage, pre-category startup with high risk",
+        "Role is full marketing/GTM function, not pure creative leadership"
+      ]
+    },
+    "where": "Remote OK or San Francisco, CA",
+    "board": "us",
+    "id": "42fc70bd5299",
+    "added": "2026-10-16T07:16:03.836245+00:00"
+  },
+  {
+    "title": "Executive Creative Director",
+    "company": "Weber Shandwick",
+    "url": "https://www.linkedin.com/jobs/view/4479180412/",
+    "description": "",
+    "salary": "",
+    "location": "New York, NY \u00b7 Remote (LinkedIn label)",
+    "source": "LinkedIn",
+    "posted": "2026-10-15",
+    "li_id": "4479180412",
+    "snippet_only": true,
+    "score": 8,
+    "age_days": 1,
+    "category": "CORE",
+    "score_reason": "ECD title at a major US agency network is squarely in his lane but the listing has no details to confirm remote or pay terms.",
+    "score_method": "claude-sonnet-5",
+    "facts": {
+      "lane": "CORE",
+      "seniority": "EXECUTIVE",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "US",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 8,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "No job description available to verify role scope",
+        "Pay not stated",
+        "Hire path and true remote policy unclear"
+      ]
+    },
+    "where": "New York, NY; Remote label on LinkedIn",
+    "board": "us",
+    "id": "25211261f5fb",
+    "added": "2026-10-16T07:16:03.836245+00:00"
+  },
+  {
     "title": "Principal, Creative Director - Campaigns",
     "company": "Deel",
     "url": "https://www.linkedin.com/jobs/view/4477300772/",
@@ -1531,7 +1609,9 @@
     "id": "08909243e598",
     "added": "2026-10-13T17:44:47.645737+00:00",
     "snippet_only": false,
-    "board": "us"
+    "board": "us",
+    "repost_count": 1,
+    "last_repost": "2026-10-16"
   },
   {
     "title": "Creative Director",
@@ -6004,7 +6084,9 @@
     "score_reason": "Senior creative leadership at innovative music/tech platform with global reach, strong creative scope across brand and product\u2014remote work unstated but no location restrictions mentioned, aligns perfectly with Travis's integrated campaign and AI-forward background.",
     "score_method": "claude",
     "snippet_only": false,
-    "board": "us"
+    "board": "us",
+    "repost_count": 1,
+    "last_repost": "2026-10-16"
   },
   {
     "title": "VP - Experience Strategy",

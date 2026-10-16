@@ -1,7 +1,31 @@
 {
-  "updated": "2026-10-15T17:43:19.443849+00:00",
+  "updated": "2026-10-16T07:16:03.836245+00:00",
   "new_today": 2,
   "today": [
+    {
+      "title": "Executive Creative Director",
+      "company": "Weber Shandwick",
+      "url": "https://www.linkedin.com/jobs/view/4479180412/",
+      "score": 8,
+      "salary": "",
+      "where": "New York, NY; Remote label on LinkedIn",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "pay_currency": "NOT_STATED",
+      "board": "us",
+      "age_days": 1,
+      "repost_count": 0,
+      "why": "ECD title at a major US agency network is squarely in his lane but the listing has no details to confirm remote or pay terms.",
+      "red_flags": [
+        "No job description available to verify role scope",
+        "Pay not stated",
+        "Hire path and true remote policy unclear"
+      ],
+      "added": "2026-10-16"
+    }
+  ],
+  "this_week": [
     {
       "title": "Principal, Creative Director - Campaigns",
       "company": "Deel",
@@ -14,7 +38,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 0,
+      "age_days": 1,
       "repost_count": 0,
       "why": "Strong CD-level title match but almost no details, and it's US-remote only with unclear hiring path for a non-US-authorized Canadian.",
       "red_flags": [
@@ -36,7 +60,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 0,
+      "age_days": 1,
       "repost_count": 0,
       "why": "Strong match for his performance-creative and AI-tooling background, but pay and hire path are unknown and the agency is a small pet-industry shop.",
       "red_flags": [
@@ -45,9 +69,7 @@
         "No stated geo or hiring-path flexibility for a non-US-based hire"
       ],
       "added": "2026-10-15"
-    }
-  ],
-  "this_week": [
+    },
     {
       "title": "Creative Director, Art & Film",
       "company": "Microsoft",
@@ -60,7 +82,7 @@
       "hire_path": null,
       "pay_currency": null,
       "board": "us",
-      "age_days": 0,
+      "age_days": 1,
       "repost_count": 0,
       "why": "A textbook senior agency CD role (integrated film/ad campaigns) at Microsoft, tagged remote with strong pay, but based in a specific US city which may mean hidden hybrid expectations.",
       "red_flags": [
@@ -82,7 +104,7 @@
       "hire_path": null,
       "pay_currency": null,
       "board": "us",
-      "age_days": 0,
+      "age_days": 1,
       "repost_count": 0,
       "why": "Strong CD role leveraging AI-driven brand campaigns, but tied to a specific US city salary band raises remote/geo questions.",
       "red_flags": [
@@ -104,7 +126,7 @@
       "hire_path": null,
       "pay_currency": null,
       "board": "us",
-      "age_days": 1,
+      "age_days": 2,
       "repost_count": 0,
       "why": "Strong pay and senior CD scope but it's a B2B/enterprise art-direction role at a tech company rather than classic brand/campaign leadership.",
       "red_flags": [
@@ -126,7 +148,7 @@
       "hire_path": null,
       "pay_currency": null,
       "board": "us",
-      "age_days": 1,
+      "age_days": 2,
       "repost_count": 0,
       "why": "Strong senior CD role matching his agency leadership background, though pay and geo rules are unstated and cultural/sports/fashion focus is a slight stretch.",
       "red_flags": [
@@ -148,7 +170,7 @@
       "hire_path": null,
       "pay_currency": null,
       "board": "us",
-      "age_days": 1,
+      "age_days": 2,
       "repost_count": 0,
       "why": "Strong pay and remote brand-creative leadership role, but company is a sugar-dating platform which may be a reputational concern.",
       "red_flags": [
@@ -170,7 +192,7 @@
       "hire_path": null,
       "pay_currency": null,
       "board": "us",
-      "age_days": 1,
+      "age_days": 2,
       "repost_count": 0,
       "why": "Strong CD marketing/brand role fully remote in US, close to Travis's exact experience and pay target.",
       "red_flags": [
@@ -179,50 +201,6 @@
         "Pay slightly below his stated minimum at low end"
       ],
       "added": "2026-10-15"
-    },
-    {
-      "title": "Creative Director",
-      "company": "BBDO Worldwide",
-      "url": "https://www.linkedin.com/jobs/view/4478121773/",
-      "score": 7,
-      "salary": "",
-      "where": "Los Angeles, CA; remote label, no office days stated",
-      "remote": "FULLY_REMOTE",
-      "geo": "US_REMOTE",
-      "hire_path": null,
-      "pay_currency": null,
-      "board": "us",
-      "age_days": 2,
-      "repost_count": 0,
-      "why": "Classic agency CD role at a top network matches his exact background, but missing details make it a gamble.",
-      "red_flags": [
-        "No job description to verify actual remote policy or scope",
-        "No compensation information provided",
-        "LinkedIn remote tag could still mean hybrid in practice"
-      ],
-      "added": "2026-10-13"
-    },
-    {
-      "title": "Director of Brand & Creative Marketing",
-      "company": "Reflex Media, Inc.",
-      "url": "https://www.adzuna.com/details/5925323496?utm_medium=api&utm_source=757a890e",
-      "score": 7,
-      "salary": "$126K\u2013$126K/yr",
-      "where": "Remote (U.S.)",
-      "remote": "FULLY_REMOTE",
-      "geo": "US_REMOTE",
-      "hire_path": null,
-      "pay_currency": null,
-      "board": "us",
-      "age_days": 2,
-      "repost_count": 0,
-      "why": "Strong remote U.S. creative leadership role with solid pay, but framed as a hands-on operator rather than traditional CD oversight.",
-      "red_flags": [
-        "Conflicting pay data ($126K vs $150-210K)",
-        "Role explicitly says 'not a traditional management role' suggesting heavy individual execution",
-        "US-based remote only, no mention of Canada/Latin America eligibility"
-      ],
-      "added": "2026-10-13"
     }
   ]
 }
