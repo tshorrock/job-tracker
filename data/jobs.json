@@ -1,5 +1,83 @@
 [
   {
+    "title": "SVP, Experience Strategy",
+    "company": "PROPELLER",
+    "url": "https://www.linkedin.com/jobs/view/4444020718/",
+    "description": "",
+    "salary": "",
+    "location": "Summit, NJ \u00b7 Remote (LinkedIn label)",
+    "source": "LinkedIn",
+    "posted": "2026-10-18",
+    "li_id": "4444020718",
+    "snippet_only": true,
+    "score": 4,
+    "age_days": 1,
+    "category": "ADJACENT",
+    "score_reason": "Experience strategy SVP title suggests strategy not creative leadership, and almost no details to judge fit or logistics.",
+    "score_method": "claude-sonnet-5",
+    "facts": {
+      "lane": "ADJACENT",
+      "seniority": "EXECUTIVE",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "US",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 4,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "No job description available, only title",
+        "Strategy-focused role, not hands-on creative direction",
+        "Location and hire path unclear beyond city + remote tag"
+      ]
+    },
+    "where": "Summit, NJ; LinkedIn remote tag",
+    "board": "us",
+    "id": "501b3c26c308",
+    "added": "2026-10-19T07:54:17.446840+00:00"
+  },
+  {
+    "title": "Creative Technologist",
+    "company": "Shields Group Search",
+    "url": "https://www.linkedin.com/jobs/view/4479629239/",
+    "description": "",
+    "salary": "",
+    "location": "San Francisco Bay Area \u00b7 Remote (LinkedIn label)",
+    "source": "LinkedIn",
+    "posted": "2026-10-18",
+    "li_id": "4479629239",
+    "snippet_only": true,
+    "score": 4,
+    "age_days": 1,
+    "category": "CORE",
+    "score_reason": "Title-only posting with no seniority, pay, or location rules to evaluate real fit.",
+    "score_method": "claude-sonnet-5",
+    "facts": {
+      "lane": "CORE",
+      "seniority": "MID",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "UNCLEAR",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 5,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "No job description available to assess scope or seniority",
+        "No compensation or geo eligibility stated",
+        "Recruiting firm listing, employer and hire path unclear"
+      ]
+    },
+    "where": "San Francisco Bay Area, remote per LinkedIn",
+    "board": "us",
+    "id": "a2d6d192121a",
+    "added": "2026-10-19T07:54:17.446840+00:00"
+  },
+  {
     "title": "Chief Marketing Officer",
     "company": "hussh \ud83e\udd2b",
     "url": "https://www.linkedin.com/jobs/view/4479318320/",
@@ -7166,8 +7244,8 @@
     "score_method": "claude",
     "snippet_only": false,
     "board": "us",
-    "repost_count": 1,
-    "last_repost": "2026-10-15"
+    "repost_count": 2,
+    "last_repost": "2026-10-19"
   },
   {
     "title": "Creative Director",
