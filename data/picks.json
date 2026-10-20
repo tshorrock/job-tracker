@@ -1,7 +1,8 @@
 {
-  "updated": "2026-10-20T07:44:01.371139+00:00",
-  "new_today": 2,
-  "today": [
+  "updated": "2026-10-20T19:30:42.893324+00:00",
+  "new_today": 1,
+  "today": [],
+  "this_week": [
     {
       "title": "AI Creative Director",
       "company": "Superside",
@@ -14,7 +15,7 @@
       "hire_path": "OPEN_GLOBAL",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 0,
+      "age_days": 1,
       "repost_count": 0,
       "why": "Strong creative-leadership and AI-tool fit, but pay and employer details are completely undisclosed.",
       "red_flags": [
@@ -23,9 +24,7 @@
         "Very large globally distributed team (700+ in 60 countries) may mean less hands-on creative control"
       ],
       "added": "2026-10-20"
-    }
-  ],
-  "this_week": [
+    },
     {
       "title": "Executive Creative Director",
       "company": "Weber Shandwick",
@@ -177,28 +176,6 @@
         "No pay listed",
         "Geo eligibility not stated\u2014could require US residency in practice",
         "Culture/sports/fashion/youth focus differs somewhat from his automotive/CPG background"
-      ],
-      "added": "2026-10-15"
-    },
-    {
-      "title": "Director of Brand & Creative Marketing",
-      "company": "Reflex Media",
-      "url": "https://www.adzuna.com/details/5927284191?utm_medium=api&utm_source=757a890e",
-      "score": 7,
-      "salary": "$150K\u2013$210K/yr",
-      "where": "Remote (U.S.)",
-      "remote": "FULLY_REMOTE",
-      "geo": "US_REMOTE",
-      "hire_path": null,
-      "pay_currency": null,
-      "board": "us",
-      "age_days": 6,
-      "repost_count": 0,
-      "why": "Strong pay and remote brand-creative leadership role, but company is a sugar-dating platform which may be a reputational concern.",
-      "red_flags": [
-        "Company 'Seeking' is a sugar-dating/adult-adjacent platform, potential brand reputation concern",
-        "Role described as hands-on 'operator', not pure strategic leadership",
-        "No explicit mention of timezone expectations despite remote US label"
       ],
       "added": "2026-10-15"
     }

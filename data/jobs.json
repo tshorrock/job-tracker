@@ -1,5 +1,44 @@
 [
   {
+    "title": "VP, Associate Creative Director, Art",
+    "company": "Biolumina",
+    "url": "https://www.linkedin.com/jobs/view/4480287605/",
+    "description": "",
+    "salary": "",
+    "location": "New York, NY \u00b7 Remote (LinkedIn label)",
+    "source": "LinkedIn",
+    "posted": "2026-10-19",
+    "li_id": "4480287605",
+    "snippet_only": true,
+    "score": 6,
+    "age_days": 1,
+    "category": "CORE",
+    "score_reason": "Senior creative leadership title fits, but healthcare/pharma niche and thin posting details leave too much unclear.",
+    "score_method": "claude-sonnet-5",
+    "facts": {
+      "lane": "CORE",
+      "seniority": "SENIOR_LEADER",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "US",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 6,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "No job description provided\u2014can't verify scope or remote policy",
+        "Likely pharma/healthcare agency, a different vertical than his ad background",
+        "No pay or hire-path info to assess feasibility for a Canadian hire"
+      ]
+    },
+    "where": "New York, NY or remote",
+    "board": "us",
+    "id": "19d95b2f056e",
+    "added": "2026-10-20T19:30:42.893324+00:00"
+  },
+  {
     "title": "AI Creative Director",
     "company": "Superside",
     "url": "https://www.linkedin.com/jobs/view/4480238163/",
@@ -5456,7 +5495,9 @@
     "id": "e3051f258058",
     "added": "2026-09-29T16:39:42.532286+00:00",
     "snippet_only": false,
-    "board": "us"
+    "board": "us",
+    "repost_count": 1,
+    "last_repost": "2026-10-20"
   },
   {
     "title": "Creative Director",
