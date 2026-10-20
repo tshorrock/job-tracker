@@ -119,9 +119,12 @@
   ],
   "tools": [
    "Midjourney",
+   "Seedream",
+   "Nano Banana",
    "Seedance",
-   "Higgsfield",
+   "Sora",
    "Runway",
+   "Higgsfield",
    "ComfyUI",
    "ElevenLabs",
    "Claude Code",
