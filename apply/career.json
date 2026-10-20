@@ -119,12 +119,12 @@
   ],
   "tools": [
    "Midjourney",
-   "Runway",
-   "Kling",
-   "Veo",
+   "Seedance",
    "Higgsfield",
+   "Runway",
    "ComfyUI",
    "ElevenLabs",
+   "Claude Code",
    "Adobe Creative Suite",
    "Figma"
   ]
