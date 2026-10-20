@@ -104,7 +104,8 @@
    "Generative image & video production",
    "Automated content pipelines",
    "Prompt & model direction",
-   "AI-powered creative workflows"
+   "AI-powered creative workflows",
+   "Model APIs & automation"
   ],
   "leadership": [
    "Building creative teams",
@@ -119,6 +120,7 @@
   ],
   "tools": [
    "Midjourney",
+   "GPT Image",
    "Seedream",
    "Gemini",
    "Seedance",
@@ -127,6 +129,7 @@
    "Higgsfield",
    "ComfyUI",
    "ElevenLabs",
+   "ChatGPT",
    "Claude Code",
    "Adobe Creative Suite",
    "Figma"
