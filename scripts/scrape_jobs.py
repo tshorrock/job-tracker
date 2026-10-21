@@ -886,7 +886,7 @@ def feedback_block():
 
 def call_claude(system_text, user_text, model, structured=True):
     api_key = os.environ.get("ANTHROPIC_API_KEY", "")
-    body = {"model": model, "max_tokens": 800,
+    body = {"model": model, "max_tokens": 2000,   # 800 truncated long answers mid-JSON ("Unterminated string")
             "system": [{"type": "text", "text": system_text, "cache_control": {"type": "ephemeral"}}],
             "messages": [{"role": "user", "content": user_text}]}
     if structured:
