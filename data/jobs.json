@@ -625,7 +625,7 @@
     "posted": "2026-10-14",
     "li_id": "4479719151",
     "li_seniority": "Director",
-    "score": 7,
+    "score": 2,
     "age_days": 1,
     "category": "CORE",
     "score_reason": "Strong senior CD role matching his agency leadership background, though pay and geo rules are unstated and cultural/sports/fashion focus is a slight stretch.",
@@ -633,13 +633,14 @@
     "facts": {
       "lane": "CORE",
       "seniority": "SENIOR_LEADER",
-      "remote": "FULLY_REMOTE",
+      "remote": "ONSITE",
       "geo": "NOT_STATED",
       "timezone": "NOT_STATED",
       "fit": 7,
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
+        "LinkedIn header: Burbank, CA (On-site)",
         "No pay listed",
         "Geo eligibility not stated\u2014could require US residency in practice",
         "Culture/sports/fashion/youth focus differs somewhat from his automotive/CPG background"
