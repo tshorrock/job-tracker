@@ -96,18 +96,6 @@
     "salary": ""
   },
   {
-    "title": "AI-Enabled Creative Director (US-Based)",
-    "company": "Designity",
-    "url": "https://www.linkedin.com/jobs/view/4478900555/",
-    "source": "LinkedIn+",
-    "score": 3,
-    "score_method": "fallback",
-    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
-    "facts": null,
-    "where": null,
-    "salary": "$90K\u2013$110K/yr"
-  },
-  {
     "title": "Creative Director",
     "company": "Motive",
     "url": "https://www.linkedin.com/jobs/view/4479440155/",
@@ -132,6 +120,18 @@
     "salary": "$230,000.00/yr - $270,000.00/yr"
   },
   {
+    "title": "Creative Director - Creative Technology / Experiential",
+    "company": "Tomorrow Recruitment Ltd | B Corp\u2122",
+    "url": "https://www.linkedin.com/jobs/view/4479429803/",
+    "source": "LinkedIn",
+    "score": 3,
+    "score_method": "fallback",
+    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
+    "facts": null,
+    "where": null,
+    "salary": "$170,000.00/yr - $220,000.00/yr"
+  },
+  {
     "title": "Creative Director",
     "company": "Avatara Personal Care, LLC",
     "url": "https://www.linkedin.com/jobs/view/4480783221/",
@@ -147,18 +147,6 @@
     "title": "Director, Brand Activation",
     "company": "Equinix",
     "url": "https://www.linkedin.com/jobs/view/4471773504/",
-    "source": "LinkedIn",
-    "score": 3,
-    "score_method": "fallback",
-    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
-    "facts": null,
-    "where": null,
-    "salary": ""
-  },
-  {
-    "title": "Retail Art Director, NA Brand Creative (Freelance, 1 year Contract)",
-    "company": "lululemon",
-    "url": "https://www.linkedin.com/jobs/view/4481142212/",
     "source": "LinkedIn",
     "score": 3,
     "score_method": "fallback",
@@ -216,93 +204,9 @@
     "salary": ""
   },
   {
-    "title": "Group Creative Director, Art and Design",
-    "company": "PASSPORT BRAND DESIGN",
-    "url": "https://www.linkedin.com/jobs/view/4482022030/",
-    "source": "LinkedIn",
-    "score": 3,
-    "score_method": "fallback",
-    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
-    "facts": null,
-    "where": null,
-    "salary": ""
-  },
-  {
-    "title": "Senior Director, Brand & Creative",
-    "company": "Firebirds Wood Fired Grill",
-    "url": "https://www.linkedin.com/jobs/view/4481760443/",
-    "source": "LinkedIn",
-    "score": 3,
-    "score_method": "fallback",
-    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
-    "facts": null,
-    "where": null,
-    "salary": ""
-  },
-  {
-    "title": "Head, Editorial Content & Brand Storytelling",
-    "company": "Lafayette 148 New York",
-    "url": "https://www.linkedin.com/jobs/view/4481789505/",
-    "source": "LinkedIn",
-    "score": 3,
-    "score_method": "fallback",
-    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
-    "facts": null,
-    "where": null,
-    "salary": ""
-  },
-  {
     "title": "Senior Director, Marketing & Communications",
     "company": "Top Aces",
     "url": "https://www.linkedin.com/jobs/view/4481789713/",
-    "source": "LinkedIn",
-    "score": 3,
-    "score_method": "fallback",
-    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
-    "facts": null,
-    "where": null,
-    "salary": ""
-  },
-  {
-    "title": "Vice President, Marketing",
-    "company": "Cosmetic Physician Partners",
-    "url": "https://www.linkedin.com/jobs/view/4482127764/",
-    "source": "LinkedIn",
-    "score": 3,
-    "score_method": "fallback",
-    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
-    "facts": null,
-    "where": null,
-    "salary": ""
-  },
-  {
-    "title": "Head of Digital",
-    "company": "INK Entertainment Group",
-    "url": "https://www.linkedin.com/jobs/view/4480729245/",
-    "source": "LinkedIn",
-    "score": 3,
-    "score_method": "fallback",
-    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
-    "facts": null,
-    "where": null,
-    "salary": ""
-  },
-  {
-    "title": "Vice-pr\u00e9sident(e) du marketing",
-    "company": "Cosmetic Physician Partners",
-    "url": "https://www.linkedin.com/jobs/view/4482139106/",
-    "source": "LinkedIn",
-    "score": 3,
-    "score_method": "fallback",
-    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
-    "facts": null,
-    "where": null,
-    "salary": ""
-  },
-  {
-    "title": "Director, Content Marketing",
-    "company": "Emburse Chrome River",
-    "url": "https://www.linkedin.com/jobs/view/4482105705/",
     "source": "LinkedIn",
     "score": 3,
     "score_method": "fallback",
@@ -324,9 +228,9 @@
     "salary": ""
   },
   {
-    "title": "Director, Consumer Marketing Strategy",
-    "company": "AutoTrader.ca",
-    "url": "https://www.linkedin.com/jobs/view/4480794248/",
+    "title": "Director, Content Marketing",
+    "company": "Emburse Chrome River",
+    "url": "https://www.linkedin.com/jobs/view/4482105705/",
     "source": "LinkedIn",
     "score": 3,
     "score_method": "fallback",
@@ -336,9 +240,69 @@
     "salary": ""
   },
   {
-    "title": "Senior Marketing Manager",
-    "company": "RideWrap",
-    "url": "https://www.linkedin.com/jobs/view/4480739148/",
+    "title": "Head of Design",
+    "company": "Microsoft",
+    "url": "https://www.linkedin.com/jobs/view/4473766542/",
+    "source": "LinkedIn",
+    "score": 3,
+    "score_method": "fallback",
+    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
+    "facts": null,
+    "where": null,
+    "salary": ""
+  },
+  {
+    "title": "Group Creative Director, Art and Design",
+    "company": "PASSPORT BRAND DESIGN",
+    "url": "https://www.linkedin.com/jobs/view/4482022030/",
+    "source": "LinkedIn",
+    "score": 3,
+    "score_method": "fallback",
+    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
+    "facts": null,
+    "where": null,
+    "salary": ""
+  },
+  {
+    "title": "Vice President, Marketing",
+    "company": "Cosmetic Physician Partners",
+    "url": "https://www.linkedin.com/jobs/view/4482127764/",
+    "source": "LinkedIn",
+    "score": 3,
+    "score_method": "fallback",
+    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
+    "facts": null,
+    "where": null,
+    "salary": ""
+  },
+  {
+    "title": "Vice-pr\u00e9sident(e) du marketing",
+    "company": "Cosmetic Physician Partners",
+    "url": "https://www.linkedin.com/jobs/view/4482126913/",
+    "source": "LinkedIn",
+    "score": 3,
+    "score_method": "fallback",
+    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
+    "facts": null,
+    "where": null,
+    "salary": ""
+  },
+  {
+    "title": "Head of Digital",
+    "company": "INK Entertainment Group",
+    "url": "https://www.linkedin.com/jobs/view/4480729245/",
+    "source": "LinkedIn",
+    "score": 3,
+    "score_method": "fallback",
+    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
+    "facts": null,
+    "where": null,
+    "salary": ""
+  },
+  {
+    "title": "Chief Marketing Officer",
+    "company": "Delta Controls",
+    "url": "https://www.linkedin.com/jobs/view/4481134663/",
     "source": "LinkedIn",
     "score": 3,
     "score_method": "fallback",
@@ -432,18 +396,6 @@
     "salary": ""
   },
   {
-    "title": "Global Director of Brand & Communications (Austin/US Remote)",
-    "company": "LumApps",
-    "url": "https://www.linkedin.com/jobs/view/4455340991/",
-    "source": "LinkedIn",
-    "score": 3,
-    "score_method": "fallback",
-    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
-    "facts": null,
-    "where": null,
-    "salary": ""
-  },
-  {
     "title": "Director Brand Management & Creative Services",
     "company": "O'Reilly Auto Parts",
     "url": "https://www.linkedin.com/jobs/view/4482007355/",
@@ -516,6 +468,18 @@
     "salary": ""
   },
   {
+    "title": "Head, Editorial Content & Brand Storytelling",
+    "company": "Lafayette 148 New York",
+    "url": "https://www.linkedin.com/jobs/view/4481789505/",
+    "source": "LinkedIn",
+    "score": 3,
+    "score_method": "fallback",
+    "score_reason": "Couldn't be scored automatically \u2014 check by hand.",
+    "facts": null,
+    "where": null,
+    "salary": ""
+  },
+  {
     "title": "Head of Content & Community",
     "company": "Beam",
     "url": "https://www.linkedin.com/jobs/view/4481779363/",
@@ -564,9 +528,9 @@
     "salary": ""
   },
   {
-    "title": "Head of Design",
-    "company": "Microsoft",
-    "url": "https://www.linkedin.com/jobs/view/4473766542/",
+    "title": "Global Head for Customer Experience & Risk , Amazon Agentic Payments",
+    "company": "Amazon",
+    "url": "https://www.linkedin.com/jobs/view/4482135942/",
     "source": "LinkedIn",
     "score": 3,
     "score_method": "fallback",
@@ -576,9 +540,9 @@
     "salary": ""
   },
   {
-    "title": "Content Marketing Manager",
-    "company": "Lankin Investments",
-    "url": "https://www.linkedin.com/jobs/view/4480717549/",
+    "title": "Director, Communications & Content",
+    "company": "Sprouts Farmers Market",
+    "url": "https://www.linkedin.com/jobs/view/4481151116/",
     "source": "LinkedIn",
     "score": 3,
     "score_method": "fallback",
@@ -660,61 +624,119 @@
     "salary": ""
   },
   {
-    "title": "VP, Human Centered Design",
-    "company": "TD",
-    "url": "https://www.linkedin.com/jobs/view/4482130254/",
+    "title": "Marketing Lead",
+    "company": "Pinemount Developments Ltd.",
+    "url": "https://www.linkedin.com/jobs/view/4481133751/",
     "source": "LinkedIn",
     "score": 2,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a VP of UX/product design and digital experience at a bank, not brand or advertising creative leadership \u2014 explicitly outside what Travis wants.",
+    "score_reason": "A generic 'Marketing Lead' title at a real-estate developer, not a creative leadership role matching his CD background.",
     "facts": {
       "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
+      "seniority": "MID",
       "remote": "FULLY_REMOTE",
       "geo": "CANADA_OK",
-      "hire_path": "CANADA_POSSIBLE",
+      "hire_path": "UNCLEAR",
       "employer_base": "CANADA",
-      "pay_currency": "CAD",
+      "pay_currency": "NOT_STATED",
       "timezone": "NOT_STATED",
       "fit": 2,
-      "comp_min_usd": 147000,
-      "comp_max_usd": 184000,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
       "red_flags": [
-        "Role is Human Centered Design / UX / product design, which Travis explicitly avoids",
-        "Canadian employer paying in CAD, a step down from his target",
-        "No brand/advertising creative scope described"
+        "Title suggests marketing generalist, not creative direction",
+        "Likely Canadian payroll in CAD",
+        "No description to confirm seniority or scope"
       ]
     },
-    "where": "Toronto, Ontario, Canada (Remote tag)",
-    "salary": "$200,000 - $250,000 CAD"
+    "where": "Toronto, Canada (remote label)",
+    "salary": ""
   },
   {
-    "title": "Sr Director NA",
-    "company": "Better Collective",
-    "url": "https://www.linkedin.com/jobs/view/4482123346/",
+    "title": "Content Marketing Manager",
+    "company": "Lankin Investments",
+    "url": "https://www.linkedin.com/jobs/view/4480717549/",
+    "source": "LinkedIn",
+    "score": 2,
+    "score_method": "claude-sonnet-5",
+    "score_reason": "This is a hands-on IC content producer role reporting to a Director, far below Travis's CD-level leadership experience.",
+    "facts": {
+      "lane": "NOT_A_FIT",
+      "seniority": "MID",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "hire_path": "CANADA_POSSIBLE",
+      "employer_base": "CANADA",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 2,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "Individual contributor production job, not creative leadership",
+        "No pay stated, likely modest CAD salary from small Canadian firm",
+        "Role is about cranking out ad variations daily, not strategic creative direction"
+      ]
+    },
+    "where": "Vaughan, Ontario, Canada; remote label",
+    "salary": ""
+  },
+  {
+    "title": "Director, Consumer Marketing Strategy",
+    "company": "AutoTrader.ca",
+    "url": "https://www.linkedin.com/jobs/view/4480794248/",
     "source": "LinkedIn",
     "score": 1,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is an SEO/affiliate content growth role for sports betting, not a creative leadership job at all.",
+    "score_reason": "This is a data-driven performance marketing/strategy director role (SQL, Excel, consumer growth analytics), not a creative leadership position.",
     "facts": {
       "lane": "NOT_A_FIT",
       "seniority": "SENIOR_LEADER",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "OTHER",
+      "remote": "HYBRID",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "employer_base": "CANADA",
       "pay_currency": "NOT_STATED",
       "timezone": "NOT_STATED",
       "fit": 1,
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "No creative direction scope \u2014 this is SEO/content/affiliate strategy",
-        "Requires sports betting/iGaming/affiliate industry experience Travis lacks",
-        "No pay or clear remote/geo terms stated"
+        "Role is analytical/performance marketing strategy, not creative direction - mismatch with Travis's CD background",
+        "Canadian employer with CA$ budget language suggests Canadian payroll, a step down from his USD target",
+        "No stated salary; likely below his $150K+ USD target once converted from CAD"
       ]
     },
-    "where": "New York, NY; LinkedIn labeled Remote",
+    "where": "Toronto, Ontario, Canada (remote label)",
     "salary": ""
+  },
+  {
+    "title": "Creative Services Lead",
+    "company": "Northern Employment Solutions Inc",
+    "url": "https://www.linkedin.com/jobs/view/4471682137/",
+    "source": "LinkedIn",
+    "score": 0,
+    "score_method": "claude-sonnet-5",
+    "score_reason": "This is a mid-level creative services/project management role at a small Canadian firm, far below his CD-level experience and pay target.",
+    "facts": {
+      "lane": "NOT_A_FIT",
+      "seniority": "MID",
+      "remote": "UNCLEAR",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "CANADA",
+      "pay_currency": "CAD",
+      "timezone": "NOT_STATED",
+      "fit": 2,
+      "comp_min_usd": 44000,
+      "comp_max_usd": 59000,
+      "red_flags": [
+        "Pay ($60-80K CAD) is well under his $150K USD target",
+        "Role is operational/project management, not senior creative leadership",
+        "3-5 years experience required signals mid-level, not 30-year CD fit"
+      ]
+    },
+    "where": "Sudbury, Ontario, Canada; listed Remote on LinkedIn",
+    "salary": "$60,000 - $80,000 (likely CAD)"
   }
 ]
