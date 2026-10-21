@@ -402,7 +402,7 @@
     "li_id": "4478481608",
     "li_seniority": "Director",
     "snippet_only": false,
-    "score": 7,
+    "score": 2,
     "age_days": 0,
     "category": "CORE",
     "score_reason": "Strong match for his performance-creative and AI-tooling background, but pay and hire path are unknown and the agency is a small pet-industry shop.",
@@ -410,7 +410,7 @@
     "facts": {
       "lane": "CORE",
       "seniority": "SENIOR_LEADER",
-      "remote": "FULLY_REMOTE",
+      "remote": "HYBRID",
       "geo": "NOT_STATED",
       "hire_path": "UNCLEAR",
       "employer_base": "US",
@@ -420,6 +420,7 @@
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
+        "LinkedIn header: Detroit Metropolitan Area (Hybrid)",
         "No compensation listed",
         "Small niche agency (pet industry) likely lower budget/pay",
         "No stated geo or hiring-path flexibility for a non-US-based hire"
