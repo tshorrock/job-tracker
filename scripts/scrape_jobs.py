@@ -1035,6 +1035,28 @@ def process(stats):
     existing = [j for j in existing if j.get("score", 0) >= SCORE_FLOOR and j.get("id") not in dismissed_fb]
     if before != len(existing): print(f"  → purged {before - len(existing)} below-floor or dismissed cards entirely")
 
+    # Legacy cards scored before the facts schema show nothing on the dashboard (no geo, remote,
+    # hire-path, pay, age). Their full postings are already saved, so re-run them through the
+    # current scorer. Capped per run to bound cost; a card that fails to score keeps its old data.
+    legacy = [j for j in existing if not (j.get("facts") or {}).get("remote") and len(j.get("description") or "") >= 300]
+    if legacy and os.environ.get("ANTHROPIC_API_KEY"):
+        legacy = legacy[:80]
+        legacy_ids = {j["id"] for j in legacy}
+        originals = {j["id"]: json.loads(json.dumps(j)) for j in legacy}
+        existing = [j for j in existing if j["id"] not in legacy_ids]
+        for j in legacy:
+            j.setdefault("location", j.get("where") or "")
+            j["location"] = j["location"] or ""
+            j.setdefault("salary", ""); j.setdefault("source", "LinkedIn"); j.setdefault("li_id", "")
+        print(f"\n  Re-scoring {len(legacy)} legacy cards (pre-facts schema)…")
+        rescored = score_all(legacy)
+        for j in rescored:
+            if j.get("score_method") == "fallback":           # scoring failed — keep the old card
+                existing.append(originals[j["id"]])
+            elif j.get("score", 0) >= SCORE_FLOOR:            # re-judged and still worth showing
+                existing.append(j)
+            # else: re-judged below floor — gone for good
+
     before = len(existing)
     existing = [j for j in existing
                 if (j.get("facts") or {}).get("remote") not in ("HYBRID", "ONSITE") and not is_clearly_hybrid({
