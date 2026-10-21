@@ -1,7 +1,8 @@
 {
-  "updated": "2026-10-21T17:10:15.999294+00:00",
-  "new_today": 2,
-  "today": [
+  "updated": "2026-10-21T17:45:41.967219+00:00",
+  "new_today": 0,
+  "today": [],
+  "this_week": [
     {
       "title": "Global Head of Brand & Advertising, Senior Vice President",
       "company": "State Street",
@@ -23,9 +24,7 @@
         "No info on international hiring, pay currency, or compensation"
       ],
       "added": "2026-10-21"
-    }
-  ],
-  "this_week": [
+    },
     {
       "title": "AI Creative Director",
       "company": "Superside",
@@ -71,28 +70,6 @@
       "added": "2026-10-16"
     },
     {
-      "title": "Executive Creative Director",
-      "company": "Ramotion",
-      "url": "https://www.linkedin.com/jobs/view/4478657813/",
-      "score": 7,
-      "salary": "Compensation agreed per project, revenue-share upside",
-      "where": "Remote, US-based (no office days)",
-      "remote": "FULLY_REMOTE",
-      "geo": "US_REMOTE",
-      "hire_path": "CONTRACT",
-      "pay_currency": "NOT_STATED",
-      "board": "us",
-      "age_days": 1,
-      "repost_count": 0,
-      "why": "Strong creative-leadership fit, but it's a project-based contract with no stated salary, which falls short of his $150K+ target.",
-      "red_flags": [
-        "Contract/project-based, not full-time employment",
-        "No stated compensation or pay range",
-        "Listed as US-based remote, uncertain if Canada-based hire possible"
-      ],
-      "added": "2026-10-21"
-    },
-    {
       "title": "Principal, Creative Director - Campaigns",
       "company": "Deel",
       "url": "https://www.linkedin.com/jobs/view/4477300772/",
@@ -113,6 +90,28 @@
         "US remote location may require US work authorization"
       ],
       "added": "2026-10-15"
+    },
+    {
+      "title": "Executive Creative Director",
+      "company": "Ramotion",
+      "url": "https://www.linkedin.com/jobs/view/4478657813/",
+      "score": 7,
+      "salary": "Compensation agreed per project, revenue-share upside",
+      "where": "Remote, US-based (no office days)",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "hire_path": "CONTRACT",
+      "pay_currency": "NOT_STATED",
+      "board": "us",
+      "age_days": 1,
+      "repost_count": 0,
+      "why": "Strong creative-leadership fit, but it's a project-based contract with no stated salary, which falls short of his $150K+ target.",
+      "red_flags": [
+        "Contract/project-based, not full-time employment",
+        "No stated compensation or pay range",
+        "Listed as US-based remote, uncertain if Canada-based hire possible"
+      ],
+      "added": "2026-10-21"
     },
     {
       "title": "Creative Director, Art & Film",
