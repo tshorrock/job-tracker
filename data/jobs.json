@@ -587,7 +587,7 @@
     "posted": "2026-10-14",
     "li_id": "4478820248",
     "li_seniority": "Not Applicable",
-    "score": 7,
+    "score": 2,
     "age_days": 1,
     "category": "CORE",
     "score_reason": "Strong pay and senior CD scope but it's a B2B/enterprise art-direction role at a tech company rather than classic brand/campaign leadership.",
@@ -595,13 +595,14 @@
     "facts": {
       "lane": "CORE",
       "seniority": "SENIOR_LEADER",
-      "remote": "FULLY_REMOTE",
+      "remote": "HYBRID",
       "geo": "US_REMOTE",
       "timezone": "NOT_STATED",
       "fit": 7,
       "comp_min_usd": 287000,
       "comp_max_usd": 318000,
       "red_flags": [
+        "Application form requires ability to work from a US office 3 days/week (not stated in the posting)",
         "Focus is narrowly B2B/enterprise storytelling, not broad brand creative",
         "Geo says SF with remote label but no explicit non-US allowance",
         "Heavy emphasis on design/art craft and Figma vs. his big-campaign CD background"
