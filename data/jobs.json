@@ -1105,7 +1105,7 @@
     "source": "Adzuna",
     "posted": "2026-10-14T06:48:00Z",
     "li_id": "",
-    "score": 7,
+    "score": 3,
     "age_days": 1,
     "category": "CORE",
     "score_reason": "Strong pay and remote brand-creative leadership role, but company is a sugar-dating platform which may be a reputational concern.",
@@ -1120,6 +1120,7 @@
       "comp_min_usd": 150000,
       "comp_max_usd": 210000,
       "red_flags": [
+        "Passed by choice: brand is Seeking.com (ex-SeekingArrangement); role is CMO-shaped (PR org, OKRs), not CD",
         "Company 'Seeking' is a sugar-dating/adult-adjacent platform, potential brand reputation concern",
         "Role described as hands-on 'operator', not pure strategic leadership",
         "No explicit mention of timezone expectations despite remote US label"
