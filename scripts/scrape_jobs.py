@@ -136,7 +136,8 @@ BLOCKED_DOMAINS = {
 }
 # Reposting agencies: the same role is already in the feed from the real employer, or it's bait.
 BLOCKED_COMPANIES = {'jobgether', 'remote quest jobs', 'vacancy global pro', 'remotepromsp', 'skill',
-                     'remoterush', 'lensa'}
+                     'remoterush', 'lensa',
+                     'reflex media'}  # Travis passed by choice 21 Oct 2026 (Seeking.com brand) — never resurface
 
 # Where Travis lives stays out of this public repo's text (encoded so the file doesn't list it).
 PRIVATE_RE = re.compile(r"\b(" + base64.b64decode("Y29zdGEgcmljYXxub3NhcmF8Z3VhbmFjYXN0ZQ==").decode() + r")\b( resident)?", re.I)
@@ -1016,6 +1017,24 @@ def process(stats):
             if k: seen[k] = now
     kept = []
     existing = load_json(DATA_FILE, [])
+
+    # Applied roles are frozen history: stamp them from feedback.json (the dashboard ✓ button),
+    # pull them out of every filter below, and re-attach at the end so they never disappear
+    # from the Applied tab — even if the posting closes, goes hybrid, or would otherwise be purged.
+    fb = load_json(FEEDBACK_FILE, {}) or {}
+    applied_fb   = fb.get("applied", {}) or {}
+    dismissed_fb = set((fb.get("dismissed") or {}).keys())
+    for j in existing:
+        if j.get("id") in applied_fb and not j.get("applied"):
+            j["applied"] = (applied_fb[j["id"]].get("at") or "")[:10] or now[:10]
+    applied_jobs = [j for j in existing if j.get("applied")]
+    existing     = [j for j in existing if not j.get("applied")]
+
+    # Anything that fails the criteria is useless — remove it totally rather than showing a capped score.
+    before = len(existing)
+    existing = [j for j in existing if j.get("score", 0) >= SCORE_FLOOR and j.get("id") not in dismissed_fb]
+    if before != len(existing): print(f"  → purged {before - len(existing)} below-floor or dismissed cards entirely")
+
     before = len(existing)
     existing = [j for j in existing
                 if (j.get("facts") or {}).get("remote") not in ("HYBRID", "ONSITE") and not is_clearly_hybrid({
@@ -1038,7 +1057,7 @@ def process(stats):
             j["last_repost"] = now[:10]
             print(f"  ↻ reposted: {j['title'][:50]} @ {j['company'][:25]} (×{j['repost_count']})")
     for j in existing + scored: scrub(j)
-    existing_ids = {j.get("id") for j in existing}
+    existing_ids = {j.get("id") for j in existing} | {j.get("id") for j in applied_jobs}
     for j in scored:
         if j.get("score", 0) < SCORE_FLOOR: continue
         j["id"] = make_id(j["title"], j["company"] or j["li_id"])
@@ -1050,7 +1069,7 @@ def process(stats):
     rejected = sorted([j for j in scored if j.get("score", 0) < SCORE_FLOOR], key=lambda j: -j.get("score", 0))[:150]
     save_json(Path("data/rejected.json"), [{k: j.get(k) for k in ("title", "company", "url", "source", "score", "score_method",
                                             "score_reason", "facts", "where", "salary")} for j in rejected])
-    all_jobs = (kept + existing)[:MAX_JOBS]
+    all_jobs = applied_jobs + (kept + existing)[:max(0, MAX_JOBS - len(applied_jobs))]
     save_json(DATA_FILE, all_jobs)
     save_json(SEEN_FILE, seen)
     save_json(META_FILE, {"updated": now, "new_count": len(kept), "total_count": len(all_jobs),

@@ -591,7 +591,8 @@ const TODAY = new Date().toISOString().slice(0,10);
 let jobs = [], meta = {};
 
 // ── LOCAL STATE ───────────────────────────────────────────────────────────
-const LS = { saved: 'jobSaved', dismissed: 'dismissed', filter: 'jobFilter' };
+const LS = { saved: 'jobSaved', dismissed: 'dismissed', applied: 'jobApplied', filter: 'jobFilter' };
+const MIN_SCORE = 4;   // anything below this is noise — don't even show it
 
 // Migrate prior keys
 (() => {
@@ -604,10 +605,14 @@ const LS = { saved: 'jobSaved', dismissed: 'dismissed', filter: 'jobFilter' };
 
 let saved     = new Set(JSON.parse(localStorage.getItem(LS.saved)     || '[]'));
 let dismissed = new Set(JSON.parse(localStorage.getItem(LS.dismissed) || '[]'));
+let applied   = JSON.parse(localStorage.getItem(LS.applied) || '{}');   // id → date applied
 let currentFilter = localStorage.getItem(LS.filter) || 'active';
 
 function persistSaved()    { localStorage.setItem(LS.saved,     JSON.stringify([...saved])); }
 function persistDismissed(){ localStorage.setItem(LS.dismissed, JSON.stringify([...dismissed])); }
+function persistApplied()  { localStorage.setItem(LS.applied,   JSON.stringify(applied)); }
+const isApplied = j => !!(applied[j.id || ''] || j.applied);
+const appliedDate = j => applied[j.id || ''] || j.applied || '';
 function persistFilter()   { localStorage.setItem(LS.filter,    currentFilter); }
 
 // Send Save / Dismiss to the repo so they sync across devices and teach the daily scorer.
@@ -803,7 +808,8 @@ async function boot() {
       const fb = await (await fetch('data/feedback.json?t=' + Date.now())).json();
       Object.keys(fb.saved || {}).forEach(id => { saved.add(id); dismissed.delete(id); });
       Object.keys(fb.dismissed || {}).forEach(id => { dismissed.add(id); saved.delete(id); });
-      persistSaved(); persistDismissed();
+      Object.entries(fb.applied || {}).forEach(([id, e]) => { if (!applied[id]) applied[id] = (e.at || '').slice(0,10) || TODAY; });
+      persistSaved(); persistDismissed(); persistApplied();
     } catch (e) {}
   } catch (e) {
     jobs = []; meta = { updated: 'never', new_count: 0, total_count: 0 };
@@ -832,7 +838,7 @@ function updateMeta() {
 
 // ── COUNT UP ──────────────────────────────────────────────────────────────
 function countUp() {
-  const active = jobs.filter(j => !dismissed.has(j.id || '') && (j.score || 0) >= 3);
+  const active = jobs.filter(j => !dismissed.has(j.id || '') && !isApplied(j) && (j.score || 0) >= MIN_SCORE);
   animateNumber('m-new',   active.filter(j => isNew(j)).length);
   animateNumber('m-total', active.length);
   animateNumber('m-core',  active.filter(j => (j.category || 'CORE') === 'CORE').length);
@@ -886,11 +892,12 @@ function getFilteredJobs() {
   const q = (document.getElementById('q').value || '').trim().toLowerCase();
   let r;
   switch (currentFilter) {
-    case 'new':       r = jobs.filter(j => !dismissed.has(j.id||'') && isNew(j) && (j.score||0) >= 3); break;
+    case 'new':       r = jobs.filter(j => !dismissed.has(j.id||'') && !isApplied(j) && isNew(j) && (j.score||0) >= MIN_SCORE); break;
     // (US-payroll-only roles are filtered out at load — see boot())
-    case 'saved':     r = jobs.filter(j => saved.has(j.id||'') && (j.score||0) >= 3); break;
+    case 'saved':     r = jobs.filter(j => saved.has(j.id||'') && !isApplied(j) && (j.score||0) >= MIN_SCORE); break;
+    case 'applied':   r = jobs.filter(j => isApplied(j)); break;
     case 'dismissed': r = jobs.filter(j => dismissed.has(j.id||'')); break;
-    default:          r = jobs.filter(j => !dismissed.has(j.id||'') && (j.score||0) >= 3);
+    default:          r = jobs.filter(j => !dismissed.has(j.id||'') && !isApplied(j) && (j.score||0) >= MIN_SCORE);
   }
   if (q) r = r.filter(j =>
     (j.title||'').toLowerCase().includes(q) ||
@@ -898,8 +905,10 @@ function getFilteredJobs() {
     (j.score_reason||'').toLowerCase().includes(q) ||
     (j.where||j.location||'').toLowerCase().includes(q)
   );
-  // Sort by score desc, then newest
-  r.sort((a,b) => {
+  // Applied tab: most recent application first. Everything else: score desc, then newest.
+  if (currentFilter === 'applied') {
+    r.sort((a,b) => (appliedDate(b)).localeCompare(appliedDate(a)) || (b.score||0) - (a.score||0));
+  } else r.sort((a,b) => {
     const sd = (b.score||0) - (a.score||0);
     if (sd !== 0) return sd;
     return (new Date(b.added||0)) - (new Date(a.added||0));
@@ -911,9 +920,10 @@ function getFilteredJobs() {
 function renderFilterLinks() {
   const today = TODAY;
   const counts = {
-    active:    jobs.filter(j => !dismissed.has(j.id||'') && (j.score||0) >= 3).length,
-    new:       jobs.filter(j => !dismissed.has(j.id||'') && (j.added||'').startsWith(today) && (j.score||0) >= 3).length,
-    saved:     [...saved].filter(id => jobs.some(j => j.id === id)).length,
+    active:    jobs.filter(j => !dismissed.has(j.id||'') && !isApplied(j) && (j.score||0) >= MIN_SCORE).length,
+    new:       jobs.filter(j => !dismissed.has(j.id||'') && !isApplied(j) && (j.added||'').startsWith(today) && (j.score||0) >= MIN_SCORE).length,
+    saved:     [...saved].filter(id => { const j = jobs.find(x => x.id === id); return j && !isApplied(j); }).length,
+    applied:   jobs.filter(j => isApplied(j)).length,
     dismissed: [...dismissed].filter(id => jobs.some(j => j.id === id)).length,
   };
 
@@ -930,6 +940,8 @@ function renderFilterLinks() {
   html += link('new', 'New Today');
   html += `<span class="filter-sep">·</span>`;
   html += link('saved', '⭐ Saved');
+  html += `<span class="filter-sep">·</span>`;
+  html += link('applied', '✓ Applied');
   html += `<span class="filter-sep">·</span>`;
   html += link('dismissed', 'Dismissed');
   if (currentFilter === 'dismissed' && counts.dismissed > 0) {
@@ -954,6 +966,15 @@ function restoreAllDismissed() {
 // ── ACTIONS ───────────────────────────────────────────────────────────────
 function toggleSave(id, e)    { if (e) { e.preventDefault(); e.stopPropagation(); } const on = !saved.has(id); on ? saved.add(id) : saved.delete(id); if (on) dismissed.delete(id); persistSaved(); persistDismissed(); syncFeedback(on ? 'save' : 'unsave', id); render(); countUp(); }
 function toggleDismiss(id, e) { if (e) { e.preventDefault(); e.stopPropagation(); } const on = !dismissed.has(id); on ? dismissed.add(id) : dismissed.delete(id); if (on) saved.delete(id); persistSaved(); persistDismissed(); syncFeedback(on ? 'dismiss' : 'undismiss', id); render(); countUp(); }
+function toggleApplied(id, e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  const on = !applied[id];
+  if (on) { applied[id] = TODAY; dismissed.delete(id); }
+  else delete applied[id];
+  persistApplied(); persistDismissed();
+  syncFeedback(on ? 'apply' : 'unapply', id);
+  render(); countUp();
+}
 function toggleReason(id, e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
   const r = document.getElementById('reason-' + id);
@@ -996,6 +1017,7 @@ function makeCard(j, idx = 0) {
   if (f.remote === 'REMOTE_SOME_TRAVEL') tags.push(`<span class="tag tag-flag">Travel</span>`);
   if (f.remote === 'UNCLEAR') tags.push(`<span class="tag tag-flag">Remote unconfirmed</span>`);
   if (f.remote === 'HYBRID' || f.remote === 'ONSITE') tags.push(`<span class="tag tag-flag">${f.remote === 'HYBRID' ? 'Hybrid' : 'On-site'}</span>`);
+  if (isApplied(j)) tags.push(`<span class="tag tag-saved" title="Application submitted">✓ Applied ${escapeHtml(appliedDate(j))}</span>`);
   if (isSaved)  tags.push(`<span class="tag tag-saved">★ Saved</span>`);
   if (isDism)   tags.push(`<span class="tag tag-dismissed">Dismissed</span>`);
 
@@ -1026,6 +1048,7 @@ function makeCard(j, idx = 0) {
       <div class="jcard-tags">${tags.join('')}</div>
       <div class="jcard-actions">
         ${reasonBtn}
+        <button class="act-btn ${isApplied(j) ? 'toggled' : ''}" onclick="toggleApplied('${jid}',event)" title="${isApplied(j) ? 'Un-mark applied' : 'Mark as applied'}">✓</button>
         <button class="act-btn ${isSaved ? 'toggled' : ''}" onclick="toggleSave('${jid}',event)" title="${isSaved ? 'Unsave' : 'Save'}">${isSaved ? '★' : '☆'}</button>
         <button class="act-btn eval" onclick="evalJob('${jid}',event)" title="Evaluate with Claude">⚡</button>
         <button class="act-btn" onclick="event.preventDefault();event.stopPropagation();buildApplication('${escapeAttr(url)}')" title="Build tailored application (resume, cover letter, emails)">📄</button>
@@ -1057,9 +1080,11 @@ function render() {
       ? { t: 'No data yet', s: 'Hit Run Now to populate.' }
       : currentFilter === 'saved' && saved.size === 0
         ? { t: 'No saved roles', s: 'Click ☆ on any card to save it.' }
-        : currentFilter === 'dismissed'
-          ? { t: 'Nothing dismissed', s: '✕ on any card moves it here.' }
-          : { t: 'Nothing matches', s: 'Try a different filter or run the scraper.' };
+        : currentFilter === 'applied'
+          ? { t: 'No applications yet', s: '✓ on any card moves it here once you\'ve applied.' }
+          : currentFilter === 'dismissed'
+            ? { t: 'Nothing dismissed', s: '✕ on any card moves it here.' }
+            : { t: 'Nothing matches', s: 'Try a different filter or run the scraper.' };
     root.innerHTML = `<div class="feed-empty">
       <div class="feed-empty-icon">∅</div>
       <div class="feed-empty-t">${empty.t}</div>

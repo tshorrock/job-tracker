@@ -117,7 +117,7 @@ async function runWorkflow(env) {
 // Save / Dismiss → data/feedback.json in the repo
 async function feedback(body, env) {
   const { action, id, title, company } = body;
-  if (!id || !['save', 'unsave', 'dismiss', 'undismiss'].includes(action)) return json({ error: 'bad request' }, 400);
+  if (!id || !['save', 'unsave', 'dismiss', 'undismiss', 'apply', 'unapply'].includes(action)) return json({ error: 'bad request' }, 400);
   const api = `https://api.github.com/repos/${REPO}/contents/data/feedback.json`;
   const gh = { Accept: 'application/vnd.github+json', Authorization: `Bearer ${env.GITHUB_TOKEN}`, 'User-Agent': 'job-eval-worker' };
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -127,13 +127,15 @@ async function feedback(body, env) {
       const f = await cur.json();
       sha = f.sha;
       fb = JSON.parse(decodeURIComponent(escape(atob(f.content.replace(/\n/g, '')))));
-      fb.saved ||= {}; fb.dismissed ||= {};
+      fb.saved ||= {}; fb.dismissed ||= {}; fb.applied ||= {};
     }
     const entry = { title: title || '', company: company || '', at: new Date().toISOString() };
     if (action === 'save') { fb.saved[id] = entry; delete fb.dismissed[id]; }
     if (action === 'unsave') delete fb.saved[id];
     if (action === 'dismiss') { fb.dismissed[id] = entry; delete fb.saved[id]; }
     if (action === 'undismiss') delete fb.dismissed[id];
+    if (action === 'apply') { fb.applied ||= {}; fb.applied[id] = entry; delete fb.dismissed[id]; }
+    if (action === 'unapply') { fb.applied ||= {}; delete fb.applied[id]; }
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(fb, null, 1))));
     const put = await fetch(api, {
       method: 'PUT', headers: { ...gh, 'Content-Type': 'application/json' },

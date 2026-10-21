@@ -1,1 +1,41 @@
-{"saved": {}, "dismissed": {}}
+{
+ "saved": {},
+ "dismissed": {},
+ "applied": {
+  "84ac52b3e3d0": {
+   "title": "Principal, Creative Director - Campaigns",
+   "company": "Deel",
+   "at": "2026-10-14T12:00:00Z"
+  },
+  "5600b61df560": {
+   "title": "Creative Director, Block",
+   "company": "Block",
+   "at": "2026-10-15T12:00:00Z"
+  },
+  "c5e98253ca8a": {
+   "title": "Principal Creative Director, AI Video",
+   "company": "Deel",
+   "at": "2026-10-21T12:00:00Z"
+  },
+  "a2bf28ca768d": {
+   "title": "Group Creative Director",
+   "company": "MasterClass",
+   "at": "2026-10-21T12:00:00Z"
+  },
+  "f59742d24dab": {
+   "title": "Creative Director, Tidal",
+   "company": "Block",
+   "at": "2026-10-21T12:00:00Z"
+  },
+  "6da87c772d1d": {
+   "title": "Creative Director, Tidal",
+   "company": "TIDAL",
+   "at": "2026-10-21T12:00:00Z"
+  },
+  "f637e3ced046": {
+   "title": "Creative Director",
+   "company": "Cyera",
+   "at": "2026-10-21T12:00:00Z"
+  }
+ }
+}
