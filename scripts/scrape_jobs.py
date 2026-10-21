@@ -268,6 +268,18 @@ def fetch_linkedin_details(job_id):
         h, v = li.find("h3"), li.find("span")
         if h and v and "seniority" in h.get_text().lower():
             out["seniority"] = v.get_text(strip=True)
+    # LinkedIn's On-site/Hybrid/Remote chip lives in the header, not the description text. Three jobs
+    # scored as remote in Oct 2026 turned out to be hybrid/on-site when the form was opened by hand.
+    # The guest page embeds it as workplaceTypes urns; appending it to the location lets the existing
+    # hybrid filter and the scorer see it.
+    wm = re.search(r'workplaceTypes?["\']?\s*[:=]\s*\[?["\']urn:li:workplaceType:(\d)', page)
+    wt = {"1": "On-site", "2": "Remote", "3": "Hybrid"}.get(wm.group(1)) if wm else None
+    if not wt:
+        chip = s.find(string=re.compile(r"^\s*(On-site|Hybrid)\s*$"))
+        if chip: wt = chip.strip()
+    if wt:
+        out["workplace_type"] = wt
+        out["location"] = ((out.get("location") or "") + f" ({wt}, LinkedIn label)").strip()
     return out
 
 def fetch_linkedin_search(query, location, page):
