@@ -1,7 +1,30 @@
 {
-  "updated": "2026-10-20T19:30:42.893324+00:00",
-  "new_today": 1,
-  "today": [],
+  "updated": "2026-10-21T07:46:15.832208+00:00",
+  "new_today": 2,
+  "today": [
+    {
+      "title": "Executive Creative Director",
+      "company": "Ramotion",
+      "url": "https://www.linkedin.com/jobs/view/4478657813/",
+      "score": 7,
+      "salary": "Compensation agreed per project, revenue-share upside",
+      "where": "Remote, US-based (no office days)",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "hire_path": "CONTRACT",
+      "pay_currency": "NOT_STATED",
+      "board": "us",
+      "age_days": 0,
+      "repost_count": 0,
+      "why": "Strong creative-leadership fit, but it's a project-based contract with no stated salary, which falls short of his $150K+ target.",
+      "red_flags": [
+        "Contract/project-based, not full-time employment",
+        "No stated compensation or pay range",
+        "Listed as US-based remote, uncertain if Canada-based hire possible"
+      ],
+      "added": "2026-10-21"
+    }
+  ],
   "this_week": [
     {
       "title": "AI Creative Director",
@@ -37,7 +60,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 5,
+      "age_days": 6,
       "repost_count": 0,
       "why": "ECD title at a major US agency network is squarely in his lane but the listing has no details to confirm remote or pay terms.",
       "red_flags": [
@@ -59,7 +82,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 5,
+      "age_days": 6,
       "repost_count": 0,
       "why": "Strong CD-level title match but almost no details, and it's US-remote only with unclear hiring path for a non-US-authorized Canadian.",
       "red_flags": [
@@ -81,7 +104,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 5,
+      "age_days": 6,
       "repost_count": 0,
       "why": "Strong match for his performance-creative and AI-tooling background, but pay and hire path are unknown and the agency is a small pet-industry shop.",
       "red_flags": [
@@ -103,7 +126,7 @@
       "hire_path": null,
       "pay_currency": null,
       "board": "us",
-      "age_days": 5,
+      "age_days": 6,
       "repost_count": 0,
       "why": "A textbook senior agency CD role (integrated film/ad campaigns) at Microsoft, tagged remote with strong pay, but based in a specific US city which may mean hidden hybrid expectations.",
       "red_flags": [
@@ -125,7 +148,7 @@
       "hire_path": null,
       "pay_currency": null,
       "board": "us",
-      "age_days": 5,
+      "age_days": 6,
       "repost_count": 0,
       "why": "Strong CD role leveraging AI-driven brand campaigns, but tied to a specific US city salary band raises remote/geo questions.",
       "red_flags": [
@@ -147,7 +170,7 @@
       "hire_path": null,
       "pay_currency": null,
       "board": "us",
-      "age_days": 6,
+      "age_days": 7,
       "repost_count": 0,
       "why": "Strong pay and senior CD scope but it's a B2B/enterprise art-direction role at a tech company rather than classic brand/campaign leadership.",
       "red_flags": [
@@ -169,7 +192,7 @@
       "hire_path": null,
       "pay_currency": null,
       "board": "us",
-      "age_days": 6,
+      "age_days": 7,
       "repost_count": 0,
       "why": "Strong senior CD role matching his agency leadership background, though pay and geo rules are unstated and cultural/sports/fashion focus is a slight stretch.",
       "red_flags": [
