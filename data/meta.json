@@ -1,50 +1,50 @@
 {
- "updated": "2026-10-21T18:40:20.159769+00:00",
- "new_count": 6,
- "total_count": 179,
- "model": "claude-sonnet-5",
- "sources": {
-  "Apify LinkedIn": {
-   "fetched": 17,
-   "new": 8
+  "updated": "2026-10-22T07:41:34.886050+00:00",
+  "new_count": 4,
+  "total_count": 183,
+  "model": "claude-sonnet-5",
+  "sources": {
+    "Apify LinkedIn": {
+      "fetched": 6,
+      "new": 4
+    },
+    "LinkedIn alerts": {
+      "fetched": 7,
+      "new": 0
+    },
+    "LinkedIn guest": {
+      "fetched": 548,
+      "new": 62
+    },
+    "Careers pages": {
+      "fetched": 29,
+      "new": 0
+    },
+    "Adzuna": {
+      "fetched": 98,
+      "new": 1
+    },
+    "JSearch": {
+      "fetched": 0,
+      "new": 0
+    },
+    "RemoteOK": {
+      "fetched": 99,
+      "new": 0
+    },
+    "Working Nomads": {
+      "fetched": 43,
+      "new": 0
+    },
+    "Himalayas": {
+      "fetched": 20,
+      "new": 0
+    }
   },
-  "LinkedIn alerts": {
-   "fetched": 7,
-   "new": 0
+  "prefilter_dropped": {
+    "hybrid": 8,
+    "us_only": 1,
+    "us_payroll": 29
   },
-  "LinkedIn guest": {
-   "fetched": 450,
-   "new": 40
-  },
-  "Careers pages": {
-   "fetched": 29,
-   "new": 1
-  },
-  "Adzuna": {
-   "fetched": 114,
-   "new": 2
-  },
-  "JSearch": {
-   "fetched": 34,
-   "new": 3
-  },
-  "RemoteOK": {
-   "fetched": 99,
-   "new": 0
-  },
-  "Working Nomads": {
-   "fetched": 44,
-   "new": 0
-  },
-  "Himalayas": {
-   "fetched": 20,
-   "new": 0
-  }
- },
- "prefilter_dropped": {
-  "hybrid": 0,
-  "us_only": 0,
-  "us_payroll": 33
- },
- "email": "failed: SMTPServerDisconnected: Connection unexpectedly closed"
+  "email": "failed: SMTPServerDisconnected: Connection unexpectedly closed"
 }
