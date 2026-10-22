@@ -1,74 +1,16 @@
 [
   {
-    "title": "Senior Director - Casino Content Strategy",
-    "company": "Hard Rock Digital",
-    "url": "https://www.linkedin.com/jobs/view/4469477331/",
-    "source": "LinkedIn",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is an iGaming content/supplier strategy ops role with zero creative scope, not a fit for a Creative Director.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "HYBRID",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "US",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "No creative leadership component \u2014 focused on supplier sourcing, IP licensing, KPI tracking",
-        "Hybrid work environment, not fully remote",
-        "No compensation stated"
-      ]
-    },
-    "where": "Canada listed; hybrid/remote environment mentioned",
-    "salary": ""
-  },
-  {
-    "title": "Creative Director - 12-Month Contract (Remote)",
-    "company": "Geotab",
-    "url": "https://www.linkedin.com/jobs/view/4473921934/",
+    "title": "Director, Planning & Service Management, Strategic Operations & Medical Affairs",
+    "company": "Provincial Health Services Authority",
+    "url": "https://www.linkedin.com/jobs/view/4482470461/",
     "source": "LinkedIn",
     "score": 0,
     "score_method": "claude-sonnet-5",
-    "score_reason": "Strong CD background match but it's a 12-month CAD-paid contract with a hybrid office policy, well under his $150K USD target.",
-    "facts": {
-      "lane": "CORE",
-      "seniority": "SENIOR_LEADER",
-      "remote": "HYBRID",
-      "geo": "NOT_STATED",
-      "hire_path": "CONTRACT",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 7,
-      "comp_min_usd": 84826,
-      "comp_max_usd": 113150,
-      "red_flags": [
-        "Pay is in CAD, below his $150K USD target",
-        "Only a 12-month contract, not a permanent role",
-        "Hybrid office model despite 'Remote' in title"
-      ]
-    },
-    "where": "Oakville, Ontario, Canada; hybrid office optional",
-    "salary": "$116,200 CAD - $155,000 CAD"
-  },
-  {
-    "title": "CRO",
-    "company": "Braindate",
-    "url": "https://www.linkedin.com/jobs/view/4482176536/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a CRO/sales-and-marketing leadership role, not creative leadership, and completely outside Travis's background.",
+    "score_reason": "Healthcare operations/medical affairs director role with zero creative or advertising relevance.",
     "facts": {
       "lane": "NOT_A_FIT",
       "seniority": "EXECUTIVE",
-      "remote": "UNCLEAR",
+      "remote": "ONSITE",
       "geo": "NOT_STATED",
       "hire_path": "UNCLEAR",
       "employer_base": "CANADA",
@@ -78,41 +20,12 @@
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "Role is sales/revenue leadership, not creative",
-        "Requires bilingual French/English likely tied to Montreal office",
-        "No remote policy or pay stated"
+        "Not a creative role at all",
+        "Healthcare administration background required, not marketing/creative",
+        "Onsite in Vancouver, no remote mention"
       ]
     },
-    "where": "Montreal, Quebec, Canada",
-    "salary": ""
-  },
-  {
-    "title": "Senior UI Artist (For Honor)",
-    "company": "Ubisoft Montr\u00e9al",
-    "url": "https://www.linkedin.com/jobs/view/4480047826/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a UI/UX artist IC role on game interfaces, not creative leadership, and completely outside his background.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "OTHER",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "UX/UI design IC role, explicitly excluded by his preferences",
-        "Onsite in Montreal with no remote mention",
-        "Mid-level individual contributor, not a leadership position"
-      ]
-    },
-    "where": "Montreal, Quebec, Canada",
+    "where": "Vancouver, BC",
     "salary": ""
   }
 ]
