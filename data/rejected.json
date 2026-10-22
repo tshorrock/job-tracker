@@ -1,191 +1,104 @@
 [
   {
-    "title": "Vice President of Marketing, Product Development & Creative",
-    "company": "Trends International LLC",
-    "url": "https://www.linkedin.com/jobs/view/4481347816/",
-    "source": "LinkedIn",
-    "score": 3,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a broad consumer-products/licensing GM role (product dev, licensing, retail, digital commerce) with only a slice of creative direction, not an agency-style creative leadership job matching his campaign background.",
-    "facts": {
-      "lane": "ADJACENT",
-      "seniority": "EXECUTIVE",
-      "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "US",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 3,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Heavy focus on product development, licensing and retail/e-commerce rather than brand creative leadership",
-        "No pay disclosed",
-        "Remote status is just a LinkedIn tag with no explicit remote policy in the text, likely needs Indianapolis HQ presence"
-      ]
-    },
-    "where": "Indianapolis, IN; LinkedIn tags it Remote",
-    "salary": ""
-  },
-  {
-    "title": "Director, Marketing",
-    "company": "Mitsubishi Motor Sales of Canada, Inc.",
-    "url": "https://www.linkedin.com/jobs/view/4481349940/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a client-side automotive marketing/CRM director role requiring an MBA, not a creative leadership job, and pays below his target in CAD.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "FULLY_REMOTE",
-      "geo": "CANADA_OK",
-      "hire_path": "CANADA_POSSIBLE",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "AMERICAS_HOURS",
-      "fit": 3,
-      "comp_min_usd": 113000,
-      "comp_max_usd": 124000,
-      "red_flags": [
-        "Pay in CAD well below his $150K USD target",
-        "Role is marketing strategy/CRM/dealer ops, not creative direction",
-        "MBA and automotive national communications requirement don't match his agency CD background"
-      ]
-    },
-    "where": "Mississauga, Ontario, Canada, remote-labeled",
-    "salary": "CA$155,000.00/yr - CA$170,000.00/yr"
-  },
-  {
-    "title": "Regional Marketing Communications Manager (US & LATAM)",
-    "company": "Armstrong Fluid Technology",
-    "url": "https://www.linkedin.com/jobs/view/4482400434/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a B2B marketing operations/demand-gen manager role, not creative leadership \u2014 wrong lane entirely for Travis.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 2,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Not a creative leadership role \u2014 focuses on campaign ops, lead management, ABM and marketing automation",
-        "Explicitly based in Toronto office, not remote despite LinkedIn tag",
-        "No compensation listed"
-      ]
-    },
-    "where": "Based in Toronto, Canada office",
-    "salary": ""
-  },
-  {
-    "title": "Design Director",
-    "company": "Solomon Page",
-    "url": "https://www.adzuna.com/land/ad/5938042359?se=8lZH6S3O8RGd8eOqR9IQ5A&utm_medium=api&utm_source=757a890e&v=041E44C562CEBE3187DE8855093F11AF11F36097",
-    "source": "Adzuna",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Product design leadership role for a tech account, not creative advertising fit, and onsite in NYC.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "US",
-      "pay_currency": "USD",
-      "timezone": "NOT_STATED",
-      "fit": 2,
-      "comp_min_usd": 122000,
-      "comp_max_usd": 122000,
-      "red_flags": [
-        "Product design focus, explicitly excluded for Travis",
-        "Onsite in Brooklyn, not remote",
-        "Pay below his $150K+ target"
-      ]
-    },
-    "where": "Brooklyn, NYC",
-    "salary": "$122K\u2013$122K/yr"
-  },
-  {
-    "title": "Head of Content Marketing",
-    "company": "crewlia",
-    "url": "https://www.linkedin.com/jobs/view/4481199292/",
-    "source": "LinkedIn+",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a digital marketing/SEO role based in India, not creative leadership, and wrong fit on every axis.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "FULLY_REMOTE",
-      "geo": "OTHER_REGION_ONLY",
-      "hire_path": "UNCLEAR",
-      "employer_base": "UNCLEAR",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Role is digital marketing/SEO/analytics, not creative direction",
-        "Location restricted to India",
-        "No compensation stated"
-      ]
-    },
-    "where": "Remote, India only",
-    "salary": "Competitive salary"
-  },
-  {
-    "title": "Social Media & Content Manager",
-    "company": "Elevation Partner",
-    "url": "https://www.linkedin.com/jobs/view/4481161077/",
+    "title": "Senior Director - Casino Content Strategy",
+    "company": "Hard Rock Digital",
+    "url": "https://www.linkedin.com/jobs/view/4469477331/",
     "source": "LinkedIn",
     "score": 1,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a mid-level hands-on social media manager role for medspas, far below Travis's 30-year senior CD background.",
+    "score_reason": "This is an iGaming content/supplier strategy ops role with zero creative scope, not a fit for a Creative Director.",
     "facts": {
       "lane": "NOT_A_FIT",
-      "seniority": "MID",
+      "seniority": "SENIOR_LEADER",
       "remote": "HYBRID",
       "geo": "NOT_STATED",
       "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
+      "employer_base": "US",
       "pay_currency": "NOT_STATED",
       "timezone": "NOT_STATED",
       "fit": 1,
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "Requires on-site shoot travel and physical presence, not fully remote",
-        "Mid-level individual contributor/manager scope, not senior creative leadership",
-        "No pay stated, likely well below his $150K+ USD target"
+        "No creative leadership component \u2014 focused on supplier sourcing, IP licensing, KPI tracking",
+        "Hybrid work environment, not fully remote",
+        "No compensation stated"
       ]
     },
-    "where": "Vaughan, Ontario; requires on-site shoot travel",
+    "where": "Canada listed; hybrid/remote environment mentioned",
     "salary": ""
   },
   {
-    "title": "[\uba54\uac00\uc820\uc784\ud50c\ub780\ud2b8] \uce90\ub098\ub2e4 \ubc95\uc778\uc7a5",
-    "company": "MegaGen Implant",
-    "url": "https://www.linkedin.com/jobs/view/4481199683/",
+    "title": "Creative Director - 12-Month Contract (Remote)",
+    "company": "Geotab",
+    "url": "https://www.linkedin.com/jobs/view/4473921934/",
     "source": "LinkedIn",
     "score": 0,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a dental implant company's Canada country manager/GM role, entirely unrelated to creative leadership.",
+    "score_reason": "Strong CD background match but it's a 12-month CAD-paid contract with a hybrid office policy, well under his $150K USD target.",
+    "facts": {
+      "lane": "CORE",
+      "seniority": "SENIOR_LEADER",
+      "remote": "HYBRID",
+      "geo": "NOT_STATED",
+      "hire_path": "CONTRACT",
+      "employer_base": "CANADA",
+      "pay_currency": "CAD",
+      "timezone": "NOT_STATED",
+      "fit": 7,
+      "comp_min_usd": 84826,
+      "comp_max_usd": 113150,
+      "red_flags": [
+        "Pay is in CAD, below his $150K USD target",
+        "Only a 12-month contract, not a permanent role",
+        "Hybrid office model despite 'Remote' in title"
+      ]
+    },
+    "where": "Oakville, Ontario, Canada; hybrid office optional",
+    "salary": "$116,200 CAD - $155,000 CAD"
+  },
+  {
+    "title": "CRO",
+    "company": "Braindate",
+    "url": "https://www.linkedin.com/jobs/view/4482176536/",
+    "source": "LinkedIn",
+    "score": 0,
+    "score_method": "claude-sonnet-5",
+    "score_reason": "This is a CRO/sales-and-marketing leadership role, not creative leadership, and completely outside Travis's background.",
     "facts": {
       "lane": "NOT_A_FIT",
       "seniority": "EXECUTIVE",
+      "remote": "UNCLEAR",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "CANADA",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 0,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "Role is sales/revenue leadership, not creative",
+        "Requires bilingual French/English likely tied to Montreal office",
+        "No remote policy or pay stated"
+      ]
+    },
+    "where": "Montreal, Quebec, Canada",
+    "salary": ""
+  },
+  {
+    "title": "Senior UI Artist (For Honor)",
+    "company": "Ubisoft Montr\u00e9al",
+    "url": "https://www.linkedin.com/jobs/view/4480047826/",
+    "source": "LinkedIn",
+    "score": 0,
+    "score_method": "claude-sonnet-5",
+    "score_reason": "This is a UI/UX artist IC role on game interfaces, not creative leadership, and completely outside his background.",
+    "facts": {
+      "lane": "NOT_A_FIT",
+      "seniority": "MID",
       "remote": "ONSITE",
-      "geo": "CANADA_OK",
+      "geo": "NOT_STATED",
       "hire_path": "UNCLEAR",
       "employer_base": "OTHER",
       "pay_currency": "NOT_STATED",
@@ -194,128 +107,12 @@
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "Not a creative role at all - general management of a medical device business",
-        "Requires dental/implant/medical device industry experience he doesn't have",
-        "Onsite in Burnaby, BC, not remote"
-      ]
-    },
-    "where": "Burnaby, BC, Canada office",
-    "salary": ""
-  },
-  {
-    "title": "Artiste interface utilisateur s\u00e9nior (For Honor)",
-    "company": "Ubisoft Montr\u00e9al",
-    "url": "https://www.linkedin.com/jobs/view/4480044976/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a senior UI artist/designer IC role for a video game, not creative direction, and explicitly not Travis's background or interest.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "UI/UX design IC role, excluded by Travis's stated preferences",
-        "Requires game engine, Figma, Photoshop production skills not in his profile",
-        "No stated remote/hybrid policy or pay"
+        "UX/UI design IC role, explicitly excluded by his preferences",
+        "Onsite in Montreal with no remote mention",
+        "Mid-level individual contributor, not a leadership position"
       ]
     },
     "where": "Montreal, Quebec, Canada",
     "salary": ""
-  },
-  {
-    "title": "Director, Centre for Gender Equity - Faculty of Arts",
-    "company": "University of Calgary",
-    "url": "https://www.linkedin.com/jobs/view/4482165741/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is an academic gender-equity administration role with zero connection to creative/advertising leadership.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Not a creative or marketing role at all",
-        "University admin position, likely onsite in Calgary",
-        "Preference given to Canadian citizens/permanent residents"
-      ]
-    },
-    "where": "Calgary, Alberta, Canada",
-    "salary": ""
-  },
-  {
-    "title": "Director, Application Development - Customer Digital",
-    "company": "Air Canada",
-    "url": "https://www.linkedin.com/jobs/view/4478917584/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a software engineering/IT director role managing app development teams, not creative leadership at all.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "HYBRID",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Engineering/IT director role, not creative",
-        "No remote confirmed - likely hybrid in Toronto",
-        "No pay stated"
-      ]
-    },
-    "where": "Toronto, Ontario, Canada",
-    "salary": ""
-  },
-  {
-    "title": "Fashion Design Director",
-    "company": "Stitch Fusion Apparel Group",
-    "url": "https://www.adzuna.com/land/ad/5938041685?se=8lZH6S3O8RGd8eOqR9IQ5A&utm_medium=api&utm_source=757a890e&v=B2CC2E2D5A8FAEA68B47ED492D55243882F22B3A",
-    "source": "Adzuna",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Fashion apparel design director role has nothing to do with Travis's advertising/brand creative leadership background.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "UNCLEAR",
-      "geo": "US_ONLY",
-      "hire_path": "UNCLEAR",
-      "employer_base": "US",
-      "pay_currency": "USD",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 131000,
-      "comp_max_usd": 131000,
-      "red_flags": [
-        "Fashion/apparel design, not advertising or brand creative",
-        "Listed as US only, likely requires US work authorization",
-        "Remote status unclear, likely onsite NYC design studio"
-      ]
-    },
-    "where": "US",
-    "salary": "$131K\u2013$131K/yr"
   }
 ]

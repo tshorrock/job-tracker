@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-22T15:34:40.388212+00:00",
+  "updated": "2026-10-22T16:56:25.750903+00:00",
   "new_today": 0,
   "today": [],
   "this_week": [
@@ -24,72 +24,6 @@
         "Portfolio must emphasize film-led work specifically, not just integrated campaigns"
       ],
       "added": "2026-10-21"
-    },
-    {
-      "title": "Global Head of Brand & Advertising, Senior Vice President",
-      "company": "State Street",
-      "url": "https://www.linkedin.com/jobs/view/4482105071/",
-      "score": 8,
-      "salary": "",
-      "where": "Boston, MA; listed as Remote",
-      "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "pay_currency": "NOT_STATED",
-      "board": "us",
-      "age_days": 1,
-      "repost_count": 0,
-      "why": "Exactly his level and discipline \u2014 Global Head of Brand & Advertising at a major US financial firm \u2014 but almost no details are available to judge logistics.",
-      "red_flags": [
-        "No job description available to confirm remote/hybrid reality",
-        "Large US financial institution may default to requiring US-based employment",
-        "No info on international hiring, pay currency, or compensation"
-      ],
-      "added": "2026-10-21"
-    },
-    {
-      "title": "AI Creative Director",
-      "company": "Superside",
-      "url": "https://www.linkedin.com/jobs/view/4480238163/",
-      "score": 8,
-      "salary": "",
-      "where": "Fully remote; Canada explicitly listed",
-      "remote": "FULLY_REMOTE",
-      "geo": "CANADA_OK",
-      "hire_path": "OPEN_GLOBAL",
-      "pay_currency": "NOT_STATED",
-      "board": "us",
-      "age_days": 3,
-      "repost_count": 0,
-      "why": "Strong creative-leadership and AI-tool fit, but pay and employer details are completely undisclosed.",
-      "red_flags": [
-        "No compensation stated anywhere in posting",
-        "Employer HQ/payroll country not specified",
-        "Very large globally distributed team (700+ in 60 countries) may mean less hands-on creative control"
-      ],
-      "added": "2026-10-20"
-    },
-    {
-      "title": "Executive Creative Director",
-      "company": "Weber Shandwick",
-      "url": "https://www.linkedin.com/jobs/view/4479180412/",
-      "score": 8,
-      "salary": "",
-      "where": "New York, NY; Remote label on LinkedIn",
-      "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "pay_currency": "NOT_STATED",
-      "board": "us",
-      "age_days": 7,
-      "repost_count": 0,
-      "why": "ECD title at a major US agency network is squarely in his lane but the listing has no details to confirm remote or pay terms.",
-      "red_flags": [
-        "No job description available to verify role scope",
-        "Pay not stated",
-        "Hire path and true remote policy unclear"
-      ],
-      "added": "2026-10-16"
     },
     {
       "title": "Principal, Creative Director - Campaigns",
@@ -134,50 +68,6 @@
         "Narrow social-media focus rather than full integrated creative leadership"
       ],
       "added": "2026-10-22"
-    },
-    {
-      "title": "Director of Brand, Creative & Content",
-      "company": "Teikametrics",
-      "url": "https://www.linkedin.com/jobs/view/4475770149/",
-      "score": 7,
-      "salary": "$160,000 USD - $175,000 USD",
-      "where": "Boston, MA or remote, no country stated",
-      "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "pay_currency": "USD",
-      "board": "us",
-      "age_days": 1,
-      "repost_count": 0,
-      "why": "Strong creative leadership scope but it's B2B SaaS content/demand-gen work, not brand/ad-campaign creative, and hiring country isn't clarified.",
-      "red_flags": [
-        "No explicit statement on which countries can be hired, so Canada eligibility unclear",
-        "Role leans heavily into content marketing/demand-gen rather than brand campaign creative",
-        "Reports to VP of Marketing as a Director, a step down from his CD/National CD titles"
-      ],
-      "added": "2026-10-21"
-    },
-    {
-      "title": "Executive Creative Director",
-      "company": "Ramotion",
-      "url": "https://www.linkedin.com/jobs/view/4478657813/",
-      "score": 7,
-      "salary": "Compensation agreed per project, revenue-share upside",
-      "where": "Remote, US-based (no office days)",
-      "remote": "FULLY_REMOTE",
-      "geo": "US_REMOTE",
-      "hire_path": "CONTRACT",
-      "pay_currency": "NOT_STATED",
-      "board": "us",
-      "age_days": 2,
-      "repost_count": 0,
-      "why": "Strong creative-leadership fit, but it's a project-based contract with no stated salary, which falls short of his $150K+ target.",
-      "red_flags": [
-        "Contract/project-based, not full-time employment",
-        "No stated compensation or pay range",
-        "Listed as US-based remote, uncertain if Canada-based hire possible"
-      ],
-      "added": "2026-10-21"
     }
   ]
 }
