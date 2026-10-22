@@ -1019,7 +1019,8 @@ function makeCard(j, idx = 0) {
   if (j.snippet_only) tags.push(`<span class="tag tag-flag" title="Only a short snippet was available, so this score is a guess. Open the posting.">Snippet only</span>`);
   if (f.hire_path === 'CONTRACT') tags.push(`<span class="tag tag-geo">Contract</span>`);
   if (f.remote === 'REMOTE_SOME_TRAVEL') tags.push(`<span class="tag tag-flag">Travel</span>`);
-  if (f.remote === 'UNCLEAR') tags.push(`<span class="tag tag-flag">Remote unconfirmed</span>`);
+  if (j.remote_verified) tags.push(`<span class="tag tag-geo" title="Checked against LinkedIn's real workplace chip (logged-in) on ${escapeHtml(j.remote_verified)}">Remote ✓ verified</span>`);
+  else if (f.remote === 'UNCLEAR') tags.push(`<span class="tag tag-flag">Remote unconfirmed</span>`);
   if (f.remote === 'HYBRID' || f.remote === 'ONSITE') tags.push(`<span class="tag tag-flag">${f.remote === 'HYBRID' ? 'Hybrid' : 'On-site'}</span>`);
   if (isApplied(j)) tags.push(`<span class="tag tag-saved" title="Application submitted">✓ Applied ${escapeHtml(appliedDate(j))}</span>`);
   if (isSaved)  tags.push(`<span class="tag tag-saved">★ Saved</span>`);

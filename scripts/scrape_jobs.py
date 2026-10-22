@@ -302,8 +302,11 @@ def fetch_linkedin_search(query, location, page):
             if not (t and jid): continue
             jobs.append(new_job(title=t.get_text(strip=True), company=c.get_text(strip=True) if c else "",
                                 url=li_url(jid), li_id=jid, source="LinkedIn",
-                                # searched with LinkedIn's Remote filter (f_WT=2), so LinkedIn labels it Remote
-                                location=(loc.get_text(strip=True) + " · " if loc else "") + "Remote (LinkedIn label)",
+                                # NOTE: searched with LinkedIn's Remote filter (f_WT=2), but that filter is
+                                # unreliable — a 22 Oct 2026 audit of 152 cards against the logged-in chip found
+                                # 71 hybrid/on-site/no-remote roles it had let through. Never stamp "Remote" from
+                                # the filter; remote must be proven by the posting text or the per-job chip.
+                                location=loc.get_text(strip=True) if loc else "",
                                 posted=tm.get("datetime", "") if tm else "",
                                 salary=sal.get_text(" ", strip=True) if sal else ""))
     except urllib.error.HTTPError as e:
@@ -816,9 +819,11 @@ LANES
   entertainment, gaming, hospitality, festivals.
 - NOT_A_FIT: anything else (designer IC roles, product design, engineering, sales, ops, junior).
 
-REMOTE RULES: he only wants 100% remote. "Remote (LinkedIn label)" in the location means the employer
-tagged it Remote on LinkedIn; treat that as FULLY_REMOTE unless the description mentions office days,
-hybrid, or on-site work, which always win.
+REMOTE RULES: he only wants 100% remote. A city in the location line is NOT evidence of remote, and
+neither is the search feed it came from (LinkedIn's Remote filter lets hybrid roles through — an audit
+found half its results weren't remote). Say FULLY_REMOTE only when the POSTING TEXT itself establishes
+it ("remote", "work from anywhere", "distributed team", a remote policy). Office days, hybrid, or
+on-site mentions always win. If the text never settles it, use UNCLEAR — never guess remote.
 
 GEO RULES (be careful — this decides whether he can actually be hired)
 - OPEN_ANYWHERE: worldwide / anywhere / any country.
