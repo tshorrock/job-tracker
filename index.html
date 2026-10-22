@@ -218,6 +218,10 @@ body{
   text-transform:uppercase;padding:4px 2px 8px;border-bottom:1px solid var(--line,#1c2a3a);margin-bottom:4px}
 .col-head.us{color:var(--teal)}
 .col-head.ca{color:#F5A623}
+.col-head.applied{color:#8a79ff}
+.applied-section{grid-column:1 / -1;margin-top:28px;display:flex;flex-direction:column;gap:12px}
+.applied-section .jcard{opacity:.75}
+.applied-section .jcard:hover{opacity:1}
 .col-count{font-size:10px;opacity:.7;background:rgba(255,255,255,0.05);border-radius:10px;padding:1px 8px}
 .col-empty{color:var(--t5,#445566);font-size:13px;padding:18px 4px;font-style:italic}
 
@@ -1098,9 +1102,18 @@ function render() {
   let i = 0;
   const paint = arr => arr.map(j => makeCard(j, i++)).join('');
   const head = (label, n, cls) => `<div class="col-head ${cls}">${label}<span class="col-count">${n}</span></div>`;
+  // On the main Active view, applied roles sit in their own section below the boards —
+  // out of the way, but visible without switching tabs. Both boards stay fresh-only.
+  let appliedHtml = '';
+  if (currentFilter === 'active') {
+    const ap = jobs.filter(j => isApplied(j))
+      .sort((a,b) => appliedDate(b).localeCompare(appliedDate(a)) || (b.score||0) - (a.score||0));
+    if (ap.length) appliedHtml = `<div class="applied-section">${head('✓ Applied — in play', ap.length, 'applied')}${ap.map(j => makeCard(j, i++)).join('')}</div>`;
+  }
   root.innerHTML = `
     <div class="column board-us">${head('US &amp; Global · USD', us.length, 'us')}${paint(us) || '<div class="col-empty">Nothing here right now.</div>'}</div>
     <div class="column board-ca">${head('Canada', ca.length, 'ca')}${paint(ca) || '<div class="col-empty">No Canadian roles on the board.</div>'}</div>
+    ${appliedHtml}
   `;
 }
 
