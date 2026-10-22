@@ -1077,6 +1077,7 @@ def process(stats):
         dropped["us_payroll"] = before - len(existing) - len(scored)
         print(f"  → dropped {dropped['us_payroll']} US-payroll-only roles (no US work authorization)")
     for j in existing + scored: j["board"] = assign_board(j)
+    scan_canada_signals(existing + scored)
     repost_ids = stats.pop("_repost_ids", set())
     for j in existing:
         if j.get("id") in repost_ids:
@@ -1103,6 +1104,54 @@ def process(stats):
                           "model": SCORING_MODEL, "sources": stats, "prefilter_dropped": dropped})
     save_picks(kept, all_jobs, now)
     return kept, all_jobs
+
+# ─── CANADA SIGNAL ───────────────────────────────────────────────────────────
+# Travis is Canadian. A "US remote" header never says whether the employer can hire him — but the
+# apply page often does: many ATSs list every eligible country or state the real residency rule.
+# Scan apply pages and record what they reveal. Conservative: a signal tags the card, never guesses.
+CANADA_POS_RE = re.compile(
+    r"\bCanad(?:a|ian)\b|\bNorth America\b|work from anywhere|anywhere in the Americas"
+    r"|\bLATAM\b|Latin America|globally remote|global[- ]remote|remote[- ](?:first|global)", re.I)
+US_LOCK_RE = re.compile(
+    r"must (?:be located|reside|live|be based) in the (?:U\.?S\.?A?\.?|United States)"
+    r"|(?:U\.?S\.?|United States) work authorization (?:is )?required"
+    r"|authorized to work in the (?:U\.?S\.?|United States) without sponsorship"
+    r"|only (?:able to )?hire in the (?:U\.?S\.?|United States)"
+    r"|green card|W-?2 employee|US[- ]based (?:employees|candidates) only", re.I)
+ATS_URL_RE = re.compile(r"greenhouse\.io|grnh\.se|lever\.co|ashbyhq\.com|workable\.com|smartrecruiters\.com"
+                        r"|rippling\.com|myworkdayjobs|clearcompany\.com|paylocity\.com|comeet\.com|jobs\.gem\.com", re.I)
+
+def scan_canada_signals(all_jobs, cap=40):
+    done = 0
+    for j in all_jobs:
+        if done >= cap: break
+        if j.get("applied") or j.get("canada_signal"): continue
+        f = j.get("facts") or {}
+        if f.get("geo") not in ("US_REMOTE", "NOT_STATED", None): continue
+        url = j.get("apply_url") or ""
+        if not url and ATS_URL_RE.search(j.get("url") or ""): url = j["url"]
+        if not url: continue
+        done += 1
+        try:
+            txt = fetch_full_posting(url) or ""
+        except Exception:
+            txt = ""
+        if len(txt) < 300:
+            j["canada_signal"] = "unreadable"; continue
+        pos, lock = bool(CANADA_POS_RE.search(txt)), bool(US_LOCK_RE.search(txt))
+        if pos and not lock:
+            j["canada_signal"] = "canada_ok"
+            if not f.get("hire_path") or f.get("hire_path") == "UNCLEAR":
+                f["hire_path"] = "CANADA_POSSIBLE"; j["facts"] = f
+            print(f"  🍁 apply page mentions Canada/anywhere: {j['title'][:45]} @ {(j.get('company') or '')[:20]}")
+        elif lock and not pos:
+            j["canada_signal"] = "us_only"
+            f.setdefault("red_flags", []).append("Apply page: US residency/work authorization required")
+            j["facts"] = f
+            print(f"  🚫 apply page locks to US: {j['title'][:45]} @ {(j.get('company') or '')[:20]}")
+        else:
+            j["canada_signal"] = "unclear"
+        time.sleep(1.0 + random.random())
 
 def assign_board(j):
     """Which board a job belongs on. None = don't show it at all.
