@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-22T17:53:16.132279+00:00",
-  "new_today": 0,
+  "updated": "2026-10-23T07:40:21.662441+00:00",
+  "new_today": 1,
   "today": [],
   "this_week": [
     {
@@ -15,7 +15,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 6,
+      "age_days": 7,
       "repost_count": 0,
       "why": "A genuine Creative Director role building a film-led brand storytelling function, remote-eligible and well-paid, that lines up closely with his big-campaign agency background.",
       "red_flags": [
@@ -24,28 +24,6 @@
         "Portfolio must emphasize film-led work specifically, not just integrated campaigns"
       ],
       "added": "2026-10-21"
-    },
-    {
-      "title": "Creative Director (social) [AQ-23287]",
-      "company": "Aquent",
-      "url": "https://www.linkedin.com/jobs/view/4479453697/",
-      "score": 7,
-      "salary": "$165,000.00/yr - $170,000.00/yr",
-      "where": "San Diego, CA or remote (US-based)",
-      "remote": "FULLY_REMOTE",
-      "geo": "US_REMOTE",
-      "hire_path": "CONTRACT",
-      "pay_currency": "USD",
-      "board": "us",
-      "age_days": 1,
-      "repost_count": 0,
-      "why": "Strong senior CD pay and scope, but it's a social-first niche role staffed through an agency (Aquent), not a direct US employer.",
-      "red_flags": [
-        "Staffing/placement agency role, may be contract or limited-term",
-        "Hire path likely requires US work authorization",
-        "Narrow social-media focus rather than full integrated creative leadership"
-      ],
-      "added": "2026-10-22"
     }
   ]
 }
