@@ -1105,18 +1105,10 @@ function render() {
   let i = 0;
   const paint = arr => arr.map(j => makeCard(j, i++)).join('');
   const head = (label, n, cls) => `<div class="col-head ${cls}">${label}<span class="col-count">${n}</span></div>`;
-  // On the main Active view, applied roles sit in their own section below the boards —
-  // out of the way, but visible without switching tabs. Both boards stay fresh-only.
-  let appliedHtml = '';
-  if (currentFilter === 'active') {
-    const ap = jobs.filter(j => isApplied(j))
-      .sort((a,b) => appliedDate(b).localeCompare(appliedDate(a)) || (b.score||0) - (a.score||0));
-    if (ap.length) appliedHtml = `<div class="applied-section">${head('✓ Applied — in play', ap.length, 'applied')}${ap.map(j => makeCard(j, i++)).join('')}</div>`;
-  }
+  // Applied roles NEVER appear on the main boards — they live only in the ✓ Applied tab.
   root.innerHTML = `
     <div class="column board-us">${head('US &amp; Global · USD', us.length, 'us')}${paint(us) || '<div class="col-empty">Nothing here right now.</div>'}</div>
     <div class="column board-ca">${head('Canada', ca.length, 'ca')}${paint(ca) || '<div class="col-empty">No Canadian roles on the board.</div>'}</div>
-    ${appliedHtml}
   `;
 }
 

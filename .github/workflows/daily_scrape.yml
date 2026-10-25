@@ -5,9 +5,9 @@ on:
     # GitHub starts scheduled runs 5-9 hours late (Oct 2026 runs set for 10:23 UTC started 15:00-20:00).
     # So it fires three times overnight (times in UTC; Travis is on UTC-6) and the scraper skips
     # any start within 12 hours of the last finished run. Whichever starts first does the work.
-    - cron: '17 2 * * 1-5'
-    - cron: '41 5 * * 1-5'
-    - cron: '13 8 * * 1-5'
+    - cron: '17 2 * * *'
+    - cron: '41 5 * * *'
+    - cron: '13 8 * * *'
   workflow_dispatch:
 
 # Overlapping starts queue instead of running side by side; the queued one then sees the fresh data and skips.
