@@ -795,45 +795,6 @@
     "canada_signal": "unclear"
   },
   {
-    "title": "VP, Group Creative Director- Copy (Pharma Ad Agency Experience Required)",
-    "company": "EVERSANA INTOUCH",
-    "url": "https://www.linkedin.com/jobs/view/4477599673/",
-    "description": "",
-    "salary": "",
-    "location": "Chicago, IL",
-    "source": "LinkedIn",
-    "posted": "2026-10-12",
-    "li_id": "4477599673",
-    "score": 4,
-    "age_days": 0,
-    "category": "CORE",
-    "score_reason": "Requires pharma ad agency experience and a copy-specific background, which Travis doesn't have.",
-    "score_method": "claude-sonnet-5",
-    "facts": {
-      "lane": "CORE",
-      "seniority": "EXECUTIVE",
-      "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 4,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Explicitly requires pharma ad agency experience",
-        "Copywriting-focused VP GCD role, not his integrated CD background",
-        "No job description or pay info to verify remote/geo rules"
-      ]
-    },
-    "where": "Chicago, IL; tagged Remote on LinkedIn",
-    "id": "529d7ce74367",
-    "added": "2026-10-12T19:58:03.709718+00:00",
-    "snippet_only": false,
-    "board": "us",
-    "remote_verified": "2026-10-22",
-    "apply_url": "https://jobs.smartrecruiters.com/EVERSANA1/744000155082818-vp-group-creative-director-copy-pharma-ad-agency-experience-required-",
-    "canada_signal": "unclear"
-  },
-  {
     "title": "Senior Director, Creative & Brand Culture - Remote",
     "company": "Lovesac Company",
     "url": "https://www.mediabistro.com/jobs/3543106897-senior-director-creative-brand-culture-remote",
@@ -1205,42 +1166,6 @@
     "apply_url": "https://jobs.gem.com/biorender/am9icG9zdDqKo1ucdjow2IEx_2w8OI60",
     "repost_count": 1,
     "last_repost": "2026-10-25"
-  },
-  {
-    "title": "Creative Director",
-    "company": "American Bath Group",
-    "url": "https://www.adzuna.com/land/ad/5914026524?se=6uCMfqbB8RGUu_Rhx7jCqA&utm_medium=api&utm_source=757a890e&v=4C1B20B823B321E0C855684CE2CB1008DE64F192",
-    "description": "Creative Director Remote, United States Periodic travel to Irving, TX and Jackson, TN A portfolio-wide creative leadership role at the intersection of premium brand building, multi-channel execution, and creative operating-system design. COMPANY OVERVIEW American Bath Group brings together a portfolio of bath and shower brands serving a wide range of customers and channels, including retail, wholesale and trade partners, showrooms, designers, architects, and end consumers. The portfolio spans p\u2026",
-    "salary": "$161K\u2013$161K/yr",
-    "location": "US",
-    "source": "Adzuna",
-    "posted": "2026-10-06T12:25:36Z",
-    "li_id": "",
-    "score": 4,
-    "age_days": 0,
-    "category": "CORE",
-    "score_reason": "Solid pay and real creative leadership scope, but it's a manufacturing/retail brand CD role rather than agency-style work, with required travel.",
-    "score_method": "claude-sonnet-5",
-    "facts": {
-      "lane": "CORE",
-      "seniority": "SENIOR_LEADER",
-      "remote": "REMOTE_SOME_TRAVEL",
-      "geo": "US_REMOTE",
-      "timezone": "AMERICAS_HOURS",
-      "fit": 6,
-      "comp_min_usd": 161000,
-      "comp_max_usd": 161000,
-      "red_flags": [
-        "Requires periodic travel to Irving, TX and Jackson, TN",
-        "Non-agency industry (bath/shower products) differs from his ad agency background",
-        "Geo may be restricted to US despite no explicit residency clause"
-      ]
-    },
-    "where": "Remote US, periodic travel to TX/TN",
-    "id": "219e2f2aa064",
-    "added": "2026-10-06T16:57:44.341546+00:00",
-    "snippet_only": true,
-    "board": "us"
   },
   {
     "title": "Remote Creative Director, Brand & Content",
