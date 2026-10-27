@@ -816,12 +816,22 @@ async function boot() {
       persistSaved(); persistDismissed(); persistApplied();
     } catch (e) {}
   } catch (e) {
-    jobs = []; meta = { updated: 'never', new_count: 0, total_count: 0 };
+    // Transient fetch failure during a background refresh: keep what's on screen.
+    if (!jobs.length) { jobs = []; meta = { updated: 'never', new_count: 0, total_count: 0 }; }
   }
   updateMeta();
   countUp();
   render();
+  lastDataFetch = Date.now();
 }
+
+// A tab left open for days used to show the world as it was at load time.
+// Now the data re-fetches every 10 minutes, and immediately when the tab regains focus.
+let lastDataFetch = 0;
+setInterval(() => boot(), 10 * 60 * 1000);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && Date.now() - lastDataFetch > 60 * 1000) boot();
+});
 
 // ── META ──────────────────────────────────────────────────────────────────
 function updateMeta() {
