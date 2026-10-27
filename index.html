@@ -822,16 +822,9 @@ async function boot() {
   updateMeta();
   countUp();
   render();
-  lastDataFetch = Date.now();
 }
-
-// A tab left open for days used to show the world as it was at load time.
-// Now the data re-fetches every 10 minutes, and immediately when the tab regains focus.
-let lastDataFetch = 0;
-setInterval(() => boot(), 10 * 60 * 1000);
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden && Date.now() - lastDataFetch > 60 * 1000) boot();
-});
+// No background polling, by Travis's choice: data loads once per page load.
+// Hitting the browser's refresh always shows the latest (fetches carry a cache-buster).
 
 // ── META ──────────────────────────────────────────────────────────────────
 function updateMeta() {
