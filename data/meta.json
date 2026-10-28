@@ -1,39 +1,39 @@
 {
-  "updated": "2026-10-27T07:55:32.516523+00:00",
-  "new_count": 1,
-  "total_count": 54,
+  "updated": "2026-10-28T08:33:42.202452+00:00",
+  "new_count": 2,
+  "total_count": 56,
   "model": "claude-sonnet-5",
   "sources": {
     "Apify LinkedIn": {
-      "fetched": 35,
-      "new": 6
+      "fetched": 14,
+      "new": 10
     },
     "LinkedIn alerts": {
-      "fetched": 5,
+      "fetched": 7,
       "new": 0
     },
     "LinkedIn guest": {
-      "fetched": 498,
-      "new": 83
+      "fetched": 520,
+      "new": 120
     },
     "Careers pages": {
-      "fetched": 25,
-      "new": 1
+      "fetched": 23,
+      "new": 0
     },
     "Adzuna": {
-      "fetched": 122,
-      "new": 1
+      "fetched": 101,
+      "new": 0
     },
     "JSearch": {
-      "fetched": 27,
-      "new": 4
+      "fetched": 0,
+      "new": 0
     },
     "RemoteOK": {
       "fetched": 99,
       "new": 0
     },
     "Working Nomads": {
-      "fetched": 39,
+      "fetched": 41,
       "new": 0
     },
     "Himalayas": {
@@ -42,9 +42,9 @@
     }
   },
   "prefilter_dropped": {
-    "hybrid": 11,
+    "hybrid": 23,
     "us_only": 1,
-    "us_payroll": 32
+    "us_payroll": 53
   },
   "email": "failed: SMTPServerDisconnected: Connection unexpectedly closed"
 }
