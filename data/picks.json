@@ -1,7 +1,119 @@
 {
-  "updated": "2026-10-28T08:33:42.202452+00:00",
-  "new_today": 2,
+  "updated": "2026-10-29T08:32:35.912986+00:00",
+  "new_today": 8,
   "today": [
+    {
+      "title": "Creative Director [84412]",
+      "company": "Onward Search",
+      "url": "https://www.linkedin.com/jobs/view/4482527727/",
+      "score": 8,
+      "salary": "$180,000.00/yr - $210,000.00/yr",
+      "where": "Remote, client in San Jose CA",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "hire_path": "CONTRACT",
+      "pay_currency": "USD",
+      "board": "us",
+      "age_days": 1,
+      "repost_count": 0,
+      "why": "Solid CD scope and pay, but staffing-agency language hints at contract/assignment work rather than a true FTE role.",
+      "red_flags": [
+        "Posted via staffing agency (Onward Search) with assignment-based benefits eligibility, suggesting contract not FTE",
+        "No explicit country residency rule stated, geo inferred from single US city",
+        "Narrow focus on family-friendly entertainment marketing, less integrated brand scope than his background"
+      ],
+      "added": "2026-10-29"
+    },
+    {
+      "title": "Creative Director (Remote US)",
+      "company": "Directive",
+      "url": "https://www.linkedin.com/jobs/view/4484780113/",
+      "score": 7,
+      "salary": "$160K\u2013$185K/yr",
+      "where": "Remote: US, Canada, Mexico, UK (work auth required)",
+      "remote": "FULLY_REMOTE",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "pay_currency": "USD",
+      "board": "us",
+      "age_days": 0,
+      "repost_count": 0,
+      "why": "Legit remote CD title at $160-185K with real Canada hiring path, but it's a performance-marketing/P&L-owner role far from his brand-CD background.",
+      "red_flags": [
+        "Heavy emphasis on P&L ownership, margins, and department as a 'profitable business unit' rather than pure creative leadership",
+        "Performance/paid social/display focus is a different discipline than his brand and integrated campaign background",
+        "Not client-facing day-to-day, limited to monthly leadership check-ins, unclear if pay scale applies outside the US"
+      ],
+      "added": "2026-10-29"
+    },
+    {
+      "title": "Head of Creative (Remote US)",
+      "company": "Directive",
+      "url": "https://www.linkedin.com/jobs/view/4484777043/",
+      "score": 7,
+      "salary": "$160K\u2013$185K/yr",
+      "where": "Remote US; also Canada, Mexico, UK with work authorization",
+      "remote": "FULLY_REMOTE",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "pay_currency": "USD",
+      "board": "us",
+      "age_days": 0,
+      "repost_count": 0,
+      "why": "Senior, hands-on AI-driven creative leadership role with real P&L ownership and explicit Canada hiring path, but it's performance-design/paid-social work at a B2B agency, a step down in scale and prestige from his big-brand campaign background.",
+      "red_flags": [
+        "Focus is performance design (paid social/display/landing pages) rather than large integrated brand campaigns",
+        "US pay range stated but Canadian compensation/currency not specified, likely lower",
+        "Agency is a mid-size B2B performance marketing shop, smaller scale than his past employers"
+      ],
+      "added": "2026-10-29"
+    },
+    {
+      "title": "Head of Creative (Remote Canada)",
+      "company": "Directive",
+      "url": "https://www.linkedin.com/jobs/view/4484768397/",
+      "score": 7,
+      "salary": "$175K\u2013$200K/yr CAD",
+      "where": "Remote, Canada (permanent work authorization required)",
+      "remote": "FULLY_REMOTE",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "pay_currency": "CAD",
+      "board": "canada",
+      "age_days": 0,
+      "repost_count": 0,
+      "why": "Solid Head of Creative leadership role but paid in CAD, likely below his $150K+ USD target and focused on performance/paid-social design rather than big-brand campaigns.",
+      "red_flags": [
+        "Pay stated in CAD (~$128K-$146K USD), below his $150K+ USD target",
+        "Role centers on performance/paid-social design, not his large integrated brand campaign background",
+        "Heavy financial/P&L ownership duties beyond pure creative leadership"
+      ],
+      "added": "2026-10-29"
+    },
+    {
+      "title": "Director of Creative (Remote US)",
+      "company": "Directive",
+      "url": "https://www.linkedin.com/jobs/view/4484776046/",
+      "score": 7,
+      "salary": "$160,000-$185,000 USD (US-based)",
+      "where": "Remote US; Canada, Mexico, UK also eligible",
+      "remote": "FULLY_REMOTE",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "pay_currency": "USD",
+      "board": "us",
+      "age_days": 0,
+      "repost_count": 0,
+      "why": "Legit senior creative leadership role with explicit Canada eligibility and real remote policy, but it's performance/B2B design ops with heavy P&L focus rather than brand creative.",
+      "red_flags": [
+        "Stated salary is only for US-based candidates; Canada pay likely lower/CAD",
+        "Role leans heavily into P&L ownership and performance-metrics design, not brand/advertising craft",
+        "Managing designers/motion contractors on paid social and landing pages is narrower scope than his big-brand integrated campaign background"
+      ],
+      "added": "2026-10-29"
+    }
+  ],
+  "this_week": [
     {
       "title": "Creative Director",
       "company": "Said Differently",
@@ -14,7 +126,7 @@
       "hire_path": "OPEN_GLOBAL",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 0,
+      "age_days": 1,
       "repost_count": 0,
       "why": "Solid agency CD role with real creative leadership, fully remote and open internationally \u2014 strong match for Travis's background.",
       "red_flags": [
@@ -23,30 +135,6 @@
         "Two roles posted together suggests high volume hiring, may be less bespoke"
       ],
       "added": "2026-10-28"
-    }
-  ],
-  "this_week": [
-    {
-      "title": "Creative Director - Brand Narrative",
-      "company": "Mercury",
-      "url": "https://job-boards.greenhouse.io/mercury/jobs/6225753004",
-      "score": 9,
-      "salary": "$189K\u2013$237K/yr",
-      "where": "SF, NYC, Portland, or remote US/Canada",
-      "remote": "FULLY_REMOTE",
-      "geo": "CANADA_OK",
-      "hire_path": "CANADA_POSSIBLE",
-      "pay_currency": "USD",
-      "board": "us",
-      "age_days": 12,
-      "repost_count": 0,
-      "why": "A genuine Creative Director role building a film-led brand storytelling function, remote-eligible and well-paid, that lines up closely with his big-campaign agency background.",
-      "red_flags": [
-        "If hired as a Canadian employee, pay is in CAD rather than his preferred USD",
-        "Heavy emphasis on building a new team/culture, not just creative output",
-        "Portfolio must emphasize film-led work specifically, not just integrated campaigns"
-      ],
-      "added": "2026-10-21"
     }
   ]
 }
