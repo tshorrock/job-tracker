@@ -1,7 +1,30 @@
 {
-  "updated": "2026-10-29T08:32:35.912986+00:00",
-  "new_today": 8,
-  "today": [
+  "updated": "2026-10-30T08:43:40.726221+00:00",
+  "new_today": 2,
+  "today": [],
+  "this_week": [
+    {
+      "title": "Creative Director",
+      "company": "Said Differently",
+      "url": "https://www.linkedin.com/jobs/view/4484082340/",
+      "score": 10,
+      "salary": "",
+      "where": "Remote, US or international, Eastern hours",
+      "remote": "FULLY_REMOTE",
+      "geo": "OPEN_ANYWHERE",
+      "hire_path": "OPEN_GLOBAL",
+      "pay_currency": "NOT_STATED",
+      "board": "us",
+      "age_days": 2,
+      "repost_count": 0,
+      "why": "Solid agency CD role with real creative leadership, fully remote and open internationally \u2014 strong match for Travis's background.",
+      "red_flags": [
+        "No pay stated",
+        "Employer structure for international hires unclear (EOR vs contract)",
+        "Two roles posted together suggests high volume hiring, may be less bespoke"
+      ],
+      "added": "2026-10-28"
+    },
     {
       "title": "Creative Director [84412]",
       "company": "Onward Search",
@@ -14,7 +37,7 @@
       "hire_path": "CONTRACT",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 1,
+      "age_days": 2,
       "repost_count": 0,
       "why": "Solid CD scope and pay, but staffing-agency language hints at contract/assignment work rather than a true FTE role.",
       "red_flags": [
@@ -36,7 +59,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 0,
+      "age_days": 1,
       "repost_count": 0,
       "why": "Legit remote CD title at $160-185K with real Canada hiring path, but it's a performance-marketing/P&L-owner role far from his brand-CD background.",
       "red_flags": [
@@ -58,7 +81,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 0,
+      "age_days": 1,
       "repost_count": 0,
       "why": "Senior, hands-on AI-driven creative leadership role with real P&L ownership and explicit Canada hiring path, but it's performance-design/paid-social work at a B2B agency, a step down in scale and prestige from his big-brand campaign background.",
       "red_flags": [
@@ -80,7 +103,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "CAD",
       "board": "canada",
-      "age_days": 0,
+      "age_days": 1,
       "repost_count": 0,
       "why": "Solid Head of Creative leadership role but paid in CAD, likely below his $150K+ USD target and focused on performance/paid-social design rather than big-brand campaigns.",
       "red_flags": [
@@ -102,7 +125,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 0,
+      "age_days": 1,
       "repost_count": 0,
       "why": "Legit senior creative leadership role with explicit Canada eligibility and real remote policy, but it's performance/B2B design ops with heavy P&L focus rather than brand creative.",
       "red_flags": [
@@ -111,30 +134,6 @@
         "Managing designers/motion contractors on paid social and landing pages is narrower scope than his big-brand integrated campaign background"
       ],
       "added": "2026-10-29"
-    }
-  ],
-  "this_week": [
-    {
-      "title": "Creative Director",
-      "company": "Said Differently",
-      "url": "https://www.linkedin.com/jobs/view/4484082340/",
-      "score": 10,
-      "salary": "",
-      "where": "Remote, US or international, Eastern hours",
-      "remote": "FULLY_REMOTE",
-      "geo": "OPEN_ANYWHERE",
-      "hire_path": "OPEN_GLOBAL",
-      "pay_currency": "NOT_STATED",
-      "board": "us",
-      "age_days": 1,
-      "repost_count": 0,
-      "why": "Solid agency CD role with real creative leadership, fully remote and open internationally \u2014 strong match for Travis's background.",
-      "red_flags": [
-        "No pay stated",
-        "Employer structure for international hires unclear (EOR vs contract)",
-        "Two roles posted together suggests high volume hiring, may be less bespoke"
-      ],
-      "added": "2026-10-28"
     }
   ]
 }
