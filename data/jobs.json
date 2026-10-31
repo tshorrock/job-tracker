@@ -294,6 +294,45 @@
     "applied": "2026-10-23"
   },
   {
+    "title": "Founding Creative Director",
+    "company": "Siena AI",
+    "url": "https://www.linkedin.com/jobs/view/4479850336/",
+    "description": "Meet Siena\n\nSiena is the Agent of Record for CX, built for consumer brands like Spanx, FIGS, Brooklinen, and Gr\u00fcns.\n\nIt runs as a connected multi-agent stack on top of a shared intelligence layer: agents that sell, support, listen, handle social and voice across the entire customer journey, turning every conversation into signal you can act on.\n\nThe team\n\nWe are a small, fully distributed, global team. We have built leverage into how we work, which is what lets a team this size move at the speed we do.\n\nWe hire athletes. Everyone here owns real outcomes, defaults to writing over meetings, communicates with directness, and acts the moment they see something worth acting on. Low ego, high standards, fast clock.\n\nIf you want to set the bar rather than follow one, keep reading.\n\nThe Role\n\nSiena is about to launch several products in quick succession, and we're not looking for someone to execute a brief well. We're looking for the person whose taste the rest of the company gets measured against: someone who can't look at a landing page without having an opinion, who'd rather kill a launch than ship something mediocre, and who has owned creative direction before, not just contributed to it.\n\nThis is a craft title, not a headcount title. You'll ship personally for the first year and set the bar for everyone who comes after, building toward a small internal agency (two to three people across design, motion, and content) that can brief, position, and launch without outside help.\n\nWhat You'll Do\n\nOwn narrative and positioning across every launch. Design as strategy, not decoration\nOwn every artifact that goes to market: landing pages, launch video, decks, social\nOwn the design system, from v3 onward\nSet the bar, full stop. If it ships under the Siena name, you made it or you signed off on it\n\nWho You Are\n\nThe Bar: If you're missing any of these, this isn't the role for you.\n\nTaste, above everything, with specific, defended opinions about what's good and why\nA track record of owning creative direction, not just contributing to it. Agency or in-house, brand refresh or full launch, you've been the person whose call was final, not the one waiting on notes\nAI as a working tool, not a threat to your taste. You've already built something with AI (an app, a prototype, a mockup) and want to get technical enough to ship a landing page yourself within a year. Anti-AI is disqualifying\n\nStrong Signal: Not dealbreakers, but what separates a good hire from a great one.\n\nNarrative thinking: you already have a point of view on how a brand like Siena should be positioned, not just how it should look\nRange that travels. Your background doesn't have to be SaaS. Fashion, art, consumer brand, editorial: what matters is whether your taste holds up somewhere new\nA pattern of shipping in chaos, not around it. Multiple launches in flight, feedback that moves in hours not weeks\n\nNice to Have: Bonus, not required.\n\nExperience building or scaling a small internal creative team\nMotion or video production skills alongside visual design\nDirect, founder-facing creative leadership experience at another startup\n\nNot a Fit If:\n\nYou need a creative director above you setting the vision, or a team to delegate to on day one\nYour best work happens on a slow, considered, one-project-at-a-time pace\nToo much scrutiny too fast doesn't sound exciting, it sounds exhausting\n\nWhy Siena?\n\nReal ownership. You will own problems, not tasks, with the autonomy to solve them your way and the trust to do it without a manager in your inbox.\n\nWork that ships and matters. What you build reaches real consumer brands fast.\n\nA category we are creating. The Agent of Record is new ground, with unsolved problems and cutting-edge models, not a crowded field to compete in.\n\nA team that respects your judgment. Globally distributed, async-first, low bureaucracy. We hire adults and treat you like one.\n\nGreat salary plus equity or stock grants. Own a piece of what you build.\n\nLearning budget. If you are growing, so are we.\n\nAI-fluency by default. Few places will push your work with production AI further or faster.\n\nOur values\n\nThe people who thrive here are curious, customer-obsessed, and take ownership without being asked. They fix problems first and explain later. They're direct about feedback - both giving and receiving it - because they care more about getting things right than being polite.\n\nThey maintain high standards while moving at startup speed, and they build real relationships with teammates because they know that's how great work gets done. When things get tough, they adapt and keep pushing forward.\n\nOur approach to AI\n\nThe people who thrive here treat AI like a natural extension of themselves. They've built their own ecosystem of agents - some for research, others for debugging, writing, analysis, or writing code. They know which AI works best for what problem.\n\nEveryone gets premium accounts (ChatGPT, Claude, Perplexity Pro, Cursor, Lovable) plus a quarterly budget for new tools. But the magic happens in how we share knowledge. Demo days where someone shows off a clever workflows. Slack threads about which model handles a specific use case better. Learning from each other's AI workflows.\n\nAt Siena, we're not just looking for people who can do a job. We're looking for people who want to break boundaries, create the future, and reshape industries. If that's you, we look forward to your application.\n\nHow We Hire\n\nWe use AI-assisted screening tools as part of our hiring process. All decisions are made by humans. You can request a human-only review at talent@siena.cx.\n\nSiena provides equal employment opportunities to all employees and applicants for employment without regard to race, color, religion, sex, national origin, age, disability, genetics, sexual orientation, gender identity, or gender expression. We are committed to a diverse and inclusive workforce and welcome people from all backgrounds, experiences, perspectives, and abilities.",
+    "salary": "",
+    "location": "Remote Solely \u00b7 London, United Kingdom",
+    "source": "LinkedIn+",
+    "posted": "2026-10-15T13:55:19",
+    "li_id": "4479850336",
+    "snippet_only": false,
+    "score": 6,
+    "age_days": 15,
+    "category": "CORE",
+    "score_reason": "Founding CD role for an AI-driven consumer brand fits his AI-creative strengths, but it's a hands-on, build-from-scratch solo gig with no stated pay and an expectation he personally ship code-adjacent work.",
+    "score_method": "claude-sonnet-5",
+    "facts": {
+      "lane": "CORE",
+      "seniority": "EXECUTIVE",
+      "remote": "FULLY_REMOTE",
+      "geo": "OPEN_ANYWHERE",
+      "hire_path": "OPEN_GLOBAL",
+      "employer_base": "UNCLEAR",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 6,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "No salary or equity numbers given",
+        "Expected to ship personally and eventually code landing pages himself",
+        "Employer base and hire path for pay currency unclear"
+      ]
+    },
+    "where": "Remote, globally distributed team; London listed as base",
+    "board": "us",
+    "id": "0585115a5090",
+    "added": "2026-10-31T11:15:23.135750+00:00"
+  },
+  {
     "title": "Remote AI-Driven Creative Director",
     "company": "A-to-Z Website Design Studio & Management",
     "url": "https://jobmesh.io/job/86ed6a37-d2c7-4bb0-a224-385dc224381c",

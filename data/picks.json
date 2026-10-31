@@ -1,74 +1,7 @@
 {
-  "updated": "2026-10-30T20:57:51.462456+00:00",
-  "new_today": 4,
-  "today": [
-    {
-      "title": "Remote Creative Director - Brand & Visual Identity Leader",
-      "company": "BioRender",
-      "url": "https://jobmesh.io/job/2333769a-5472-439f-b17e-9fce8bc85950",
-      "score": 8,
-      "salary": "",
-      "where": "Remote-first, no country restriction stated",
-      "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
-      "hire_path": "CANADA_POSSIBLE",
-      "pay_currency": "NOT_STATED",
-      "board": "canada",
-      "age_days": 2,
-      "repost_count": 0,
-      "why": "A true Creative Director role owning brand identity for a remote-first company is a strong background match, but pay and hire-path specifics are missing.",
-      "red_flags": [
-        "No compensation listed",
-        "Company (BioRender) is Toronto-based, may pay in CAD",
-        "Posting mixes contract/permanent labels, unclear employment type"
-      ],
-      "added": "2026-10-30"
-    },
-    {
-      "title": "Remote AI-Driven Creative Director",
-      "company": "A-to-Z Website Design Studio & Management",
-      "url": "https://jobmesh.io/job/86ed6a37-d2c7-4bb0-a224-385dc224381c",
-      "score": 7,
-      "salary": "",
-      "where": "Remote; listed as Baxter, Minnesota",
-      "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "pay_currency": "NOT_STATED",
-      "board": "us",
-      "age_days": 2,
-      "repost_count": 0,
-      "why": "AI-enabled Creative Director role plays directly to his AI tool fluency and CD experience, but posting is thin on details.",
-      "red_flags": [
-        "Only a short snippet available, no comp or geo specifics",
-        "Requires just ~8 years experience, far less senior than his 30+ year background",
-        "Listing oddly bundled with unrelated local job ads, raising quality concerns"
-      ],
-      "added": "2026-10-30"
-    },
-    {
-      "title": "Associate Creative Director",
-      "company": "Sequencing Inc",
-      "url": "https://www.ziprecruiter.com/c/sequencing/Job/Associate-Creative-Director/-in-Remote,US?jid=b6354f85ab41bd7c",
-      "score": 7,
-      "salary": "",
-      "where": "Fully remote, no country restriction stated",
-      "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "pay_currency": "NOT_STATED",
-      "board": "us",
-      "age_days": 3,
-      "repost_count": 0,
-      "why": "Strong fully-remote ACD role blending brand and performance creative with heavy AI-tooling use, right in his wheelhouse.",
-      "red_flags": [
-        "No pay stated",
-        "No explicit country/geo eligibility despite 'fully remote' claim",
-        "US-style benefits (401k) suggest US employee status, unclear if he can be hired"
-      ],
-      "added": "2026-10-30"
-    }
-  ],
+  "updated": "2026-10-31T11:15:23.135750+00:00",
+  "new_today": 1,
+  "today": [],
   "this_week": [
     {
       "title": "Creative Director",
@@ -93,6 +26,28 @@
       "added": "2026-10-28"
     },
     {
+      "title": "Remote Creative Director - Brand & Visual Identity Leader",
+      "company": "BioRender",
+      "url": "https://jobmesh.io/job/2333769a-5472-439f-b17e-9fce8bc85950",
+      "score": 8,
+      "salary": "",
+      "where": "Remote-first, no country restriction stated",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "hire_path": "CANADA_POSSIBLE",
+      "pay_currency": "NOT_STATED",
+      "board": "canada",
+      "age_days": 3,
+      "repost_count": 0,
+      "why": "A true Creative Director role owning brand identity for a remote-first company is a strong background match, but pay and hire-path specifics are missing.",
+      "red_flags": [
+        "No compensation listed",
+        "Company (BioRender) is Toronto-based, may pay in CAD",
+        "Posting mixes contract/permanent labels, unclear employment type"
+      ],
+      "added": "2026-10-30"
+    },
+    {
       "title": "Creative Director [84412]",
       "company": "Onward Search",
       "url": "https://www.linkedin.com/jobs/view/4482527727/",
@@ -104,7 +59,7 @@
       "hire_path": "CONTRACT",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 2,
+      "age_days": 3,
       "repost_count": 0,
       "why": "Solid CD scope and pay, but staffing-agency language hints at contract/assignment work rather than a true FTE role.",
       "red_flags": [
@@ -113,6 +68,50 @@
         "Narrow focus on family-friendly entertainment marketing, less integrated brand scope than his background"
       ],
       "added": "2026-10-29"
+    },
+    {
+      "title": "Remote AI-Driven Creative Director",
+      "company": "A-to-Z Website Design Studio & Management",
+      "url": "https://jobmesh.io/job/86ed6a37-d2c7-4bb0-a224-385dc224381c",
+      "score": 7,
+      "salary": "",
+      "where": "Remote; listed as Baxter, Minnesota",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "pay_currency": "NOT_STATED",
+      "board": "us",
+      "age_days": 3,
+      "repost_count": 0,
+      "why": "AI-enabled Creative Director role plays directly to his AI tool fluency and CD experience, but posting is thin on details.",
+      "red_flags": [
+        "Only a short snippet available, no comp or geo specifics",
+        "Requires just ~8 years experience, far less senior than his 30+ year background",
+        "Listing oddly bundled with unrelated local job ads, raising quality concerns"
+      ],
+      "added": "2026-10-30"
+    },
+    {
+      "title": "Associate Creative Director",
+      "company": "Sequencing Inc",
+      "url": "https://www.ziprecruiter.com/c/sequencing/Job/Associate-Creative-Director/-in-Remote,US?jid=b6354f85ab41bd7c",
+      "score": 7,
+      "salary": "",
+      "where": "Fully remote, no country restriction stated",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "pay_currency": "NOT_STATED",
+      "board": "us",
+      "age_days": 4,
+      "repost_count": 0,
+      "why": "Strong fully-remote ACD role blending brand and performance creative with heavy AI-tooling use, right in his wheelhouse.",
+      "red_flags": [
+        "No pay stated",
+        "No explicit country/geo eligibility despite 'fully remote' claim",
+        "US-style benefits (401k) suggest US employee status, unclear if he can be hired"
+      ],
+      "added": "2026-10-30"
     },
     {
       "title": "Creative Director (Remote US)",
@@ -126,7 +125,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 1,
+      "age_days": 2,
       "repost_count": 0,
       "why": "Legit remote CD title at $160-185K with real Canada hiring path, but it's a performance-marketing/P&L-owner role far from his brand-CD background.",
       "red_flags": [
@@ -148,7 +147,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 1,
+      "age_days": 2,
       "repost_count": 0,
       "why": "Senior, hands-on AI-driven creative leadership role with real P&L ownership and explicit Canada hiring path, but it's performance-design/paid-social work at a B2B agency, a step down in scale and prestige from his big-brand campaign background.",
       "red_flags": [
@@ -170,35 +169,13 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "CAD",
       "board": "canada",
-      "age_days": 1,
+      "age_days": 2,
       "repost_count": 0,
       "why": "Solid Head of Creative leadership role but paid in CAD, likely below his $150K+ USD target and focused on performance/paid-social design rather than big-brand campaigns.",
       "red_flags": [
         "Pay stated in CAD (~$128K-$146K USD), below his $150K+ USD target",
         "Role centers on performance/paid-social design, not his large integrated brand campaign background",
         "Heavy financial/P&L ownership duties beyond pure creative leadership"
-      ],
-      "added": "2026-10-29"
-    },
-    {
-      "title": "Director of Creative (Remote US)",
-      "company": "Directive",
-      "url": "https://www.linkedin.com/jobs/view/4484776046/",
-      "score": 7,
-      "salary": "$160,000-$185,000 USD (US-based)",
-      "where": "Remote US; Canada, Mexico, UK also eligible",
-      "remote": "FULLY_REMOTE",
-      "geo": "CANADA_OK",
-      "hire_path": "CANADA_POSSIBLE",
-      "pay_currency": "USD",
-      "board": "us",
-      "age_days": 1,
-      "repost_count": 0,
-      "why": "Legit senior creative leadership role with explicit Canada eligibility and real remote policy, but it's performance/B2B design ops with heavy P&L focus rather than brand creative.",
-      "red_flags": [
-        "Stated salary is only for US-based candidates; Canada pay likely lower/CAD",
-        "Role leans heavily into P&L ownership and performance-metrics design, not brand/advertising craft",
-        "Managing designers/motion contractors on paid social and landing pages is narrower scope than his big-brand integrated campaign background"
       ],
       "added": "2026-10-29"
     }
