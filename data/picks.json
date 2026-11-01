@@ -1,7 +1,30 @@
 {
-  "updated": "2026-10-31T11:15:23.135750+00:00",
-  "new_today": 1,
-  "today": [],
+  "updated": "2026-11-01T09:18:14.570819+00:00",
+  "new_today": 3,
+  "today": [
+    {
+      "title": "Head of Creative (Remote Canada) Head Directive \u00b7 CAD 175k-200k/yr Toronto, Canada 4 more Workplace 8 hours ago",
+      "company": "Content Creators",
+      "url": "https://www.adzuna.ca/details/5948274966?utm_medium=api&utm_source=757a890e",
+      "score": 7,
+      "salary": "$175,000-$200,000 CAD",
+      "where": "Remote within Canada (also Mexico, UK)",
+      "remote": "FULLY_REMOTE",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "pay_currency": "CAD",
+      "board": "canada",
+      "age_days": 0,
+      "repost_count": 0,
+      "why": "Solid Head of Creative leadership role but pay is in CAD via Canadian hire path, a step down from his US-dollar target.",
+      "red_flags": [
+        "Pay stated in CAD, not USD",
+        "Confusing salary text mixes US and CAD language",
+        "Focus is performance/paid social design, narrower than his integrated brand campaign background"
+      ],
+      "added": "2026-11-01"
+    }
+  ],
   "this_week": [
     {
       "title": "Creative Director",
@@ -15,7 +38,7 @@
       "hire_path": "OPEN_GLOBAL",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 3,
+      "age_days": 4,
       "repost_count": 0,
       "why": "Solid agency CD role with real creative leadership, fully remote and open internationally \u2014 strong match for Travis's background.",
       "red_flags": [
@@ -37,7 +60,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "NOT_STATED",
       "board": "canada",
-      "age_days": 3,
+      "age_days": 4,
       "repost_count": 0,
       "why": "A true Creative Director role owning brand identity for a remote-first company is a strong background match, but pay and hire-path specifics are missing.",
       "red_flags": [
@@ -59,7 +82,7 @@
       "hire_path": "CONTRACT",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 3,
+      "age_days": 4,
       "repost_count": 0,
       "why": "Solid CD scope and pay, but staffing-agency language hints at contract/assignment work rather than a true FTE role.",
       "red_flags": [
@@ -81,7 +104,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 3,
+      "age_days": 4,
       "repost_count": 0,
       "why": "AI-enabled Creative Director role plays directly to his AI tool fluency and CD experience, but posting is thin on details.",
       "red_flags": [
@@ -103,7 +126,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 4,
+      "age_days": 5,
       "repost_count": 0,
       "why": "Strong fully-remote ACD role blending brand and performance creative with heavy AI-tooling use, right in his wheelhouse.",
       "red_flags": [
@@ -125,7 +148,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 2,
+      "age_days": 3,
       "repost_count": 0,
       "why": "Legit remote CD title at $160-185K with real Canada hiring path, but it's a performance-marketing/P&L-owner role far from his brand-CD background.",
       "red_flags": [
@@ -147,7 +170,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 2,
+      "age_days": 3,
       "repost_count": 0,
       "why": "Senior, hands-on AI-driven creative leadership role with real P&L ownership and explicit Canada hiring path, but it's performance-design/paid-social work at a B2B agency, a step down in scale and prestige from his big-brand campaign background.",
       "red_flags": [
@@ -169,7 +192,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "CAD",
       "board": "canada",
-      "age_days": 2,
+      "age_days": 3,
       "repost_count": 0,
       "why": "Solid Head of Creative leadership role but paid in CAD, likely below his $150K+ USD target and focused on performance/paid-social design rather than big-brand campaigns.",
       "red_flags": [
