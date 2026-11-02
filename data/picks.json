@@ -1,28 +1,28 @@
 {
-  "updated": "2026-11-01T09:18:14.570819+00:00",
+  "updated": "2026-11-02T09:32:14.614190+00:00",
   "new_today": 3,
   "today": [
     {
-      "title": "Head of Creative (Remote Canada) Head Directive \u00b7 CAD 175k-200k/yr Toronto, Canada 4 more Workplace 8 hours ago",
-      "company": "Content Creators",
-      "url": "https://www.adzuna.ca/details/5948274966?utm_medium=api&utm_source=757a890e",
+      "title": "Creative Director",
+      "company": "AvantStay",
+      "url": "https://www.linkedin.com/jobs/view/4404711181/",
       "score": 7,
-      "salary": "$175,000-$200,000 CAD",
-      "where": "Remote within Canada (also Mexico, UK)",
+      "salary": "$75K\u2013$120K/yr",
+      "where": "Remote worldwide outside the US (Spain listed)",
       "remote": "FULLY_REMOTE",
-      "geo": "CANADA_OK",
-      "hire_path": "CANADA_POSSIBLE",
-      "pay_currency": "CAD",
-      "board": "canada",
+      "geo": "OPEN_ANYWHERE",
+      "hire_path": "OPEN_GLOBAL",
+      "pay_currency": "USD",
+      "board": "us",
       "age_days": 0,
       "repost_count": 0,
-      "why": "Solid Head of Creative leadership role but pay is in CAD via Canadian hire path, a step down from his US-dollar target.",
+      "why": "Legit remote CD role with AI focus, but pay tops out at $120K\u2014well under his $150K floor\u2014and wants luxury hospitality/travel brand background he doesn't have.",
       "red_flags": [
-        "Pay stated in CAD, not USD",
-        "Confusing salary text mixes US and CAD language",
-        "Focus is performance/paid social design, narrower than his integrated brand campaign background"
+        "Pay ceiling ($120K) below his $150K+ target",
+        "Requires luxury hospitality/travel/lifestyle brand experience, not his ad-agency background",
+        "Explicitly excludes US candidates, so likely non-US payroll/entity"
       ],
-      "added": "2026-11-01"
+      "added": "2026-11-02"
     }
   ],
   "this_week": [
@@ -38,7 +38,7 @@
       "hire_path": "OPEN_GLOBAL",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 4,
+      "age_days": 5,
       "repost_count": 0,
       "why": "Solid agency CD role with real creative leadership, fully remote and open internationally \u2014 strong match for Travis's background.",
       "red_flags": [
@@ -60,7 +60,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "NOT_STATED",
       "board": "canada",
-      "age_days": 4,
+      "age_days": 5,
       "repost_count": 0,
       "why": "A true Creative Director role owning brand identity for a remote-first company is a strong background match, but pay and hire-path specifics are missing.",
       "red_flags": [
@@ -82,7 +82,7 @@
       "hire_path": "CONTRACT",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 4,
+      "age_days": 5,
       "repost_count": 0,
       "why": "Solid CD scope and pay, but staffing-agency language hints at contract/assignment work rather than a true FTE role.",
       "red_flags": [
@@ -91,6 +91,28 @@
         "Narrow focus on family-friendly entertainment marketing, less integrated brand scope than his background"
       ],
       "added": "2026-10-29"
+    },
+    {
+      "title": "Head of Creative (Remote Canada) Head Directive \u00b7 CAD 175k-200k/yr Toronto, Canada 4 more Workplace 8 hours ago",
+      "company": "Content Creators",
+      "url": "https://www.adzuna.ca/details/5948274966?utm_medium=api&utm_source=757a890e",
+      "score": 7,
+      "salary": "$175,000-$200,000 CAD",
+      "where": "Remote within Canada (also Mexico, UK)",
+      "remote": "FULLY_REMOTE",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "pay_currency": "CAD",
+      "board": "canada",
+      "age_days": 1,
+      "repost_count": 0,
+      "why": "Solid Head of Creative leadership role but pay is in CAD via Canadian hire path, a step down from his US-dollar target.",
+      "red_flags": [
+        "Pay stated in CAD, not USD",
+        "Confusing salary text mixes US and CAD language",
+        "Focus is performance/paid social design, narrower than his integrated brand campaign background"
+      ],
+      "added": "2026-11-01"
     },
     {
       "title": "Remote AI-Driven Creative Director",
@@ -104,7 +126,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 4,
+      "age_days": 5,
       "repost_count": 0,
       "why": "AI-enabled Creative Director role plays directly to his AI tool fluency and CD experience, but posting is thin on details.",
       "red_flags": [
@@ -126,7 +148,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 5,
+      "age_days": 6,
       "repost_count": 0,
       "why": "Strong fully-remote ACD role blending brand and performance creative with heavy AI-tooling use, right in his wheelhouse.",
       "red_flags": [
@@ -148,7 +170,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 3,
+      "age_days": 4,
       "repost_count": 0,
       "why": "Legit remote CD title at $160-185K with real Canada hiring path, but it's a performance-marketing/P&L-owner role far from his brand-CD background.",
       "red_flags": [
@@ -170,35 +192,13 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 3,
+      "age_days": 4,
       "repost_count": 0,
       "why": "Senior, hands-on AI-driven creative leadership role with real P&L ownership and explicit Canada hiring path, but it's performance-design/paid-social work at a B2B agency, a step down in scale and prestige from his big-brand campaign background.",
       "red_flags": [
         "Focus is performance design (paid social/display/landing pages) rather than large integrated brand campaigns",
         "US pay range stated but Canadian compensation/currency not specified, likely lower",
         "Agency is a mid-size B2B performance marketing shop, smaller scale than his past employers"
-      ],
-      "added": "2026-10-29"
-    },
-    {
-      "title": "Head of Creative (Remote Canada)",
-      "company": "Directive",
-      "url": "https://www.linkedin.com/jobs/view/4484768397/",
-      "score": 7,
-      "salary": "$175K\u2013$200K/yr CAD",
-      "where": "Remote, Canada (permanent work authorization required)",
-      "remote": "FULLY_REMOTE",
-      "geo": "CANADA_OK",
-      "hire_path": "CANADA_POSSIBLE",
-      "pay_currency": "CAD",
-      "board": "canada",
-      "age_days": 3,
-      "repost_count": 0,
-      "why": "Solid Head of Creative leadership role but paid in CAD, likely below his $150K+ USD target and focused on performance/paid-social design rather than big-brand campaigns.",
-      "red_flags": [
-        "Pay stated in CAD (~$128K-$146K USD), below his $150K+ USD target",
-        "Role centers on performance/paid-social design, not his large integrated brand campaign background",
-        "Heavy financial/P&L ownership duties beyond pure creative leadership"
       ],
       "added": "2026-10-29"
     }
