@@ -1,32 +1,32 @@
 {
-  "updated": "2026-11-02T09:32:14.614190+00:00",
-  "new_count": 3,
+  "updated": "2026-11-03T09:36:17.814994+00:00",
+  "new_count": 0,
   "total_count": 77,
   "model": "claude-sonnet-5",
   "sources": {
     "Apify LinkedIn": {
-      "fetched": 9,
-      "new": 6
+      "fetched": 14,
+      "new": 10
     },
     "LinkedIn alerts": {
-      "fetched": 8,
+      "fetched": 5,
       "new": 0
     },
     "LinkedIn guest": {
-      "fetched": 441,
-      "new": 92
+      "fetched": 448,
+      "new": 112
     },
     "Careers pages": {
       "fetched": 26,
       "new": 0
     },
     "Adzuna": {
-      "fetched": 136,
-      "new": 3
+      "fetched": 87,
+      "new": 0
     },
     "JSearch": {
-      "fetched": 0,
-      "new": 0
+      "fetched": 28,
+      "new": 5
     },
     "RemoteOK": {
       "fetched": 99,
@@ -42,9 +42,9 @@
     }
   },
   "prefilter_dropped": {
-    "hybrid": 11,
+    "hybrid": 25,
     "us_only": 0,
-    "us_payroll": 46
+    "us_payroll": 58
   },
-  "email": "failed: SMTPServerDisconnected: Connection unexpectedly closed"
+  "email": "skipped: no new jobs"
 }
