@@ -1,7 +1,30 @@
 {
-  "updated": "2026-11-04T09:14:32.999139+00:00",
-  "new_today": 0,
-  "today": [],
+  "updated": "2026-11-05T09:33:56.415096+00:00",
+  "new_today": 4,
+  "today": [
+    {
+      "title": "Group Creative Director - Brand Narrative",
+      "company": "Mercury",
+      "url": "https://job-boards.greenhouse.io/mercury/jobs/6225753004",
+      "score": 8,
+      "salary": "$235K\u2013$293K/yr",
+      "where": "SF, NY, Portland, or remote in US/Canada",
+      "remote": "FULLY_REMOTE",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "pay_currency": "USD",
+      "board": "us",
+      "age_days": 20,
+      "repost_count": 0,
+      "why": "A senior, film-led brand creative leadership role at a serious company, explicitly remote-friendly and open to Canadian hires, with excellent pay even on the CAD scale.",
+      "red_flags": [
+        "Canadian employees are paid in CAD, a step down from his USD target",
+        "Building a brand-new team from scratch means heavy org-building, not just creative work",
+        "No explicit mention of working hours/timezone expectations"
+      ],
+      "added": "2026-11-05"
+    }
+  ],
   "this_week": [
     {
       "title": "Remote Creative Director - Brand & Visual Identity Leader",
@@ -15,7 +38,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "NOT_STATED",
       "board": "canada",
-      "age_days": 7,
+      "age_days": 8,
       "repost_count": 0,
       "why": "A true Creative Director role owning brand identity for a remote-first company is a strong background match, but pay and hire-path specifics are missing.",
       "red_flags": [
@@ -24,28 +47,6 @@
         "Posting mixes contract/permanent labels, unclear employment type"
       ],
       "added": "2026-10-30"
-    },
-    {
-      "title": "Creative Director [84412]",
-      "company": "Onward Search",
-      "url": "https://www.linkedin.com/jobs/view/4482527727/",
-      "score": 8,
-      "salary": "$180,000.00/yr - $210,000.00/yr",
-      "where": "Remote, client in San Jose CA",
-      "remote": "FULLY_REMOTE",
-      "geo": "US_REMOTE",
-      "hire_path": "CONTRACT",
-      "pay_currency": "USD",
-      "board": "us",
-      "age_days": 7,
-      "repost_count": 0,
-      "why": "Solid CD scope and pay, but staffing-agency language hints at contract/assignment work rather than a true FTE role.",
-      "red_flags": [
-        "Posted via staffing agency (Onward Search) with assignment-based benefits eligibility, suggesting contract not FTE",
-        "No explicit country residency rule stated, geo inferred from single US city",
-        "Narrow focus on family-friendly entertainment marketing, less integrated brand scope than his background"
-      ],
-      "added": "2026-10-29"
     },
     {
       "title": "Creative Director",
@@ -59,7 +60,7 @@
       "hire_path": "OPEN_GLOBAL",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 2,
+      "age_days": 3,
       "repost_count": 0,
       "why": "Legit remote CD role with AI focus, but pay tops out at $120K\u2014well under his $150K floor\u2014and wants luxury hospitality/travel brand background he doesn't have.",
       "red_flags": [
@@ -81,7 +82,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "CAD",
       "board": "canada",
-      "age_days": 3,
+      "age_days": 4,
       "repost_count": 0,
       "why": "Solid Head of Creative leadership role but pay is in CAD via Canadian hire path, a step down from his US-dollar target.",
       "red_flags": [
@@ -103,7 +104,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 7,
+      "age_days": 8,
       "repost_count": 0,
       "why": "AI-enabled Creative Director role plays directly to his AI tool fluency and CD experience, but posting is thin on details.",
       "red_flags": [
@@ -125,7 +126,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 8,
+      "age_days": 9,
       "repost_count": 0,
       "why": "Strong fully-remote ACD role blending brand and performance creative with heavy AI-tooling use, right in his wheelhouse.",
       "red_flags": [
@@ -134,50 +135,6 @@
         "US-style benefits (401k) suggest US employee status, unclear if he can be hired"
       ],
       "added": "2026-10-30"
-    },
-    {
-      "title": "Creative Director (Remote US)",
-      "company": "Directive",
-      "url": "https://www.linkedin.com/jobs/view/4484780113/",
-      "score": 7,
-      "salary": "$160K\u2013$185K/yr",
-      "where": "Remote: US, Canada, Mexico, UK (work auth required)",
-      "remote": "FULLY_REMOTE",
-      "geo": "CANADA_OK",
-      "hire_path": "CANADA_POSSIBLE",
-      "pay_currency": "USD",
-      "board": "us",
-      "age_days": 6,
-      "repost_count": 0,
-      "why": "Legit remote CD title at $160-185K with real Canada hiring path, but it's a performance-marketing/P&L-owner role far from his brand-CD background.",
-      "red_flags": [
-        "Heavy emphasis on P&L ownership, margins, and department as a 'profitable business unit' rather than pure creative leadership",
-        "Performance/paid social/display focus is a different discipline than his brand and integrated campaign background",
-        "Not client-facing day-to-day, limited to monthly leadership check-ins, unclear if pay scale applies outside the US"
-      ],
-      "added": "2026-10-29"
-    },
-    {
-      "title": "Head of Creative (Remote US)",
-      "company": "Directive",
-      "url": "https://www.linkedin.com/jobs/view/4484777043/",
-      "score": 7,
-      "salary": "$160K\u2013$185K/yr",
-      "where": "Remote US; also Canada, Mexico, UK with work authorization",
-      "remote": "FULLY_REMOTE",
-      "geo": "CANADA_OK",
-      "hire_path": "CANADA_POSSIBLE",
-      "pay_currency": "USD",
-      "board": "us",
-      "age_days": 6,
-      "repost_count": 0,
-      "why": "Senior, hands-on AI-driven creative leadership role with real P&L ownership and explicit Canada hiring path, but it's performance-design/paid-social work at a B2B agency, a step down in scale and prestige from his big-brand campaign background.",
-      "red_flags": [
-        "Focus is performance design (paid social/display/landing pages) rather than large integrated brand campaigns",
-        "US pay range stated but Canadian compensation/currency not specified, likely lower",
-        "Agency is a mid-size B2B performance marketing shop, smaller scale than his past employers"
-      ],
-      "added": "2026-10-29"
     }
   ]
 }
