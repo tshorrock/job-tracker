@@ -1,186 +1,128 @@
 [
   {
-    "title": "Creative Director",
-    "company": "RIVERBLAC",
-    "url": "https://www.linkedin.com/jobs/view/4488015496/",
-    "source": "LinkedIn+",
+    "title": "Senior Vice President",
+    "company": "Golden Pushers Productions LLP",
+    "url": "https://www.linkedin.com/jobs/view/4486995436/",
+    "source": "LinkedIn",
     "score": 3,
     "score_method": "claude-sonnet-5",
-    "score_reason": "Legit CD title but restricted to India and in luxury fashion, outside his ad-agency wheelhouse.",
+    "score_reason": "SVP title with creative oversight but role is mostly business development and sales, with an obscure, unverified company and no pay listed.",
     "facts": {
       "lane": "CORE",
-      "seniority": "SENIOR_LEADER",
-      "remote": "FULLY_REMOTE",
-      "geo": "OTHER_REGION_ONLY",
+      "seniority": "EXECUTIVE",
+      "remote": "REMOTE_SOME_TRAVEL",
+      "geo": "US_REMOTE",
       "hire_path": "UNCLEAR",
       "employer_base": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "timezone": "NOT_STATED",
-      "fit": 4,
+      "fit": 5,
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "Location limited to India, likely excludes him",
-        "No pay or employer details given",
-        "Industry is luxury fashion/retail, not his advertising background"
+        "No compensation stated",
+        "Company name and legitimacy unclear (Golden Pushers Productions LLP)",
+        "Heavy emphasis on sales/BD rather than pure creative leadership"
       ]
     },
-    "where": "Remote solely, India",
+    "where": "United States, remote with occasional travel",
     "salary": ""
   },
   {
-    "title": "Creative Director, Interactive Experiences job at CourtAvenue in Austin, TX, Bentonville, AR, Chicago, IL, Cincinnati, OH, Dallas, TX, Los Angeles, CA, Minneapolis, MN, Orlando, FL, Seattle, WA, San Diego, CA",
-    "company": "CourtAvenue",
-    "url": "https://remote.co/job-details/creative-director-interactive-experiences-78ae6e3a-ec84-4b1f-8d3a-82dcf3dfd157",
-    "source": "JSearch",
-    "score": 3,
+    "title": "Creative Solutions Lead",
+    "company": "Yahoo",
+    "url": "https://www.linkedin.com/jobs/view/4486544625/",
+    "source": "LinkedIn",
+    "score": 2,
     "score_method": "claude-sonnet-5",
-    "score_reason": "A contract interactive/experiential CD role requiring US work authorization, outside his core ad-agency brand-campaign expertise.",
+    "score_reason": "This is a client-facing branded-content/sales-support role, not a senior creative leadership position, and the pay is likely CAD.",
+    "facts": {
+      "lane": "ADJACENT",
+      "seniority": "MID",
+      "remote": "HYBRID",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "employer_base": "US",
+      "pay_currency": "CAD",
+      "timezone": "AMERICAS_HOURS",
+      "fit": 4,
+      "comp_min_usd": 126600,
+      "comp_max_usd": 177200,
+      "red_flags": [
+        "Hybrid/on-site expectations, not fully remote",
+        "Role is sales/branded-content support, not agency CD-level creative leadership",
+        "Pay likely in CAD, a step down from his USD target"
+      ]
+    },
+    "where": "Canada-based, hybrid with occasional on-site sessions",
+    "salary": "$126,600 - $177,200"
+  },
+  {
+    "title": "Executive Producer - Brand Creative",
+    "company": "Mercury",
+    "url": "https://www.linkedin.com/jobs/view/4452148081/",
+    "source": "LinkedIn",
+    "score": 2,
+    "score_method": "claude-sonnet-5",
+    "score_reason": "This is an Executive Producer/production-ops role, not a creative-direction job, so it's a stretch fit despite senior level and decent pay.",
     "facts": {
       "lane": "ADJACENT",
       "seniority": "SENIOR_LEADER",
-      "remote": "FULLY_REMOTE",
-      "geo": "US_REMOTE",
-      "hire_path": "CONTRACT",
-      "employer_base": "US",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 4,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Contract/freelance, not full-time employment",
-        "Requires US work authorization via E-Verify, not a Canadian hire path",
-        "Role centers on physical/interactive installations, not his traditional brand-campaign CD background"
-      ]
-    },
-    "where": "US freelancers, priority given to several listed US cities",
-    "salary": ""
-  },
-  {
-    "title": "Brand & Community Lead, DTC Pet Brand",
-    "company": "KittySpout",
-    "url": "https://www.linkedin.com/jobs/view/4487051426/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a PR/community/cause-marketing consultant gig for a pet DTC brand, not a creative-direction role, and pays well under his target.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "FULLY_REMOTE",
+      "remote": "UNCLEAR",
       "geo": "CANADA_OK",
-      "hire_path": "CONTRACT",
-      "employer_base": "UNCLEAR",
+      "hire_path": "CANADA_POSSIBLE",
+      "employer_base": "US",
       "pay_currency": "USD",
       "timezone": "NOT_STATED",
-      "fit": 3,
-      "comp_min_usd": 84000,
-      "comp_max_usd": 120000,
+      "fit": 5,
+      "comp_min_usd": 170400,
+      "comp_max_usd": 236700,
       "red_flags": [
-        "Contract/consultant basis only, not full-time employment",
-        "Core duties are PR, shelter partnerships and community management, not creative direction",
-        "Pay (~$84K-120K) is below his $150K+ target"
+        "Title and duties center on production management/logistics, not creative direction",
+        "Canadian employees paid in CAD, a step down from his USD target",
+        "Remote status never explicitly stated despite distributed pay bands"
       ]
     },
-    "where": "Remote, must be based in Canada, UK or Ireland",
-    "salary": "US$7,000-10,000/month retainer (or equivalent day rate)"
+    "where": "Canada (any location) or US cities",
+    "salary": "US: $170,400\u2013$236,700 USD; Canada: $179,000\u2013$223,700 CAD"
   },
   {
-    "title": "Senior Creative Director, Global Running, Brand Design",
-    "company": "Nike",
-    "url": "https://www.linkedin.com/jobs/view/4488110322/",
+    "title": "Director, Marketing & Communications",
+    "company": "Insurance Brokers Association of Ontario",
+    "url": "https://www.linkedin.com/jobs/view/4486983979/",
     "source": "LinkedIn",
     "score": 2,
     "score_method": "claude-sonnet-5",
-    "score_reason": "Senior creative leadership role but requires deep Running sport/culture expertise he lacks, and it's based onsite at Nike HQ with no remote language.",
+    "score_reason": "This is a corporate marketing/comms/PR director job for an insurance trade association, not an agency creative leadership role, and it's based onsite in Toronto with no remote mention.",
     "facts": {
-      "lane": "CORE",
-      "seniority": "SENIOR_LEADER",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "US",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 4,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "No remote or distributed-team language; location is Beaverton HQ",
-        "Requires deep Running sport and culture expertise, not his background",
-        "No pay stated"
-      ]
-    },
-    "where": "Beaverton, OR; no remote mention",
-    "salary": ""
-  },
-  {
-    "title": "Head of Brand",
-    "company": "Furientis",
-    "url": "https://www.linkedin.com/jobs/view/4488034133/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Head of Brand title fits his profile well but almost no details are available to judge remote, pay, or hire path.",
-    "facts": {
-      "lane": "CORE",
-      "seniority": "EXECUTIVE",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "UNCLEAR",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 6,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "No job description available to confirm scope or seniority",
-        "Location listed as Los Angeles with no remote info",
-        "Pay and hire path completely unknown"
-      ]
-    },
-    "where": "Los Angeles, CA (listed)",
-    "salary": ""
-  },
-  {
-    "title": "Creative Director (social) [AQ-25441]",
-    "company": "Aquent",
-    "url": "https://www.linkedin.com/jobs/view/4485809963/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Decent pay and title but it's an onsite San Diego gig staffed through Aquent, not the remote senior CD role he wants.",
-    "facts": {
-      "lane": "CORE",
+      "lane": "NOT_A_FIT",
       "seniority": "SENIOR_LEADER",
       "remote": "ONSITE",
       "geo": "NOT_STATED",
-      "hire_path": "CONTRACT",
-      "employer_base": "UNCLEAR",
-      "pay_currency": "USD",
+      "hire_path": "UNCLEAR",
+      "employer_base": "CANADA",
+      "pay_currency": "NOT_STATED",
       "timezone": "NOT_STATED",
-      "fit": 6,
-      "comp_min_usd": 165000,
-      "comp_max_usd": 170000,
+      "fit": 2,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
       "red_flags": [
-        "No remote language, location is a specific onsite city",
-        "Staffing-agency placement (Aquent) suggests contract, not direct employment",
-        "Social-content focus is narrower than his integrated/brand leadership experience"
+        "No remote work mentioned, appears to be an in-office Toronto role",
+        "Role is mostly PR, digital marketing, segmentation and comms management, not creative leadership (only 20% creative)",
+        "No pay stated and employer is a small Canadian nonprofit association, likely below his $150K USD target"
       ]
     },
-    "where": "San Diego, CA, no remote mention",
-    "salary": "$165,000.00/yr - $170,000.00/yr"
+    "where": "Toronto, Ontario, Canada",
+    "salary": ""
   },
   {
-    "title": "Snr Brand & Marketing Manager",
-    "company": "Bosa Properties",
-    "url": "https://www.linkedin.com/jobs/view/4485859151/",
+    "title": "Manager, Brand Marketing, North America",
+    "company": "Canada Goose",
+    "url": "https://www.linkedin.com/jobs/view/4479891415/",
     "source": "LinkedIn",
     "score": 2,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a brand/marketing manager role under a Senior Director, not a creative leadership position Travis would take.",
+    "score_reason": "This is a mid-level onsite brand marketing manager job in Toronto, not a creative leadership role, and pay is well below his target.",
     "facts": {
       "lane": "NOT_A_FIT",
       "seniority": "MID",
@@ -189,669 +131,89 @@
       "hire_path": "UNCLEAR",
       "employer_base": "CANADA",
       "pay_currency": "CAD",
-      "timezone": "PACIFIC_HOURS",
-      "fit": 3,
-      "comp_min_usd": 89000,
-      "comp_max_usd": 122000,
-      "red_flags": [
-        "No remote work mentioned, appears onsite in Vancouver",
-        "Pay in CAD, well below his $150K+ USD target",
-        "Role is marketing strategy/management, not creative direction"
-      ]
-    },
-    "where": "Vancouver, BC office, no remote mention",
-    "salary": "$121,788 CAD - $167,484 CAD"
-  },
-  {
-    "title": "Chef du Marketing - Air Canada Cargo",
-    "company": "Air Canada",
-    "url": "https://www.linkedin.com/jobs/view/4485876524/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "A Montreal-area onsite marketing head role for an airline cargo division, not a creative leadership job and not remote.",
-    "facts": {
-      "lane": "ADJACENT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 3,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "No remote option indicated, onsite in Quebec",
-        "Marketing (not creative) leadership for a cargo/logistics brand",
-        "No pay or hire-path details available"
-      ]
-    },
-    "where": "Dorval, Quebec, Canada",
-    "salary": ""
-  },
-  {
-    "title": "Digital Marketing Lead",
-    "company": "Konrad",
-    "url": "https://www.linkedin.com/jobs/view/4485832958/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Digital Marketing Lead is a marketing/ops role, not creative leadership, and a poor match for a CD.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
       "timezone": "NOT_STATED",
       "fit": 2,
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "Title suggests marketing/growth role, not creative leadership",
-        "No description available to confirm scope",
-        "No remote or comp info stated"
+        "Manager-level, not CD/ECD/VP creative leadership",
+        "Onsite at Toronto HQ address, not remote",
+        "Pay ~$102-141K CAD, below his $150K+ USD target"
       ]
     },
-    "where": "Toronto, Ontario, Canada",
-    "salary": ""
+    "where": "Toronto, Ontario office address given",
+    "salary": "$102,000.00 - $141,000.00 / year"
   },
   {
-    "title": "Gestionnaire de marque et contenu | Manager, Brand & Content",
-    "company": "Altitude-sports.com",
-    "url": "https://www.linkedin.com/jobs/view/4485868447/",
+    "title": "Chief Marketing Officer and Executive Advisory",
+    "company": "Impel-Consultants",
+    "url": "https://www.linkedin.com/jobs/view/4487799080/",
     "source": "LinkedIn",
     "score": 2,
     "score_method": "claude-sonnet-5",
-    "score_reason": "An onsite Montreal brand/content manager role reporting to a Creative Director \u2014 a seniority step down from Travis's CD-level background, with no remote option and a bilingual French requirement.",
-    "facts": {
-      "lane": "ADJACENT",
-      "seniority": "MID",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 3,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "No remote work mentioned \u2014 onsite in Montreal with travel to events",
-        "Requires fluent French (bilingual), not part of Travis's stated skill set",
-        "Manager-level IC/team-lead role reporting to a Creative Director, below Travis's senior CD/executive level"
-      ]
-    },
-    "where": "Montreal, Quebec, Canada (onsite)",
-    "salary": ""
-  },
-  {
-    "title": "Marketing Manager - Cargo",
-    "company": "Air Canada",
-    "url": "https://www.linkedin.com/jobs/view/4486939764/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a B2B marketing management role for air cargo, not a creative leadership position, and it's onsite in Quebec.",
+    "score_reason": "This is a growth/demand-gen CMO role for a vague confidential client via a recruiting agency, not a creative leadership position.",
     "facts": {
       "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 2,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Not a creative role\u2014focused on B2B marketing ops, budgets, and sales enablement",
-        "Onsite in Dorval, Quebec with no remote mention",
-        "No compensation stated"
-      ]
-    },
-    "where": "Dorval, Quebec, Canada",
-    "salary": ""
-  },
-  {
-    "title": "Dir. Sportsnet Marketing",
-    "company": "Rogers Communications",
-    "url": "https://www.linkedin.com/jobs/view/4486700479/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is an onsite Toronto subscription/audience marketing director role, not a remote creative-leadership job, and it's a poor functional match for a 30-year ad CD.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 3,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "No remote or hybrid language \u2014 appears fully onsite in Toronto",
-        "Role is subscription/audience growth marketing, not creative direction",
-        "No pay stated and Canadian employer likely means CAD pay"
-      ]
-    },
-    "where": "Toronto, Ontario, Canada",
-    "salary": ""
-  },
-  {
-    "title": "Director of Marketing & Brand Strategy",
-    "company": "University of Illinois Springfield",
-    "url": "https://www.linkedin.com/jobs/view/4485880098/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "An onsite university marketing-director role in Illinois, far from Travis's ad-agency creative leadership background and remote requirement.",
-    "facts": {
-      "lane": "ADJACENT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "US",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 3,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "No remote option indicated, appears onsite",
-        "University marketing/brand role, not agency creative direction",
-        "No pay information provided"
-      ]
-    },
-    "where": "Springfield, IL (no remote mentioned)",
-    "salary": ""
-  },
-  {
-    "title": "Director, Content Strategy",
-    "company": "Michael Baker International",
-    "url": "https://www.linkedin.com/jobs/view/4486918805/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a corporate content/editorial strategy role for an engineering firm, not advertising creative direction, and it's based onsite in Alabama with no remote language.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "US",
-      "pay_currency": "USD",
-      "timezone": "NOT_STATED",
-      "fit": 3,
-      "comp_min_usd": 134786,
-      "comp_max_usd": 187525,
-      "red_flags": [
-        "No remote or distributed-team language; likely onsite",
-        "Role is editorial/content strategy for engineering firm, not brand creative leadership",
-        "No indication company hires outside the US"
-      ]
-    },
-    "where": "Mobile, AL (no remote mention)",
-    "salary": "$134,786 - $187,525 per year"
-  },
-  {
-    "title": "Creative Director",
-    "company": "Infotree Global Solutions",
-    "url": "https://www.linkedin.com/jobs/view/4486798628/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a mid-level visual research/art direction role with AI tool familiarity, not senior creative leadership, despite 'Creative Director' title.",
-    "facts": {
-      "lane": "ADJACENT",
-      "seniority": "MID",
+      "seniority": "EXECUTIVE",
       "remote": "UNCLEAR",
       "geo": "NOT_STATED",
       "hire_path": "UNCLEAR",
       "employer_base": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "timezone": "NOT_STATED",
-      "fit": 4,
+      "fit": 3,
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "Title says Creative Director but responsibilities read like a visual researcher/art director IC role",
-        "Staffing agency posting with minimal detail on remote, pay, or hire path",
-        "Seniority mismatch versus his 30-year CD/ECD background"
-      ]
-    },
-    "where": "United States",
-    "salary": ""
-  },
-  {
-    "title": "Director, Brand & Communications",
-    "company": "The Redesign Group",
-    "url": "https://www.linkedin.com/jobs/view/4468175601/",
-    "source": "LinkedIn",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Only a bare title is available, so there's no way to confirm creative scope, remote status, or pay fit.",
-    "facts": {
-      "lane": "ADJACENT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "UNCLEAR",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 4,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "No job description provided",
-        "No remote or location policy stated",
-        "No compensation information"
+        "Posted by a recruiting agency for an unnamed 'confidential client'",
+        "No pay or remote policy stated",
+        "Role is growth/CRM/demand-gen focused, not creative/brand leadership"
       ]
     },
     "where": "United States (no further detail)",
     "salary": ""
   },
   {
-    "title": "Fractional CMO / Senior Marketing Advisor",
-    "company": "Go Fractional",
-    "url": "https://www.gofractional.com/job/fractional-cmo-senior-marketing-advisor-cmw3xm3o",
-    "source": "JSearch",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a performance-marketing/e-commerce growth consulting gig, not a creative leadership role.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "CONTRACT",
-      "employer_base": "UNCLEAR",
-      "pay_currency": "USD",
-      "timezone": "NOT_STATED",
-      "fit": 2,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Role is growth/conversion marketing, not creative direction",
-        "Fractional hourly contract with no stated location or remote policy",
-        "Focus is DTC funnel optimization and team training, outside his core skill set"
-      ]
-    },
-    "where": "not stated",
-    "salary": "$125\u2013$160/hr"
-  },
-  {
-    "title": "Hands to Heart: Chief Marketing Officer",
-    "company": "Hands to Heart",
-    "url": "https://www.idealist.org/en/volunteer-opportunity/33636b59b6e44abaa92a2bec7d1501be-hands-to-heart-chief-marketing-officer-hands-to-heart-paramus",
-    "source": "JSearch",
-    "score": 2,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Despite the CMO title, this is a junior social-media/community-outreach role for a small nonprofit, not senior creative leadership.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "UNCLEAR",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 2,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "No compensation listed, likely unpaid or volunteer",
-        "Duties are hands-on social media content creation, not strategic creative leadership",
-        "No location or remote policy stated"
-      ]
-    },
-    "where": "Not stated",
-    "salary": ""
-  },
-  {
-    "title": "Chief Marketing Officer",
-    "company": "Association for Commuter Transportation of Canada (ACT Canada)",
-    "url": "https://www.linkedin.com/jobs/view/4488068987/",
-    "source": "LinkedIn+",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a part-time nonprofit marketing/PR/sponsorship role, not a creative leadership position, and a poor match for an ad CD.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "FULLY_REMOTE",
-      "geo": "US_REMOTE",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 2,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Part-time role, likely low pay",
-        "Marketing/PR/sponsorship focus, not creative direction",
-        "No compensation or seniority detail stated despite 'CMO' title"
-      ]
-    },
-    "where": "Remote, United States (org is Canadian)",
-    "salary": ""
-  },
-  {
-    "title": "Chief Marketing Officer",
-    "company": "Ora Stone South Africa",
-    "url": "https://www.linkedin.com/jobs/view/4487773174/",
-    "source": "LinkedIn+",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a generic marketing-management CMO role for a small South African stone company, not creative direction work, and the listing's US-remote/South Africa mismatch plus missing pay raise credibility concerns.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "FULLY_REMOTE",
-      "geo": "US_REMOTE",
-      "hire_path": "UNCLEAR",
-      "employer_base": "OTHER",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 2,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "No creative direction or brand/campaign scope described, mostly market research, PR, and sales alignment",
-        "Confusing/likely mismatched location listing (US remote for a South African stone manufacturer)",
-        "No pay stated and vague, generic qualifications suggest a low-quality or possibly non-legitimate posting"
-      ]
-    },
-    "where": "Remote, United States (company based South Africa)",
-    "salary": ""
-  },
-  {
-    "title": "Head of Brand & Creative",
-    "company": "QUOC",
-    "url": "https://www.linkedin.com/jobs/view/4486584356/",
-    "source": "LinkedIn+",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Timezone requirement (UK-Taiwan overlap) rules out his Central time base, and the hands-on production-design demands don't match his senior CD scope.",
-    "facts": {
-      "lane": "CORE",
-      "seniority": "EXECUTIVE",
-      "remote": "FULLY_REMOTE",
-      "geo": "OTHER_REGION_ONLY",
-      "hire_path": "UNCLEAR",
-      "employer_base": "OTHER",
-      "pay_currency": "NOT_STATED",
-      "timezone": "EUROPE_ASIA_HOURS",
-      "fit": 3,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Requires working hours overlapping UK and Taiwan, incompatible with Central time",
-        "Only 4-6+ years experience required, suggesting a much more junior role than 'Head of' implies",
-        "Expects hands-on Adobe/Figma production work rather than senior creative leadership"
-      ]
-    },
-    "where": "Remote, but timezone GMT to GMT+8 required",
-    "salary": ""
-  },
-  {
-    "title": "Direction artistique et codirection g\u00e9n\u00e9rale",
-    "company": "Montr\u00e9al Danse",
-    "url": "https://www.linkedin.com/jobs/view/4486783370/",
+    "title": "Social Media Creative | $70/hr | Remote",
+    "company": "The Ai Training Company",
+    "url": "https://www.linkedin.com/jobs/view/4486703011/",
     "source": "LinkedIn",
     "score": 1,
     "score_method": "claude-sonnet-5",
-    "score_reason": "Artistic/general co-direction of a contemporary dance company has nothing to do with Travis's ad/brand creative background.",
+    "score_reason": "This is a gig-work AI data-labeling/evaluation job, not creative leadership, and far below his level and target pay.",
     "facts": {
       "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Dance company artistic direction, not advertising or brand creative",
-        "No remote or compensation info given",
-        "Likely requires French-language arts sector leadership experience"
-      ]
-    },
-    "where": "Montreal, Quebec",
-    "salary": ""
-  },
-  {
-    "title": "Marketing & Communications Director",
-    "company": "Decor Cabinets Ltd",
-    "url": "https://www.linkedin.com/jobs/view/4486910065/",
-    "source": "LinkedIn",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a corporate/B2B communications director job for a cabinet manufacturer in rural Manitoba, not a creative leadership role, and it's onsite.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Onsite only in small-town Manitoba, not remote",
-        "Role is internal/corporate comms and B2B dealer marketing, not creative direction or advertising",
-        "No pay disclosed, likely well below his $150K USD target"
-      ]
-    },
-    "where": "Morden, Manitoba, Canada (onsite)",
-    "salary": ""
-  },
-  {
-    "title": "Directeur(trice) de l'Assurance Voyage B2C",
-    "company": "AXA Partners",
-    "url": "https://www.linkedin.com/jobs/view/4488072441/",
-    "source": "LinkedIn",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a digital marketing/eCommerce growth director role for travel insurance, not a creative leadership position.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "OTHER",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Not a creative role\u2014focused on eCommerce, SEO/SEM, affiliate marketing",
-        "Posted in French with no remote policy stated",
-        "No compensation listed"
-      ]
-    },
-    "where": "Montreal, Quebec (role also tied to Chicago HQ)",
-    "salary": ""
-  },
-  {
-    "title": "Content Marketing Lead",
-    "company": "TransPerfect",
-    "url": "https://www.linkedin.com/jobs/view/4488003917/",
-    "source": "LinkedIn",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a content marketing writer/operator role, not creative leadership, and requires basing in London or Barcelona.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "UNCLEAR",
-      "geo": "OTHER_REGION_ONLY",
-      "hire_path": "UNCLEAR",
-      "employer_base": "US",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Not a creative leadership role - content marketing/SEO/copywriting IC",
-        "Location restricted to London or Barcelona",
-        "No pay stated, likely well below his $150K+ target"
-      ]
-    },
-    "where": "Based in London or Barcelona",
-    "salary": ""
-  },
-  {
-    "title": "Gestionnaire des communications et des communaut\u00e9s",
-    "company": "F\u00e9d\u00e9ration des parents francophones de l'Alberta",
-    "url": "https://www.linkedin.com/jobs/view/4486905116/",
-    "source": "LinkedIn",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Mid-level nonprofit communications/community manager role, onsite in Alberta, far below Travis's CD-level background and pay target.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Onsite in Edmonton/Calgary, not remote",
-        "Temporary contract role, not full creative leadership",
-        "Pay unstated, likely far below $150K USD target"
-      ]
-    },
-    "where": "Edmonton or Calgary office, Alberta",
-    "salary": "Selon l'exp\u00e9rience et les comp\u00e9tences"
-  },
-  {
-    "title": "Solutions Architect, AI Systems",
-    "company": "Viral Nation",
-    "url": "https://www.linkedin.com/jobs/view/4451955514/",
-    "source": "LinkedIn",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a hands-on AI/ML engineering and solutions architecture job requiring production code, not a creative leadership role.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Requires 5+ years as a software/ML engineer writing production Python/SQL, not creative direction",
-        "Toronto location with no remote mention, likely onsite/hybrid",
-        "Pay range $130-150K likely CAD from a Canadian employer, below his USD target"
-      ]
-    },
-    "where": "Toronto, Ontario, Canada",
-    "salary": "$130,000 to $150,000 annual salary range"
-  },
-  {
-    "title": "Directeur(ice)/Directeur(ice) Prinicpal(e), Exp\u00e9rience client & Op\u00e9rations, Services Financiers",
-    "company": "KPMG Canada",
-    "url": "https://www.linkedin.com/jobs/view/4488096767/",
-    "source": "LinkedIn",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a management-consulting director role for financial services clients, not a creative leadership position at all.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "No creative scope whatsoever\u2014strategy/ops consulting for banks and insurers",
-        "Requires 10+ years in consulting/financial services, not advertising/creative",
-        "Role is in French and based in Quebec City with no remote mention"
-      ]
-    },
-    "where": "Qu\u00e9bec, Quebec, Canada",
-    "salary": ""
-  },
-  {
-    "title": "Director, Delivery CX AI",
-    "company": "TELUS Digital",
-    "url": "https://www.linkedin.com/jobs/view/4478818555/",
-    "source": "LinkedIn",
-    "score": 1,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a delivery/operations leadership role for CX AI consulting engagements, not a creative direction job at all.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
+      "seniority": "JUNIOR",
       "remote": "FULLY_REMOTE",
       "geo": "CANADA_OK",
-      "hire_path": "CANADA_POSSIBLE",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "AMERICAS_HOURS",
+      "hire_path": "CONTRACT",
+      "employer_base": "UNCLEAR",
+      "pay_currency": "USD",
+      "timezone": "NOT_STATED",
       "fit": 1,
-      "comp_min_usd": 109500,
-      "comp_max_usd": 138700,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
       "red_flags": [
-        "No creative scope whatsoever \u2014 role is about delivery, P&L, and client account management",
-        "Pay in CAD through Canadian employer, below his USD target when converted",
-        "Role demands deep CCaaS/platform delivery expertise unrelated to his creative background"
+        "Entry-level hourly gig, not a creative director role",
+        "Work is evaluating/rating other people's creative, not directing it",
+        "Posting is from a 'referral partner,' suggesting a third-party staffing/crowdwork setup"
       ]
     },
-    "where": "Remote US/Canada or major NA office cities",
-    "salary": "CA$150,000.00/yr - CA$190,000.00/yr"
+    "where": "Canada, remote",
+    "salary": "$70/hr"
   },
   {
-    "title": "Directeur(trice) adjoint(e) communication, \u00e9v\u00e8nementiel et relation publique",
-    "company": "F\u00e9d\u00e9ration de l'UPA de la Mont\u00e9r\u00e9gie",
-    "url": "https://www.linkedin.com/jobs/view/4486940413/",
+    "title": "Directeur principal transformation des communications",
+    "company": "National Bank of Canada",
+    "url": "https://www.linkedin.com/jobs/view/4486219739/",
     "source": "LinkedIn",
     "score": 1,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a French-language corporate communications/PR deputy director role for an agricultural federation, not creative advertising leadership.",
+    "score_reason": "This is an internal corporate communications/HR transformation director role, not creative leadership.",
     "facts": {
       "lane": "NOT_A_FIT",
       "seniority": "SENIOR_LEADER",
-      "remote": "ONSITE",
+      "remote": "UNCLEAR",
       "geo": "NOT_STATED",
       "hire_path": "UNCLEAR",
       "employer_base": "CANADA",
@@ -861,403 +223,258 @@
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "Onsite in Quebec, not remote",
-        "Requires excellent French fluency, role is communications/PR not creative direction",
-        "Industry (agricultural trade federation) and function (PR/government relations) don't match his ad agency creative background"
+        "Not an advertising/creative role\u2014internal comms and change management",
+        "French language required, bilingual Montreal-based position",
+        "No remote or pay info stated, likely onsite/hybrid"
       ]
     },
-    "where": "Office in St-Hyacinthe, Quebec",
+    "where": "Montreal, Quebec, Canada",
     "salary": ""
   },
   {
-    "title": "Corporate Communications Content Manager",
-    "company": "BioCryst Pharmaceuticals, Inc.",
-    "url": "https://www.linkedin.com/jobs/view/4486785692/",
+    "title": "Senior Director Communications Transformation",
+    "company": "National Bank of Canada",
+    "url": "https://www.linkedin.com/jobs/view/4486230230/",
     "source": "LinkedIn",
     "score": 1,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a pharma corporate communications/PR content manager role, not a creative leadership position, and a total mismatch for Travis's background.",
+    "score_reason": "This is an internal corporate communications transformation role at a bank, not a creative/brand leadership job.",
+    "facts": {
+      "lane": "NOT_A_FIT",
+      "seniority": "SENIOR_LEADER",
+      "remote": "UNCLEAR",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "CANADA",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 1,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "Requires fluency in French and English",
+        "No mention of remote work; likely onsite in Montreal",
+        "Role is internal comms/HR-adjacent, not advertising or brand creative"
+      ]
+    },
+    "where": "Montreal, Quebec, Canada",
+    "salary": ""
+  },
+  {
+    "title": "Responsable marketing",
+    "company": "AudiSon centre auditif Smith & ass. audioproth\u00e9sistes",
+    "url": "https://www.linkedin.com/jobs/view/4487303030/",
+    "source": "LinkedIn",
+    "score": 1,
+    "score_method": "claude-sonnet-5",
+    "score_reason": "A local, hybrid marketing manager role at a small Quebec hearing-clinic chain, not creative leadership and not remote.",
     "facts": {
       "lane": "NOT_A_FIT",
       "seniority": "MID",
       "remote": "HYBRID",
       "geo": "NOT_STATED",
       "hire_path": "UNCLEAR",
-      "employer_base": "US",
+      "employer_base": "CANADA",
       "pay_currency": "NOT_STATED",
       "timezone": "NOT_STATED",
       "fit": 1,
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "Not a creative leadership role \u2014 it's corporate comms/PR/social media management",
-        "Requires pharma/biotech regulatory communications experience Travis lacks",
-        "Hybrid with required office days in Boston or Durham, not fully remote"
+        "Requires 2-3 days/week on-site in Sainte-Marie, Quebec",
+        "Marketing generalist/ops role, not a creative director position",
+        "Small local company, no sign of remote or US hire"
       ]
     },
-    "where": "Primarily remote, in-office at Boston or Durham",
+    "where": "Hybrid, based in Sainte-Marie, Quebec",
     "salary": ""
   },
   {
-    "title": "Managing Director",
-    "company": "Raise",
-    "url": "https://www.linkedin.com/jobs/view/4475585771/",
+    "title": "Manager, Education Content and Development, Scotia iTRADE - Toronto, ON (12 month contract)",
+    "company": "Scotiabank",
+    "url": "https://www.linkedin.com/jobs/view/4479170369/",
     "source": "LinkedIn",
     "score": 1,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a business/technical consulting leadership role, not creative direction, and hybrid in Calgary besides.",
+    "score_reason": "This is a hands-on video editor/producer IC contract role at a bank, nowhere near Travis's CD-level background.",
     "facts": {
       "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "HYBRID",
+      "seniority": "JUNIOR",
+      "remote": "ONSITE",
+      "geo": "NOT_STATED",
+      "hire_path": "CONTRACT",
+      "employer_base": "CANADA",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 1,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "Individual-contributor video editing/production role, not creative leadership",
+        "12-month contract with no remote mention, likely onsite in Toronto",
+        "Minimum 3 years experience requested, far below Travis's 30-year CD level"
+      ]
+    },
+    "where": "Toronto, Ontario, Canada",
+    "salary": ""
+  },
+  {
+    "title": "Responsable des communications et du marketing",
+    "company": "Fondation du Mus\u00e9e d'art contemporain de Montr\u00e9al",
+    "url": "https://www.linkedin.com/jobs/view/4486992734/",
+    "source": "LinkedIn",
+    "score": 0,
+    "score_method": "claude-sonnet-5",
+    "score_reason": "This is a mid-level bilingual marketing/communications manager role at a nonprofit, not a creative leadership position, at a fraction of Travis's target pay.",
+    "facts": {
+      "lane": "NOT_A_FIT",
+      "seniority": "MID",
+      "remote": "ONSITE",
       "geo": "NOT_STATED",
       "hire_path": "UNCLEAR",
       "employer_base": "CANADA",
       "pay_currency": "CAD",
       "timezone": "NOT_STATED",
       "fit": 1,
-      "comp_min_usd": 127000,
-      "comp_max_usd": 146000,
+      "comp_min_usd": 47000,
+      "comp_max_usd": 54000,
       "red_flags": [
-        "Not a creative role\u2014IT/data consulting practice leadership",
-        "Hybrid, not remote",
-        "Pay in CAD well below his USD target"
+        "Pay is CAD $65-75K, far below his $150K+ USD target",
+        "Onsite in Montreal, not remote",
+        "Role is marketing/comms management, not creative direction, and requires French fluency"
       ]
     },
-    "where": "Calgary, Alberta, Canada (hybrid)",
-    "salary": "CA$175,000.00/yr - CA$200,000.00/yr"
+    "where": "Montreal, Quebec, on-site role",
+    "salary": "CA$65,000.00/yr - CA$75,000.00/yr"
   },
   {
-    "title": "Chief Marketing Officer",
-    "company": "GENIE FLEXION",
-    "url": "https://www.linkedin.com/jobs/view/4485871108/",
-    "source": "LinkedIn+",
+    "title": "Programmeur\u00b7euse d'interfaces",
+    "company": "Studios Wizards of the Coast",
+    "url": "https://www.linkedin.com/jobs/view/4480150446/",
+    "source": "LinkedIn",
     "score": 0,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a B2B industrial marketing/PR/sales-alignment CMO role for a French hydraulic-hose company with zero creative scope \u2014 nothing like Travis's background.",
+    "score_reason": "This is a junior UI programmer role in C++/Unreal, nothing to do with creative direction.",
     "facts": {
       "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
+      "seniority": "JUNIOR",
+      "remote": "ONSITE",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "US",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 0,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "Engineering/programming IC role, not creative leadership",
+        "Junior-level technical position",
+        "No remote or pay info stated"
+      ]
+    },
+    "where": "Montreal, Quebec office",
+    "salary": ""
+  },
+  {
+    "title": "Senior Technical Animator - [March of Giants]",
+    "company": "Ubisoft Montr\u00e9al",
+    "url": "https://www.linkedin.com/jobs/view/4477317986/",
+    "source": "LinkedIn",
+    "score": 0,
+    "score_method": "claude-sonnet-5",
+    "score_reason": "This is a technical animation/rigging engineering role, completely unrelated to Travis's creative direction background.",
+    "facts": {
+      "lane": "NOT_A_FIT",
+      "seniority": "MID",
+      "remote": "ONSITE",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "CANADA",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 0,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "Not a creative leadership role at all\u2014technical animator IC position",
+        "Onsite in Montreal, not remote",
+        "No pay stated"
+      ]
+    },
+    "where": "Montreal, Quebec, Canada",
+    "salary": ""
+  },
+  {
+    "title": "Senior Product Builder",
+    "company": "Clutch",
+    "url": "https://www.linkedin.com/jobs/view/4479156791/",
+    "source": "LinkedIn",
+    "score": 0,
+    "score_method": "claude-sonnet-5",
+    "score_reason": "This is a hands-on product/design/engineering builder IC role, not creative leadership, and wrong fit entirely.",
+    "facts": {
+      "lane": "NOT_A_FIT",
+      "seniority": "MID",
+      "remote": "ONSITE",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "CANADA",
+      "pay_currency": "NOT_STATED",
+      "timezone": "NOT_STATED",
+      "fit": 0,
+      "comp_min_usd": 0,
+      "comp_max_usd": 0,
+      "red_flags": [
+        "Not a creative leadership role \u2014 expects coding, shipping software, product management",
+        "Onsite in Toronto with no remote mention",
+        "Far below his seniority and compensation target"
+      ]
+    },
+    "where": "Toronto, Ontario, Canada",
+    "salary": "Competitive compensation and equity incentives"
+  },
+  {
+    "title": "Head of Service, Crimson Rise",
+    "company": "Crimson Education",
+    "url": "https://www.linkedin.com/jobs/view/4462773638/",
+    "source": "LinkedIn",
+    "score": 0,
+    "score_method": "claude-sonnet-5",
+    "score_reason": "This is an education-services operations leadership role with zero creative or advertising scope, totally outside Travis's expertise.",
+    "facts": {
+      "lane": "NOT_A_FIT",
+      "seniority": "SENIOR_LEADER",
       "remote": "FULLY_REMOTE",
       "geo": "US_REMOTE",
       "hire_path": "UNCLEAR",
       "employer_base": "OTHER",
       "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 1,
+      "timezone": "AMERICAS_HOURS",
+      "fit": 0,
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "Not a creative leadership role \u2014 market research, PR, sales alignment, not brand/creative",
-        "Confusing location (US remote) vs company clearly based and operating in France",
-        "No pay stated, generic/templated posting feel"
+        "Not a creative role at all\u2014operations/education consulting leadership",
+        "No compensation stated",
+        "Requires undergraduate degree from Top 20 US/UK university, not relevant to his background"
       ]
     },
-    "where": "Remote, United States (company based in France)",
+    "where": "Texas, United States; 100% remote, US time zone preferred",
     "salary": ""
   },
   {
-    "title": "Directeur g\u00e9n\u00e9ral/Directrice g\u00e9n\u00e9rale",
-    "company": "Jump! Recruiters",
-    "url": "https://www.linkedin.com/jobs/view/4485842057/",
+    "title": "Vice President, Customer Success",
+    "company": "M3",
+    "url": "https://www.linkedin.com/jobs/view/4453115980/",
     "source": "LinkedIn",
     "score": 0,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a General Manager/COO operations role, not a creative leadership position, and onsite in Montreal.",
+    "score_reason": "This is a VP of Customer Success SaaS operations role with zero creative component, completely outside Travis's background.",
     "facts": {
       "lane": "NOT_A_FIT",
       "seniority": "EXECUTIVE",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 2,
-      "comp_min_usd": 102000,
-      "comp_max_usd": 113000,
-      "red_flags": [
-        "Role is GM/operations, not creative direction",
-        "Onsite in Montreal, no remote mention",
-        "Pay in CAD, below his $150K+ USD target"
-      ]
-    },
-    "where": "Montreal, Quebec, Canada",
-    "salary": "CA$140,000.00/yr - CA$155,000.00/yr"
-  },
-  {
-    "title": "Sr. Marketing Manager, Core Surgical Innovations",
-    "company": "Medtronic",
-    "url": "https://www.linkedin.com/jobs/view/4488068044/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a medical-device product marketing management role at Medtronic, nothing to do with creative leadership.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "UNCLEAR",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Not a creative role at all \u2014 product/portfolio marketing management for surgical devices",
-        "No remote mention; location is a specific Canadian office city",
-        "Posting text is garbled with mismatched pay ranges, suggesting a templated/low-quality listing"
-      ]
-    },
-    "where": "Brampton, Ontario, Canada",
-    "salary": "Hiring Range $140,480-$175,600; also lists Salary Range $85,440-$106,800 (conflicting/unclear currency)"
-  },
-  {
-    "title": "Chef de marque - Neurologie (Pendopharm)",
-    "company": "Pendopharm",
-    "url": "https://www.linkedin.com/jobs/view/4452124612/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a pharmaceutical brand manager role requiring pharma industry experience, not a creative leadership position for an ad veteran.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
       "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Requires 7+ years pharmaceutical industry experience, which Travis lacks",
-        "Not a creative role at all - it's brand/product management in pharma",
-        "Bilingual French/English required, likely onsite in Montreal"
-      ]
-    },
-    "where": "Montreal, Quebec, Canada",
-    "salary": ""
-  },
-  {
-    "title": "Manager, Marketing",
-    "company": "Give and Go Prepared Foods",
-    "url": "https://www.linkedin.com/jobs/view/4484749146/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a CPG category marketing manager role (4-6 yrs experience, no mention of remote), nothing to do with creative leadership or advertising.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 73000,
-      "comp_max_usd": 108000,
-      "red_flags": [
-        "Not a creative role at all - category/product marketing management",
-        "Onsite in Etobicoke with no remote mention",
-        "Mid-level role (4-6 yrs experience) far below his seniority"
-      ]
-    },
-    "where": "Etobicoke, Ontario, Canada (onsite implied)",
-    "salary": "CA$100,000.00/yr - CA$147,000.00/yr"
-  },
-  {
-    "title": "Director, Language & Learning",
-    "company": "Assembly of First Nations",
-    "url": "https://www.linkedin.com/jobs/view/4486772064/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is an Indigenous language/education policy director role with no creative scope, nothing to do with Travis's background.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Not a creative role at all",
-        "Onsite in Ottawa, not remote",
-        "Preference given to candidates of First Nations ancestry"
-      ]
-    },
-    "where": "Ottawa, Ontario office",
-    "salary": ""
-  },
-  {
-    "title": "Web Designer",
-    "company": "Submerged Records",
-    "url": "https://www.linkedin.com/jobs/view/4486935762/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Entry-level, on-site web/graphic design IC role at a tiny record label \u2014 completely wrong level and function for a 30-year CD.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "JUNIOR",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Entry-level IC design role, not creative leadership",
-        "On-site only in Halifax, not remote",
-        "No compensation stated"
-      ]
-    },
-    "where": "On-site, Halifax, Nova Scotia",
-    "salary": ""
-  },
-  {
-    "title": "D\u00e9veloppeur(euse) Power Platform bilingue",
-    "company": "CGI",
-    "url": "https://www.linkedin.com/jobs/view/4487779818/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a junior-level Power Platform developer role in Quebec, entirely unrelated to creative leadership.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "JUNIOR",
-      "remote": "HYBRID",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 36000,
-      "comp_max_usd": 73000,
-      "red_flags": [
-        "Not a creative role at all - software development position",
-        "Entry level per LinkedIn, hybrid not remote",
-        "Pay far below his $150K+ USD target, in CAD"
-      ]
-    },
-    "where": "Qu\u00e9bec, hybrid with office/client visits",
-    "salary": "50,000$ to 100,000$ (CAD, estimated range)"
-  },
-  {
-    "title": "D\u00e9veloppeur ou d\u00e9veloppeuse full stack senior",
-    "company": "ChallengeU",
-    "url": "https://www.linkedin.com/jobs/view/4486511791/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a senior full stack software engineering job, not a creative leadership role.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "HYBRID",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Not a creative role at all",
-        "Hybrid, not remote",
-        "Engineering IC position, far outside his background"
-      ]
-    },
-    "where": "Montreal, Quebec, hybrid",
-    "salary": ""
-  },
-  {
-    "title": "Manager",
-    "company": "Konrad",
-    "url": "https://www.linkedin.com/jobs/view/4485836854/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a management consulting delivery role, not a creative leadership position, and pays well under his target.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "HYBRID",
-      "geo": "NOT_STATED",
-      "hire_path": "CANADA_POSSIBLE",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 88000,
-      "comp_max_usd": 103000,
-      "red_flags": [
-        "Not a creative director role - it's project/engagement management consulting",
-        "Pay likely in CAD and below his $150K USD target",
-        "Based in Toronto with hybrid/WFH flexibility, not fully remote"
-      ]
-    },
-    "where": "Toronto, Ontario, Canada; 'work from home flexibility' implies hybrid",
-    "salary": "$120,000 to $140,000 (CAD assumed, Toronto)"
-  },
-  {
-    "title": "Senior Art Director",
-    "company": "Creative Circle",
-    "url": "https://www.linkedin.com/jobs/view/4487770156/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Mid-level Senior Art Director IC contract role, wrong seniority and pay far below his target.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "CONTRACT",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 2,
-      "comp_min_usd": 48000,
-      "comp_max_usd": 55000,
-      "red_flags": [
-        "Pay rate equates to far below $150K target",
-        "Individual contributor role, not creative leadership",
-        "Hourly contract through staffing agency, CAD pay"
-      ]
-    },
-    "where": "Toronto, Ontario, Canada",
-    "salary": "CA$65.00/hr - CA$75.00/hr"
-  },
-  {
-    "title": "VP, Customer Relations",
-    "company": "Tennessee Valley Public Power Association, Inc.",
-    "url": "https://www.linkedin.com/jobs/view/4485845001/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a utility customer service operations executive role with zero creative or brand component, not a fit.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "ONSITE",
       "geo": "NOT_STATED",
       "hire_path": "UNCLEAR",
       "employer_base": "US",
@@ -1267,26 +484,55 @@
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "Not a creative role at all - customer service/billing/contact center operations",
-        "Onsite in Chattanooga, TN with no remote mention",
-        "Requires utility/billing industry background, not advertising/creative"
+        "Not a creative role at all - customer success/retention leadership",
+        "No remote policy stated despite being a senior exec role",
+        "Requires SaaS/hospitality tech customer success experience he doesn't have"
       ]
     },
-    "where": "Chattanooga, TN",
+    "where": "Lawrenceville, GA",
     "salary": ""
   },
   {
-    "title": "VP People",
-    "company": "Quark Expeditions",
-    "url": "https://www.linkedin.com/jobs/view/4487736704/",
+    "title": "Head of Managed Services (MMS) Up to $175k + Bonus (CAD) Package",
+    "company": "Oliver Peters",
+    "url": "https://www.linkedin.com/jobs/view/4488140043/",
     "source": "LinkedIn",
     "score": 0,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a VP of HR role, not creative leadership, and completely outside his background.",
+    "score_reason": "This is a telecom customer support/managed services leadership role with no creative component whatsoever.",
     "facts": {
       "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "HYBRID",
+      "seniority": "SENIOR_LEADER",
+      "remote": "UNCLEAR",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "employer_base": "UNCLEAR",
+      "pay_currency": "CAD",
+      "timezone": "NOT_STATED",
+      "fit": 0,
+      "comp_min_usd": 0,
+      "comp_max_usd": 128000,
+      "red_flags": [
+        "Not a creative role at all - telecom/SaaS customer support operations",
+        "Requires telecom industry and ITIL/Zendesk technical background",
+        "Pay is in CAD via a recruiting agency, not USD"
+      ]
+    },
+    "where": "Canada",
+    "salary": "Up to $175k + Bonus (CAD)"
+  },
+  {
+    "title": "Director, Customer Success",
+    "company": "Prophix",
+    "url": "https://www.linkedin.com/jobs/view/4461311656/",
+    "source": "LinkedIn",
+    "score": 0,
+    "score_method": "claude-sonnet-5",
+    "score_reason": "This is a Customer Success leadership role in SaaS, completely outside Travis's creative background.",
+    "facts": {
+      "lane": "NOT_A_FIT",
+      "seniority": "SENIOR_LEADER",
+      "remote": "ONSITE",
       "geo": "NOT_STATED",
       "hire_path": "UNCLEAR",
       "employer_base": "CANADA",
@@ -1296,54 +542,54 @@
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "Not a creative role at all - it's an HR/People leadership position",
-        "Hybrid in Toronto office 2 days/week, not remote",
-        "Pay is in CAD, a step down from his USD target"
+        "Not a creative role at all - Customer Success/Account Management",
+        "Location is Etobicoke with no remote mention, likely onsite/hybrid",
+        "Pay is in CAD, a step down from his target USD comp"
       ]
     },
-    "where": "Toronto, Ontario, hybrid 2 days/week",
-    "salary": "$170,000.00/yr - $220,000.00/yr"
+    "where": "Etobicoke, Ontario, Canada",
+    "salary": "CA$160,000.00/yr - CA$180,000.00/yr"
   },
   {
-    "title": "Global Head of Professional Services",
-    "company": "Ashby",
-    "url": "https://www.linkedin.com/jobs/view/4486921249/",
+    "title": "Managing Director, Managed Services Delivery",
+    "company": "Baker Tilly US",
+    "url": "https://www.linkedin.com/jobs/view/4469782486/",
     "source": "LinkedIn",
     "score": 0,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a Professional Services/implementation leadership role for a SaaS recruiting platform, completely unrelated to creative direction.",
+    "score_reason": "This is a professional-services managed-services delivery/operations executive role with zero creative, advertising, or brand component.",
     "facts": {
       "lane": "NOT_A_FIT",
       "seniority": "EXECUTIVE",
       "remote": "UNCLEAR",
       "geo": "NOT_STATED",
-      "hire_path": "CANADA_POSSIBLE",
+      "hire_path": "UNCLEAR",
       "employer_base": "US",
       "pay_currency": "USD",
       "timezone": "NOT_STATED",
       "fit": 0,
-      "comp_min_usd": 215000,
-      "comp_max_usd": 300000,
+      "comp_min_usd": 182150,
+      "comp_max_usd": 345350,
       "red_flags": [
-        "Not a creative role at all \u2014 it's operational/services leadership for B2B SaaS",
-        "Requires deep professional services and delivery economics background Travis doesn't have",
-        "No remote or location details beyond 'Canada'"
+        "Not a creative leadership role at all \u2014 accounting/consulting operations",
+        "CPA/MBA and professional services background required, not advertising",
+        "No remote/location flexibility stated, likely tied to office location"
       ]
     },
-    "where": "Canada",
-    "salary": "$215,000.00/yr - $300,000.00/yr"
+    "where": "Frisco, TX",
+    "salary": "$182,150 to $345,350"
   },
   {
-    "title": "Director, Fraud Operations & Customer Success",
-    "company": "Equifax",
-    "url": "https://www.linkedin.com/jobs/view/4460670515/",
+    "title": "Director of Strategy & Operations",
+    "company": "Inspira Education",
+    "url": "https://www.linkedin.com/jobs/view/4432441669/",
     "source": "LinkedIn",
     "score": 0,
     "score_method": "claude-sonnet-5",
-    "score_reason": "This is a fraud operations and client success director role with zero creative scope, completely outside Travis's background.",
+    "score_reason": "This is an ops/strategy role running HubSpot and customer escalations, nothing to do with creative leadership.",
     "facts": {
       "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
+      "seniority": "MID",
       "remote": "UNCLEAR",
       "geo": "NOT_STATED",
       "hire_path": "UNCLEAR",
@@ -1354,244 +600,12 @@
       "comp_min_usd": 0,
       "comp_max_usd": 0,
       "red_flags": [
-        "No creative leadership component whatsoever",
-        "Requires 10+ years fraud/risk/financial crime domain expertise",
-        "Operational/commercial revenue role, not creative"
+        "Not a creative role at all\u2014operations, CRM, and customer support focus",
+        "Location listed as New York, NY with no remote language stated",
+        "Seniority and compensation not aligned with Travis's target"
       ]
     },
-    "where": "Toronto, Ontario, Canada",
-    "salary": ""
-  },
-  {
-    "title": "Director of Community Development",
-    "company": "Municipality of the County of Annapolis",
-    "url": "https://www.linkedin.com/jobs/view/4488065952/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Municipal government community development/recreation director role with no creative or advertising scope whatsoever.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "SENIOR_LEADER",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 81000,
-      "comp_max_usd": 103000,
-      "red_flags": [
-        "Not a creative role at all - municipal parks/recreation/EDI administration",
-        "Onsite government job in rural Nova Scotia, not remote",
-        "Pay in CAD well below his $150K+ USD target"
-      ]
-    },
-    "where": "Annapolis Royal, Nova Scotia, Canada (onsite)",
-    "salary": "$111,032 - $141,409 annually (CAD)"
-  },
-  {
-    "title": "Manager, Corporate Communications",
-    "company": "CSA Testing & Certification",
-    "url": "https://www.linkedin.com/jobs/view/4471157379/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "Internal corporate communications manager role, nowhere near creative leadership and well below his target pay.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 64000,
-      "comp_max_usd": 85000,
-      "red_flags": [
-        "Not a creative role at all - internal comms/employee engagement",
-        "Pay far below $150K USD target, in CAD not USD",
-        "Manager level IC role, not senior leadership"
-      ]
-    },
-    "where": "Toronto, Ontario, Canada",
-    "salary": "$88,260\u2013$115,836 CAD gross annually"
-  },
-  {
-    "title": "Communications Manager, Canada (Contract)",
-    "company": "G Adventures",
-    "url": "https://www.linkedin.com/jobs/view/4485862008/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a PR/communications manager contract role, not creative leadership\u2014wrong discipline entirely for Travis.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "CONTRACT",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 1,
-      "comp_min_usd": 65000,
-      "comp_max_usd": 74000,
-      "red_flags": [
-        "PR/communications function, not creative direction",
-        "10-12 month contract at CAD $88-100K, far below his $150K+ USD target",
-        "Toronto-based company, no remote mention"
-      ]
-    },
-    "where": "Toronto, Ontario, Canada",
-    "salary": "$88,000 - $100,000 annually, 10-12 month contract"
-  },
-  {
-    "title": "Chief Operating Officer",
-    "company": "PSI Engineering",
-    "url": "https://www.linkedin.com/jobs/view/4486771805/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "COO role for an industrial automation manufacturer, with zero creative scope and requiring onsite/shop-floor presence.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "NOT_STATED",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Not a creative role at all - operations/engineering COO",
-        "Onsite requirement, shop floor and customer site visits",
-        "No pay stated and completely outside Travis's background"
-      ]
-    },
-    "where": "Mississauga, Ontario, Canada",
-    "salary": ""
-  },
-  {
-    "title": "Executive Director / Direction G\u00e9n\u00e9rale",
-    "company": "Climbing Escalade Canada",
-    "url": "https://www.linkedin.com/jobs/view/4486776955/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a national sport federation nonprofit executive director role with no creative scope at all, and pay is far below his target.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "UNCLEAR",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 62000,
-      "comp_max_usd": 73000,
-      "red_flags": [
-        "Not a creative or marketing role at all \u2014 sport org administration/governance",
-        "Pay ($85-100K CAD, ~$62-73K USD) is well under his $150K USD target",
-        "Bilingual French/English strongly preferred, no indication he qualifies"
-      ]
-    },
-    "where": "Canada",
-    "salary": "$85,000\u2013$100,000 CAD per year"
-  },
-  {
-    "title": "Senior Manager, Operational Experience & Process Design",
-    "company": "goeasy Ltd.",
-    "url": "https://www.linkedin.com/jobs/view/4454917193/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is an operations/process-improvement management role with no creative or brand component, a total mismatch for a creative director.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "HYBRID",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 92000,
-      "comp_max_usd": 109000,
-      "red_flags": [
-        "Not a creative role at all\u2014process engineering/Lean Six Sigma focus",
-        "Hybrid 3 days onsite in Mississauga, not remote",
-        "Pay in CAD well below his $150K USD target"
-      ]
-    },
-    "where": "Mississauga, Ontario, 3 days onsite",
-    "salary": "$126,500\u2013$150,000 CAD (base + bonus)"
-  },
-  {
-    "title": "Chief Executive Officer",
-    "company": "Catholic Family Services of Peel Dufferin",
-    "url": "https://www.linkedin.com/jobs/view/4486914022/",
-    "source": "LinkedIn",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "CEO of a Catholic family social services nonprofit has nothing to do with Travis's creative leadership background.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "EXECUTIVE",
-      "remote": "ONSITE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "employer_base": "CANADA",
-      "pay_currency": "CAD",
-      "timezone": "NOT_STATED",
-      "fit": 0,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Not a creative role at all - nonprofit social services CEO",
-        "Onsite in Brampton, not remote",
-        "Pay likely in CAD, well below his USD target when converted"
-      ]
-    },
-    "where": "Brampton, Ontario office",
-    "salary": "$150,000-$190,000 annually (CAD)"
-  },
-  {
-    "title": "AI Creative Technologist",
-    "company": "Superside",
-    "url": "https://jobs.lever.co/superside/2e3f7ff5-8b1e-45e3-bbdc-65ab16c291e1",
-    "source": "Careers",
-    "score": 0,
-    "score_method": "claude-sonnet-5",
-    "score_reason": "This is a hands-on IC automation-builder role restricted to EMEA, not a senior creative leadership position Travis would take.",
-    "facts": {
-      "lane": "NOT_A_FIT",
-      "seniority": "MID",
-      "remote": "FULLY_REMOTE",
-      "geo": "OTHER_REGION_ONLY",
-      "hire_path": "UNCLEAR",
-      "employer_base": "UNCLEAR",
-      "pay_currency": "NOT_STATED",
-      "timezone": "EUROPE_ASIA_HOURS",
-      "fit": 2,
-      "comp_min_usd": 0,
-      "comp_max_usd": 0,
-      "red_flags": [
-        "Region-restricted to EMEA, excludes Travis's Central-time location",
-        "Individual-contributor builder role, not a CD/leadership position",
-        "No pay or employment type stated"
-      ]
-    },
-    "where": "EMEA, remote",
-    "salary": ""
+    "where": "New York, NY listed; remote unclear",
+    "salary": "Competitive compensation commensurate with experience"
   }
 ]
