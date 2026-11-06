@@ -478,6 +478,62 @@ def fetch_linkedin_email():
         print(f"    ⚠ Gmail: {e}")
         return []
 
+# ─── APPLICATION CONFIRMATIONS FROM GMAIL ────────────────────────────────────
+# The ✓ button was the only way the tracker learned about an application, so roles applied to
+# straight on the company site (Said Differently, 30 Oct 2026) stayed on the board scored 10.
+# Each run reads recent "thanks for applying" emails and stamps the matching card as applied.
+CONFIRM_Q = ('newer_than:14d -from:me (subject:("thank you for applying" OR "thanks for applying" '
+             'OR "application received" OR "application has been received" OR "received your application" '
+             'OR "your application was sent") OR "we received your application" OR "received your application")')
+
+def norm_name(s):
+    s = re.sub(r"\b(inc|llc|ltd|corp|co|the|group|hq|usa)\b\.?", " ", (s or "").lower())
+    return re.sub(r"[^a-z0-9]", "", s)
+
+def fetch_application_confirmations():
+    """[(date 'YYYY-MM-DD', text)] for recent application-confirmation emails; [] if Gmail isn't set up."""
+    rt, cid, cs = (os.environ.get(k, "") for k in ("GMAIL_REFRESH_TOKEN", "GMAIL_CLIENT_ID", "GMAIL_CLIENT_SECRET"))
+    if not all([rt, cid, cs]): return []
+    try:
+        from google.oauth2.credentials import Credentials
+        from google.auth.transport.requests import Request
+        from googleapiclient.discovery import build
+        creds = Credentials(token=None, refresh_token=rt, client_id=cid, client_secret=cs,
+                            token_uri="https://oauth2.googleapis.com/token",
+                            scopes=["https://www.googleapis.com/auth/gmail.readonly"])
+        creds.refresh(Request())
+        svc = build("gmail", "v1", credentials=creds, cache_discovery=False)
+        msgs = svc.users().messages().list(userId="me", q=CONFIRM_Q, maxResults=30).execute().get("messages", [])
+        out = []
+        for m in msgs:
+            msg = svc.users().messages().get(userId="me", id=m["id"], format="metadata",
+                                             metadataHeaders=["Subject", "From"]).execute()
+            h = {x["name"]: x["value"] for x in msg.get("payload", {}).get("headers", [])}
+            when = datetime.fromtimestamp(int(msg.get("internalDate", "0")) / 1000, timezone.utc).strftime("%Y-%m-%d")
+            out.append((when, f"{h.get('From', '')} {h.get('Subject', '')} {msg.get('snippet', '')}"))
+        print(f"  Gmail: {len(out)} application confirmation email(s) in the last 14 days")
+        return out
+    except Exception as e:
+        print(f"  ⚠ Gmail confirmations: {e}")
+        return []
+
+def match_confirmations(jobs, confirmations):
+    """Stamp cards as applied from confirmation emails. A card matches when the email names its
+    company and either its title or it is that company's only unapplied card — so one email
+    never marks several roles at the same company."""
+    marked = []
+    for when, text in confirmations:
+        t, tn = text.lower(), norm_name(text)
+        cands = [j for j in jobs if not j.get("applied") and len(norm_name(j.get("company"))) >= 4
+                 and norm_name(j.get("company")) in tn]
+        by_title = [j for j in cands if clean_title(j.get("title")).lower() in t]
+        hits = by_title or (cands if len(cands) == 1 else [])
+        for j in hits:
+            j["applied"], j["applied_via"] = when, "email"
+            marked.append(j)
+            print(f"  ✓ marked applied from email: {j['title'][:50]} @ {j['company'][:25]} ({when})")
+    return marked
+
 # ─── COMPANY CAREERS PAGES (Greenhouse / Lever / Ashby) ──────────────────────
 
 REMOTE_LOC_RE = re.compile(r"remote|anywhere|distributed|north america|americas|canada|latam|united states|usa|\bus\b", re.I)
@@ -1107,6 +1163,7 @@ def process(stats):
     for j in existing:
         if j.get("id") in applied_fb and not j.get("applied"):
             j["applied"] = (applied_fb[j["id"]].get("at") or "")[:10] or now[:10]
+    match_confirmations(existing, fetch_application_confirmations())
     applied_jobs = [j for j in existing if j.get("applied")]
     existing     = [j for j in existing if not j.get("applied")]
 
