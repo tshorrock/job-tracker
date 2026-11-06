@@ -211,14 +211,33 @@ def applied_twin(job, applied_jobs):
     url, li = norm_url(job.get("url")), job.get("li_id") or ""
     co = (job.get("company") or "").strip().lower()
     core = title_core(job.get("title"), job.get("company"))
+    ck = content_key(job)
     for a in applied_jobs:
         if a is job or (job.get("id") and a.get("id") == job.get("id")): continue
         if url and url == norm_url(a.get("url")): return a
         if li and li == (a.get("li_id") or ""): return a
+        if ck and ck == content_key(a): return a
         if co and core and co == (a.get("company") or "").strip().lower() \
                 and core == title_core(a.get("title"), a.get("company")):
             return a
     return None
+
+# Some feeds (Adzuna) glue a LinkedIn card's text onto the title, e.g.
+# "Head of Creative (Remote Canada) Head Directive · CAD 175k-200k/yr Toronto, Canada 4 more Workplace 8 hours ago".
+AGO_RE = re.compile(r"\s+\d+\s+(?:minutes?|hours?|days?|weeks?|months?)\s+ago\b.*$", re.I)
+
+def clean_title(title):
+    t = AGO_RE.sub("", (title or "").strip())
+    if " · " in t:                                   # card text glued on: keep the title part only
+        t = t.split(" · ")[0]
+        if ")" in t: t = t[:t.rfind(")") + 1]        # drop the company/title echo after "(Remote X)"
+    return re.sub(r"\s{2,}", " ", t).strip(" -|·")
+
+def content_key(job):
+    """Same title + same opening text = same posting, even when two feeds name the company differently."""
+    desc = re.sub(r"[^a-z0-9]", "", (job.get("description") or "").lower())
+    if len(desc) < 120: return ""
+    return hashlib.md5((re.sub(r"[^a-z0-9]", "", clean_title(job.get("title")).lower()) + desc[:120]).encode()).hexdigest()[:12]
 
 def load_applied_reference():
     """Every job Travis has marked applied: cards already stamped in jobs.json plus feedback.json ids."""
@@ -256,7 +275,7 @@ def new_job(**kw):
     base = {"title": "", "company": "", "url": "", "description": "", "salary": "",
             "location": "", "source": "", "posted": "", "li_id": ""}
     base.update({k: (v if v is not None else "") for k, v in kw.items()})
-    base["title"] = base["title"].strip()
+    base["title"] = clean_title(base["title"])
     base["company"] = base["company"].strip()
     base["description"] = (base["description"] or "")[:DESC_CHARS]
     return base
@@ -1096,6 +1115,17 @@ def process(stats):
     existing = [j for j in existing if not applied_twin(j, applied_jobs)]
     if before != len(existing): print(f"  → removed {before - len(existing)} cards duplicating roles already applied to")
 
+    # Same posting from two feeds: keep one card, preferring LinkedIn (real company name, full text).
+    for j in existing: j["title"] = clean_title(j.get("title"))
+    by_key, deduped = {}, []
+    for j in sorted(existing, key=lambda j: 0 if "LinkedIn" in (j.get("source") or "") else 1):
+        ck = content_key(j)
+        if ck and ck in by_key: continue
+        if ck: by_key[ck] = j
+        deduped.append(j)
+    if len(deduped) != len(existing): print(f"  → merged {len(existing) - len(deduped)} cross-feed duplicate cards")
+    existing = sorted(deduped, key=lambda j: existing.index(j))
+
     # Anything that fails the criteria is useless — remove it totally rather than showing a capped score.
     before = len(existing)
     existing = [j for j in existing if j.get("score", 0) >= SCORE_FLOOR and j.get("id") not in dismissed_fb]
@@ -1147,11 +1177,16 @@ def process(stats):
             print(f"  ↻ reposted: {j['title'][:50]} @ {j['company'][:25]} (×{j['repost_count']})")
     for j in existing + scored: scrub(j)
     existing_ids = {j.get("id") for j in existing} | {j.get("id") for j in applied_jobs}
+    content_keys = {content_key(j) for j in existing + applied_jobs} - {""}
     for j in scored:
         if j.get("score", 0) < SCORE_FLOOR: continue
         j["id"] = make_id(j["title"], j["company"] or j["li_id"])
         if j["id"] in existing_ids: continue
         if applied_twin(j, applied_jobs): continue
+        ck = content_key(j)
+        if ck and ck in content_keys:               # same posting from another feed
+            print(f"  ⧉ cross-feed duplicate: {j['title'][:50]} @ {j['company'][:25]} ({j['source']})"); continue
+        if ck: content_keys.add(ck)
         j["added"] = now
         kept.append(j)
     print(f"\n  → kept {len(kept)} (score ≥ {SCORE_FLOOR}), dropped {len(scored) - len(kept)}")
