@@ -182,6 +182,50 @@ def make_id(title, company):
     c = re.sub(r'[^a-z0-9]', '', (company or '').lower())[:20]
     return hashlib.md5(f"{t}{c}".encode()).hexdigest()[:12]
 
+# ─── ALREADY-APPLIED TWINS ───────────────────────────────────────────────────
+# The ✓ Applied mark is keyed to make_id(title, company), so a retitled or reposted copy of a role
+# Travis already applied to got a fresh id and came back as "new" (Nov 2026: Mercury retitled
+# "Creative Director - Brand Narrative" to "Group Creative Director - ..." on the same Greenhouse
+# link; Deel's AI Video role reappeared under a new LinkedIn id). applied_twin() catches those.
+LEVEL_WORDS_RE = re.compile(r"\b(group|senior|sr|principal|lead|associate|staff|global|remote|head)\b", re.I)
+
+def title_core(title, company=""):
+    """Title with seniority words, the company's own name, parentheticals and punctuation removed."""
+    t = (title or "").lower()
+    c = (company or "").strip().lower()
+    if c: t = t.replace(c, " ")
+    t = re.sub(r"\([^)]*\)|\[[^\]]*\]", " ", t)
+    t = LEVEL_WORDS_RE.sub(" ", t)
+    return re.sub(r"[^a-z0-9]", "", t)
+
+def norm_url(u):
+    try:
+        p = urllib.parse.urlparse(u or "")
+        return (p.netloc.lower().replace("www.", "") + p.path.rstrip("/")).lower()
+    except Exception:
+        return ""
+
+def applied_twin(job, applied_jobs):
+    """The applied job this one duplicates — same posting link, same LinkedIn id, or same company
+    with the same core title — else None."""
+    url, li = norm_url(job.get("url")), job.get("li_id") or ""
+    co = (job.get("company") or "").strip().lower()
+    core = title_core(job.get("title"), job.get("company"))
+    for a in applied_jobs:
+        if a is job or (job.get("id") and a.get("id") == job.get("id")): continue
+        if url and url == norm_url(a.get("url")): return a
+        if li and li == (a.get("li_id") or ""): return a
+        if co and core and co == (a.get("company") or "").strip().lower() \
+                and core == title_core(a.get("title"), a.get("company")):
+            return a
+    return None
+
+def load_applied_reference():
+    """Every job Travis has marked applied: cards already stamped in jobs.json plus feedback.json ids."""
+    fb = load_json(FEEDBACK_FILE, {}) or {}
+    ids = set((fb.get("applied") or {}).keys())
+    return [j for j in load_json(DATA_FILE, []) if j.get("applied") or j.get("id") in ids]
+
 def load_json(path, default):
     try: return json.loads(Path(path).read_text())
     except Exception: return default
@@ -1004,12 +1048,24 @@ def process(stats):
     enrich_linkedin(raw)
     enrich_short(raw)
 
-    cand, dropped = [], {"hybrid": 0, "us_only": 0}
+    # Re-check the company block now that enrichment has filled in names. LinkedIn guest results
+    # often arrive with no company, so a blocked reposter (Jobgether) used to pass collect() and
+    # reach the morning picks before tomorrow's purge caught it.
+    applied_ref = load_applied_reference()
+    cand, dropped = [], {"hybrid": 0, "us_only": 0, "blocked_company": 0, "already_applied": 0}
     for j in raw:
+        if not company_ok(j.get("company")) or not domain_ok(j.get("url", "")):
+            dropped["blocked_company"] += 1; continue
+        twin = applied_twin(j, applied_ref)
+        if twin:
+            dropped["already_applied"] += 1
+            print(f"  ✓ skipped, already applied: {j['title'][:50]} @ {j['company'][:25]} = {twin['title'][:40]}")
+            continue
         if is_clearly_hybrid(j): dropped["hybrid"] += 1; continue
         if is_us_only(j):        dropped["us_only"] += 1; continue
         cand.append(j)
-    print(f"  → dropped {dropped['hybrid']} hybrid/on-site and {dropped['us_only']} explicitly US-only before scoring")
+    print(f"  → dropped {dropped['hybrid']} hybrid/on-site, {dropped['us_only']} explicitly US-only, "
+          f"{dropped['blocked_company']} blocked companies and {dropped['already_applied']} already-applied before scoring")
 
     now = datetime.now(timezone.utc).isoformat()
     print(f"\n  Scoring {len(cand)} jobs with {SCORING_MODEL}…")
@@ -1034,6 +1090,11 @@ def process(stats):
             j["applied"] = (applied_fb[j["id"]].get("at") or "")[:10] or now[:10]
     applied_jobs = [j for j in existing if j.get("applied")]
     existing     = [j for j in existing if not j.get("applied")]
+
+    # Cards that duplicate something already applied to (retitled, reposted) come off the board.
+    before = len(existing)
+    existing = [j for j in existing if not applied_twin(j, applied_jobs)]
+    if before != len(existing): print(f"  → removed {before - len(existing)} cards duplicating roles already applied to")
 
     # Anything that fails the criteria is useless — remove it totally rather than showing a capped score.
     before = len(existing)
@@ -1090,6 +1151,7 @@ def process(stats):
         if j.get("score", 0) < SCORE_FLOOR: continue
         j["id"] = make_id(j["title"], j["company"] or j["li_id"])
         if j["id"] in existing_ids: continue
+        if applied_twin(j, applied_jobs): continue
         j["added"] = now
         kept.append(j)
     print(f"\n  → kept {len(kept)} (score ≥ {SCORE_FLOOR}), dropped {len(scored) - len(kept)}")
@@ -1178,7 +1240,8 @@ def save_picks(kept, all_jobs, now):
                 "red_flags": f.get("red_flags", []), "added": j.get("added", "")[:10]}
     today = sorted([j for j in kept if j.get("score", 0) >= 7], key=lambda j: -j["score"])[:8]
     cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
-    week = sorted([j for j in all_jobs if j.get("score", 0) >= 7 and j.get("added", "") >= cutoff and j not in today],
+    week = sorted([j for j in all_jobs if j.get("score", 0) >= 7 and j.get("added", "") >= cutoff and j not in today
+                   and not j.get("applied")],
                   key=lambda j: -j["score"])[:8]
     save_json(PICKS_FILE, {"updated": now, "new_today": len(kept), "today": [slim(j) for j in today],
                            "this_week": [slim(j) for j in week]})
