@@ -1,7 +1,31 @@
 {
-  "updated": "2026-11-05T09:33:56.415096+00:00",
-  "new_today": 4,
+  "updated": "2026-11-06T09:27:54.175707+00:00",
+  "new_today": 3,
   "today": [
+    {
+      "title": "Principal Creative Director, AI Video",
+      "company": "Jobgether",
+      "url": "https://www.linkedin.com/jobs/view/4486351396/",
+      "score": 10,
+      "salary": "USD $170,000\u2013$225,000 base, localized by country",
+      "where": "Canada listed; globally distributed, remote-first",
+      "remote": "FULLY_REMOTE",
+      "geo": "OPEN_ANYWHERE",
+      "hire_path": "OPEN_GLOBAL",
+      "pay_currency": "USD",
+      "board": "us",
+      "age_days": null,
+      "repost_count": 0,
+      "why": "This is squarely his AI-native creative director sweet spot, hands-on with gen AI tools and workflow-building, posted remote-first with strong USD pay.",
+      "red_flags": [
+        "Posted via Jobgether, a third-party AI-matching aggregator, not the actual employer directly",
+        "Pay is 'localized according to candidate's country' so Canada-based pay could be lower than stated USD range",
+        "Actual hiring company and its base/country are not disclosed"
+      ],
+      "added": "2026-11-06"
+    }
+  ],
+  "this_week": [
     {
       "title": "Group Creative Director - Brand Narrative",
       "company": "Mercury",
@@ -14,7 +38,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 20,
+      "age_days": 21,
       "repost_count": 0,
       "why": "A senior, film-led brand creative leadership role at a serious company, explicitly remote-friendly and open to Canadian hires, with excellent pay even on the CAD scale.",
       "red_flags": [
@@ -23,9 +47,7 @@
         "No explicit mention of working hours/timezone expectations"
       ],
       "added": "2026-11-05"
-    }
-  ],
-  "this_week": [
+    },
     {
       "title": "Remote Creative Director - Brand & Visual Identity Leader",
       "company": "BioRender",
@@ -38,7 +60,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "NOT_STATED",
       "board": "canada",
-      "age_days": 8,
+      "age_days": 9,
       "repost_count": 0,
       "why": "A true Creative Director role owning brand identity for a remote-first company is a strong background match, but pay and hire-path specifics are missing.",
       "red_flags": [
@@ -60,7 +82,7 @@
       "hire_path": "OPEN_GLOBAL",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 3,
+      "age_days": 4,
       "repost_count": 0,
       "why": "Legit remote CD role with AI focus, but pay tops out at $120K\u2014well under his $150K floor\u2014and wants luxury hospitality/travel brand background he doesn't have.",
       "red_flags": [
@@ -82,7 +104,7 @@
       "hire_path": "CANADA_POSSIBLE",
       "pay_currency": "CAD",
       "board": "canada",
-      "age_days": 4,
+      "age_days": 5,
       "repost_count": 0,
       "why": "Solid Head of Creative leadership role but pay is in CAD via Canadian hire path, a step down from his US-dollar target.",
       "red_flags": [
@@ -104,7 +126,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 8,
+      "age_days": 9,
       "repost_count": 0,
       "why": "AI-enabled Creative Director role plays directly to his AI tool fluency and CD experience, but posting is thin on details.",
       "red_flags": [
@@ -126,7 +148,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 9,
+      "age_days": 10,
       "repost_count": 0,
       "why": "Strong fully-remote ACD role blending brand and performance creative with heavy AI-tooling use, right in his wheelhouse.",
       "red_flags": [
