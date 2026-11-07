@@ -1,30 +1,8 @@
 {
-  "updated": "2026-11-06T16:24:57.546522+00:00",
-  "new_today": 0,
+  "updated": "2026-11-07T08:49:55.740431+00:00",
+  "new_today": 1,
   "today": [],
   "this_week": [
-    {
-      "title": "Remote Creative Director - Brand & Visual Identity Leader",
-      "company": "BioRender",
-      "url": "https://jobmesh.io/job/2333769a-5472-439f-b17e-9fce8bc85950",
-      "score": 8,
-      "salary": "",
-      "where": "Remote-first, no country restriction stated",
-      "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
-      "hire_path": "CANADA_POSSIBLE",
-      "pay_currency": "NOT_STATED",
-      "board": "canada",
-      "age_days": 9,
-      "repost_count": 0,
-      "why": "A true Creative Director role owning brand identity for a remote-first company is a strong background match, but pay and hire-path specifics are missing.",
-      "red_flags": [
-        "No compensation listed",
-        "Company (BioRender) is Toronto-based, may pay in CAD",
-        "Posting mixes contract/permanent labels, unclear employment type"
-      ],
-      "added": "2026-10-30"
-    },
     {
       "title": "Creative Director",
       "company": "AvantStay",
@@ -37,7 +15,7 @@
       "hire_path": "OPEN_GLOBAL",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 4,
+      "age_days": 5,
       "repost_count": 0,
       "why": "Legit remote CD role with AI focus, but pay tops out at $120K\u2014well under his $150K floor\u2014and wants luxury hospitality/travel brand background he doesn't have.",
       "red_flags": [
@@ -46,28 +24,6 @@
         "Explicitly excludes US candidates, so likely non-US payroll/entity"
       ],
       "added": "2026-11-02"
-    },
-    {
-      "title": "Remote AI-Driven Creative Director",
-      "company": "A-to-Z Website Design Studio & Management",
-      "url": "https://jobmesh.io/job/86ed6a37-d2c7-4bb0-a224-385dc224381c",
-      "score": 7,
-      "salary": "",
-      "where": "Remote; listed as Baxter, Minnesota",
-      "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
-      "hire_path": "UNCLEAR",
-      "pay_currency": "NOT_STATED",
-      "board": "us",
-      "age_days": 9,
-      "repost_count": 0,
-      "why": "AI-enabled Creative Director role plays directly to his AI tool fluency and CD experience, but posting is thin on details.",
-      "red_flags": [
-        "Only a short snippet available, no comp or geo specifics",
-        "Requires just ~8 years experience, far less senior than his 30+ year background",
-        "Listing oddly bundled with unrelated local job ads, raising quality concerns"
-      ],
-      "added": "2026-10-30"
     }
   ]
 }
