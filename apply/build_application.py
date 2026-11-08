@@ -97,8 +97,9 @@ EFFORT = os.environ.get("APPLY_EFFORT") or "medium"
 def claude_stream(messages, tools=None, max_tokens=6000, deadline=360):
     """Streamed call for long web-search runs: one long silent request was dropped or timed out at
     ~5 minutes on Actions (Nov 2026); a stream keeps bytes flowing the whole time."""
+    # Research is searching, not reasoning: low effort keeps it inside the time cap.
     body = {"model": MODEL, "max_tokens": max_tokens, "messages": messages, "stream": True,
-            "output_config": {"effort": EFFORT}}
+            "output_config": {"effort": os.environ.get("RESEARCH_EFFORT") or "low"}}
     if tools: body["tools"] = tools
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=json.dumps(body).encode(), headers={
         "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"})
