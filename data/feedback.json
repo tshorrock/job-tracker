@@ -1,92 +1,97 @@
 {
-  "saved": {},
-  "dismissed": {
-    "ed8e10d8b2c2": {
-      "title": "VP Directeur\u00b7rice de Studio",
-      "company": "Valtech",
-      "at": "2026-10-22T15:17:23.876Z"
-    },
-    "e69debd4900b": {
-      "title": "Retail Art Director, NA Brand Creative (Freelance, 1 year Contract)",
-      "company": "lululemon",
-      "at": "2026-10-22T15:32:34.613Z"
-    },
-    "d37f1af942d5": {
-      "title": "Head of Creative Strategy",
-      "company": "Clever Digital Marketing",
-      "at": "2026-10-22T15:34:07.977Z"
-    },
-    "80573a59cda9": {
-      "title": "AI Creative Director",
-      "company": "Superside",
-      "at": "2026-10-22T16:50:07.119Z"
-    },
-    "3a0f2a56bbfb": {
-      "title": "Creative Director (social) [AQ-23287]",
-      "company": "Aquent",
-      "at": "2026-10-22T20:25:27.204Z"
-    },
-    "34fdec862541": {
-      "title": "Remote Senior Director, Creative Strategy & Growth",
-      "company": "JZone",
-      "at": "2026-10-25T16:54:10.556Z"
-    },
-    "529d7ce74367": {
-      "title": "VP, Group Creative Director- Copy (Pharma Ad Agency Experience Required)",
-      "company": "EVERSANA INTOUCH",
-      "at": "2026-10-25T16:57:04.598Z"
-    },
-    "219e2f2aa064": {
-      "title": "Creative Director",
-      "company": "American Bath Group",
-      "at": "2026-10-25T16:57:12.067Z"
-    }
+ "saved": {},
+ "dismissed": {
+  "ed8e10d8b2c2": {
+   "title": "VP Directeur·rice de Studio",
+   "company": "Valtech",
+   "at": "2026-10-22T15:17:23.876Z"
   },
-  "applied": {
-    "84ac52b3e3d0": {
-      "title": "Principal, Creative Director - Campaigns",
-      "company": "Deel",
-      "at": "2026-10-14T12:00:00Z"
-    },
-    "5600b61df560": {
-      "title": "Creative Director, Block",
-      "company": "Block",
-      "at": "2026-10-15T12:00:00Z"
-    },
-    "c5e98253ca8a": {
-      "title": "Principal Creative Director, AI Video",
-      "company": "Deel",
-      "at": "2026-10-21T12:00:00Z"
-    },
-    "a2bf28ca768d": {
-      "title": "Group Creative Director",
-      "company": "MasterClass",
-      "at": "2026-10-21T12:00:00Z"
-    },
-    "f59742d24dab": {
-      "title": "Creative Director, Tidal",
-      "company": "Block",
-      "at": "2026-10-21T12:00:00Z"
-    },
-    "6da87c772d1d": {
-      "title": "Creative Director, Tidal",
-      "company": "TIDAL",
-      "at": "2026-10-21T12:00:00Z"
-    },
-    "f637e3ced046": {
-      "title": "Creative Director",
-      "company": "Cyera",
-      "at": "2026-10-21T12:00:00Z"
-    },
-    "9b1500a6454e": {
-      "title": "Creative Director - Brand Narrative",
-      "company": "Mercury",
-      "at": "2026-10-23T14:49:00Z"
-    },
-    "f8037a8fef8d": {
-      "title": "Creative Director",
-      "company": "Said Differently",
-      "at": "2026-10-30T20:51:09Z"
-    }
+  "e69debd4900b": {
+   "title": "Retail Art Director, NA Brand Creative (Freelance, 1 year Contract)",
+   "company": "lululemon",
+   "at": "2026-10-22T15:32:34.613Z"
+  },
+  "d37f1af942d5": {
+   "title": "Head of Creative Strategy",
+   "company": "Clever Digital Marketing",
+   "at": "2026-10-22T15:34:07.977Z"
+  },
+  "80573a59cda9": {
+   "title": "AI Creative Director",
+   "company": "Superside",
+   "at": "2026-10-22T16:50:07.119Z"
+  },
+  "3a0f2a56bbfb": {
+   "title": "Creative Director (social) [AQ-23287]",
+   "company": "Aquent",
+   "at": "2026-10-22T20:25:27.204Z"
+  },
+  "34fdec862541": {
+   "title": "Remote Senior Director, Creative Strategy & Growth",
+   "company": "JZone",
+   "at": "2026-10-25T16:54:10.556Z"
+  },
+  "529d7ce74367": {
+   "title": "VP, Group Creative Director- Copy (Pharma Ad Agency Experience Required)",
+   "company": "EVERSANA INTOUCH",
+   "at": "2026-10-25T16:57:04.598Z"
+  },
+  "219e2f2aa064": {
+   "title": "Creative Director",
+   "company": "American Bath Group",
+   "at": "2026-10-25T16:57:12.067Z"
+  },
+  "6f9858e49d22": {
+   "title": "Director of Brand Design",
+   "company": "TimelyCare",
+   "at": "2026-11-08T23:40:24.956Z"
   }
+ },
+ "applied": {
+  "84ac52b3e3d0": {
+   "title": "Principal, Creative Director - Campaigns",
+   "company": "Deel",
+   "at": "2026-10-14T12:00:00Z"
+  },
+  "5600b61df560": {
+   "title": "Creative Director, Block",
+   "company": "Block",
+   "at": "2026-10-15T12:00:00Z"
+  },
+  "c5e98253ca8a": {
+   "title": "Principal Creative Director, AI Video",
+   "company": "Deel",
+   "at": "2026-10-21T12:00:00Z"
+  },
+  "a2bf28ca768d": {
+   "title": "Group Creative Director",
+   "company": "MasterClass",
+   "at": "2026-10-21T12:00:00Z"
+  },
+  "f59742d24dab": {
+   "title": "Creative Director, Tidal",
+   "company": "Block",
+   "at": "2026-10-21T12:00:00Z"
+  },
+  "6da87c772d1d": {
+   "title": "Creative Director, Tidal",
+   "company": "TIDAL",
+   "at": "2026-10-21T12:00:00Z"
+  },
+  "f637e3ced046": {
+   "title": "Creative Director",
+   "company": "Cyera",
+   "at": "2026-10-21T12:00:00Z"
+  },
+  "9b1500a6454e": {
+   "title": "Creative Director - Brand Narrative",
+   "company": "Mercury",
+   "at": "2026-10-23T14:49:00Z"
+  },
+  "f8037a8fef8d": {
+   "title": "Creative Director",
+   "company": "Said Differently",
+   "at": "2026-10-30T20:51:09Z"
+  }
+ }
 }
