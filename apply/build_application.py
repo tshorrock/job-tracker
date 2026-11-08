@@ -17,7 +17,7 @@ What it does
   5. Renders PDF + Word versions and writes brief.md (who to contact, emails, what to check).
   6. Emails the package to you (if SMTP secrets are set) and saves it under applications/.
 """
-import json, os, re, sys, argparse, datetime, urllib.request, urllib.parse, urllib.error, smtplib, html as htmllib
+import json, os, re, sys, time, argparse, datetime, urllib.request, urllib.parse, urllib.error, smtplib, html as htmllib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
@@ -94,7 +94,7 @@ def fetch_posting(url):
 
 EFFORT = os.environ.get("APPLY_EFFORT") or "medium"
 
-def claude_stream(messages, tools=None, max_tokens=6000):
+def claude_stream(messages, tools=None, max_tokens=6000, deadline=360):
     """Streamed call for long web-search runs: one long silent request was dropped or timed out at
     ~5 minutes on Actions (Nov 2026); a stream keeps bytes flowing the whole time."""
     body = {"model": MODEL, "max_tokens": max_tokens, "messages": messages, "stream": True,
@@ -102,14 +102,18 @@ def claude_stream(messages, tools=None, max_tokens=6000):
     if tools: body["tools"] = tools
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=json.dumps(body).encode(), headers={
         "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"})
-    out = []
-    with urllib.request.urlopen(req, timeout=180) as r:
+    out, start = [], time.monotonic()
+    with urllib.request.urlopen(req, timeout=120) as r:
         for line in r:
+            if time.monotonic() - start > deadline:   # the Actions job has a 20-minute ceiling
+                raise TimeoutError(f"gave up after {deadline // 60} minutes")
             line = line.decode("utf-8", errors="replace").strip()
             if not line.startswith("data:"): continue
             ev = json.loads(line[5:].strip() or "{}")
             if ev.get("type") == "content_block_delta" and ev.get("delta", {}).get("type") == "text_delta":
                 out.append(ev["delta"]["text"])
+            elif ev.get("type") == "message_stop":
+                break
             elif ev.get("type") == "error":
                 raise RuntimeError(f"stream error: {ev.get('error')}")
     return "".join(out)
@@ -162,7 +166,7 @@ email_format ({{pattern, confidence, source}})."""
     for tool_ver in ("web_search_20260209", "web_search_20250305"):
         try:
             txt = claude_stream([{"role": "user", "content": prompt}],
-                                tools=[{"type": tool_ver, "name": "web_search", "max_uses": 8}], max_tokens=12000)
+                                tools=[{"type": tool_ver, "name": "web_search", "max_uses": 6}], max_tokens=12000)
             m = re.search(r"<json>(.*?)</json>", txt, re.S)
             return json.loads(m.group(1)) if m else {"raw": txt}
         except urllib.error.HTTPError as e:
@@ -170,15 +174,8 @@ email_format ({{pattern, confidence, source}})."""
             print(f"  research ({tool_ver}) HTTP {e.code}: {msg}")
             if e.code != 400: break
         except Exception as e:
-            # Long web-search calls sometimes lose the connection; one retry usually lands.
-            print(f"  research failed ({type(e).__name__}: {e}); retrying once")
-            try:
-                txt = claude_stream([{"role": "user", "content": prompt}],
-                                    tools=[{"type": tool_ver, "name": "web_search", "max_uses": 5}], max_tokens=12000)
-                m = re.search(r"<json>(.*?)</json>", txt, re.S)
-                return json.loads(m.group(1)) if m else {"raw": txt}
-            except Exception as e2:
-                print(f"  research failed again: {type(e2).__name__}: {e2}")
+            # Research is optional: never let it eat the time the tailoring needs.
+            print(f"  research skipped ({type(e).__name__}: {e}); building without it")
             break
     return {}
 
@@ -564,6 +561,7 @@ def email_selftest():
 # ─── MAIN ────────────────────────────────────────────────────────────────────
 
 def main():
+    sys.stdout.reconfigure(line_buffering=True)  # progress shows in the Actions log as it happens
     ap = argparse.ArgumentParser()
     ap.add_argument("url"); ap.add_argument("--text", help="file with the posting text, if the page can't be read")
     ap.add_argument("--tailoring", "--mock", dest="mock", help="JSON file with a finished tailoring (used when Claude in chat does the writing; skips the API)")
