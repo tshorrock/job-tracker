@@ -233,6 +233,38 @@ def clean_title(title):
         if ")" in t: t = t[:t.rfind(")") + 1]        # drop the company/title echo after "(Remote X)"
     return re.sub(r"\s{2,}", " ", t).strip(" -|·")
 
+REGION_TAG_RE = re.compile(
+    r"\s*[\(\[\-–|,]\s*(?:remote\s*[-–:]?\s*)?(?:us|u\.s\.|usa|united states|canada|can|north america|na|uk|mexico|latam|emea)"
+    r"(?:\s*(?:remote|only|based))?\s*[\)\]]?\s*$", re.I)
+
+def region_key(job):
+    """Same company + same title once a trailing region tag is removed: "Head of Creative (Remote US)"
+    and "Head of Creative (Remote Canada)" are one role posted per market (Directive, Nov 2026)."""
+    t = (job.get("title") or "").strip()
+    t = REGION_TAG_RE.sub("", t)
+    return ((job.get("company") or "").strip().lower(), re.sub(r"[^a-z0-9]", "", t.lower()))
+
+def collapse_regional(jobs):
+    """Keep one card per region_key: the Canada posting if there is one (Travis applies from Canada),
+    else the highest score. The others are kept as links on the card (also_posted)."""
+    groups = {}
+    for j in jobs:
+        groups.setdefault(region_key(j), []).append(j)
+    out, dropped = [], 0
+    for key, js in groups.items():
+        if len(js) == 1 or not key[1]:
+            out.extend(js); continue
+        canada = [j for j in js if re.search(r"canada", j.get("title") or "", re.I)]
+        keep = max(canada or js, key=lambda j: (j.get("score", 0), j.get("added", "")))
+        keep["also_posted"] = sorted({j.get("url") for j in js if j is not keep and j.get("url")})
+        best = max(js, key=lambda j: j.get("score", 0))   # same posting, so take the best read of it
+        if best is not keep:
+            for f in ("score", "score_reason", "category", "facts"):
+                if f in best: keep[f] = best[f]
+        out.append(keep); dropped += len(js) - 1
+    if dropped: print(f"  → collapsed {dropped} regional repost(s) into their main card")
+    return [j for j in jobs if j in out]
+
 def content_key(job):
     """Same title + same opening text = same posting, even when two feeds name the company differently."""
     desc = re.sub(r"[^a-z0-9]", "", (job.get("description") or "").lower())
@@ -1251,7 +1283,9 @@ def process(stats):
     rejected = sorted([j for j in scored if j.get("score", 0) < SCORE_FLOOR], key=lambda j: -j.get("score", 0))[:150]
     save_json(Path("data/rejected.json"), [{k: j.get(k) for k in ("title", "company", "url", "source", "score", "score_method",
                                             "score_reason", "facts", "where", "salary")} for j in rejected])
-    all_jobs = applied_jobs + (kept + existing)[:max(0, MAX_JOBS - len(applied_jobs))]
+    live = collapse_regional(kept + existing)
+    kept = [j for j in kept if j in live]
+    all_jobs = applied_jobs + live[:max(0, MAX_JOBS - len(applied_jobs))]
     save_json(DATA_FILE, all_jobs)
     save_json(SEEN_FILE, seen)
     save_json(META_FILE, {"updated": now, "new_count": len(kept), "total_count": len(all_jobs),
