@@ -94,6 +94,26 @@ def fetch_posting(url):
 
 EFFORT = os.environ.get("APPLY_EFFORT") or "medium"
 
+def claude_stream(messages, tools=None, max_tokens=6000):
+    """Streamed call for long web-search runs: one long silent request was dropped or timed out at
+    ~5 minutes on Actions (Nov 2026); a stream keeps bytes flowing the whole time."""
+    body = {"model": MODEL, "max_tokens": max_tokens, "messages": messages, "stream": True,
+            "output_config": {"effort": EFFORT}}
+    if tools: body["tools"] = tools
+    req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=json.dumps(body).encode(), headers={
+        "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"})
+    out = []
+    with urllib.request.urlopen(req, timeout=180) as r:
+        for line in r:
+            line = line.decode("utf-8", errors="replace").strip()
+            if not line.startswith("data:"): continue
+            ev = json.loads(line[5:].strip() or "{}")
+            if ev.get("type") == "content_block_delta" and ev.get("delta", {}).get("type") == "text_delta":
+                out.append(ev["delta"]["text"])
+            elif ev.get("type") == "error":
+                raise RuntimeError(f"stream error: {ev.get('error')}")
+    return "".join(out)
+
 def claude(messages, system=None, schema=None, tools=None, max_tokens=4000):
     # Claude 5 models think before answering, and thinking counts against max_tokens: at the default
     # (high) effort the tailoring call spent all 6,000 tokens thinking and returned nothing (Nov 2026).
@@ -141,8 +161,8 @@ other_contacts (list of {{name, title, linkedin, role_in_hire, source}}),
 email_format ({{pattern, confidence, source}})."""
     for tool_ver in ("web_search_20260209", "web_search_20250305"):
         try:
-            txt = claude([{"role": "user", "content": prompt}],
-                         tools=[{"type": tool_ver, "name": "web_search", "max_uses": 8}], max_tokens=6000)
+            txt = claude_stream([{"role": "user", "content": prompt}],
+                                tools=[{"type": tool_ver, "name": "web_search", "max_uses": 8}], max_tokens=12000)
             m = re.search(r"<json>(.*?)</json>", txt, re.S)
             return json.loads(m.group(1)) if m else {"raw": txt}
         except urllib.error.HTTPError as e:
@@ -153,8 +173,8 @@ email_format ({{pattern, confidence, source}})."""
             # Long web-search calls sometimes lose the connection; one retry usually lands.
             print(f"  research failed ({type(e).__name__}: {e}); retrying once")
             try:
-                txt = claude([{"role": "user", "content": prompt}],
-                             tools=[{"type": tool_ver, "name": "web_search", "max_uses": 5}], max_tokens=6000)
+                txt = claude_stream([{"role": "user", "content": prompt}],
+                                    tools=[{"type": tool_ver, "name": "web_search", "max_uses": 5}], max_tokens=12000)
                 m = re.search(r"<json>(.*?)</json>", txt, re.S)
                 return json.loads(m.group(1)) if m else {"raw": txt}
             except Exception as e2:
@@ -510,22 +530,36 @@ def email_package(outdir, stem, t, brief):
     print(f"  ✓ package emailed to {to}")
 
 def gmail_send(user, pwd, to, raw):
-    """Gmail SMTP, trying STARTTLS on 587 and then SSL on 465 (587 drops the connection from some runners)."""
+    """Gmail SMTP, trying STARTTLS on 587 and then SSL on 465. Errors name the stage that failed
+    (connect / starttls / login / send) so a blocked network and a bad password look different.
+    Never logs the credentials."""
     errs = []
     for port in (587, 465):
+        stage = "connect"
         try:
-            if port == 587:
-                with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as s:
-                    s.starttls(); s.login(user, pwd); s.sendmail(user, to, raw)
-            else:
-                with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30) as s:
-                    s.login(user, pwd); s.sendmail(user, to, raw)
+            s = smtplib.SMTP("smtp.gmail.com", 587, timeout=30) if port == 587 else smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30)
+            with s:
+                stage = "ehlo"; s.ehlo()
+                if port == 587: stage = "starttls"; s.starttls(); s.ehlo()
+                stage = "login"; s.login(user, pwd)
+                if raw is None: return  # connection test only
+                stage = "send"; s.sendmail(user, to, raw)
             return
         except smtplib.SMTPAuthenticationError as e:
             raise RuntimeError(f"Gmail rejected the login ({e.smtp_code}): the app password in SMTP_PASS needs replacing") from None
         except Exception as e:
-            errs.append(f"port {port}: {type(e).__name__}: {e}")
+            errs.append(f"port {port} failed at {stage}: {type(e).__name__}: {e}")
     raise RuntimeError("; ".join(errs))
+
+def email_selftest():
+    """`build_application.py test-email`: checks the Gmail connection without calling Claude or sending anything."""
+    user, pwd = os.environ.get("SMTP_USER", ""), os.environ.get("SMTP_PASS", "")
+    print(f"SMTP_USER set: {bool(user)} ({'gmail.com address' if user.lower().endswith('@gmail.com') else 'not a gmail.com address' if user else '-'}); "
+          f"SMTP_PASS set: {bool(pwd)}, {len(pwd.replace(' ', ''))} characters (Gmail app passwords are 16)")
+    try:
+        gmail_send(user, pwd, None, None); print("✓ Gmail login works")
+    except Exception as e:
+        print(f"✗ {e}")
 
 # ─── MAIN ────────────────────────────────────────────────────────────────────
 
@@ -537,6 +571,8 @@ def main():
     ap.add_argument("--print-schema", action="store_true", help="print the tailoring JSON schema and exit")
     ap.add_argument("--out", default=str(ROOT / "applications")); ap.add_argument("--no-email", action="store_true")
     a = ap.parse_args()
+    if a.url == "test-email":
+        email_selftest(); return
     if a.print_schema:
         print(json.dumps(tailor_schema(), indent=1)); return
 
