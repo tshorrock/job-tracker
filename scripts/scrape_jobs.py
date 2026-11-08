@@ -1384,8 +1384,14 @@ def send_email(new_jobs):
     msg["From"], msg["To"] = user, to
     msg.attach(MIMEText(build_html(new_jobs), "html", "utf-8"))
     try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as s:
-            s.starttls(); s.login(user, pwd); s.sendmail(user, to, msg.as_string())
+        try:
+            with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as s:
+                s.starttls(); s.login(user, pwd); s.sendmail(user, to, msg.as_string())
+        except smtplib.SMTPAuthenticationError:
+            raise
+        except Exception:  # 587 drops the connection from some runners; Gmail also takes SSL on 465
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30) as s:
+                s.login(user, pwd); s.sendmail(user, to, msg.as_string())
         print(f"  ✓ Email → {to}")
         return "sent"
     except Exception as e:

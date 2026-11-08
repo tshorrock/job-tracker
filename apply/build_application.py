@@ -150,7 +150,16 @@ email_format ({{pattern, confidence, source}})."""
             print(f"  research ({tool_ver}) HTTP {e.code}: {msg}")
             if e.code != 400: break
         except Exception as e:
-            print(f"  research failed: {e}"); break
+            # Long web-search calls sometimes lose the connection; one retry usually lands.
+            print(f"  research failed ({type(e).__name__}: {e}); retrying once")
+            try:
+                txt = claude([{"role": "user", "content": prompt}],
+                             tools=[{"type": tool_ver, "name": "web_search", "max_uses": 5}], max_tokens=6000)
+                m = re.search(r"<json>(.*?)</json>", txt, re.S)
+                return json.loads(m.group(1)) if m else {"raw": txt}
+            except Exception as e2:
+                print(f"  research failed again: {type(e2).__name__}: {e2}")
+            break
     return {}
 
 def tailor_schema():
@@ -497,9 +506,26 @@ def email_package(outdir, stem, t, brief):
             part = MIMEApplication(f.read_bytes(), Name=f.name)
             part["Content-Disposition"] = f'attachment; filename="{f.name}"'
             msg.attach(part)
-    with smtplib.SMTP("smtp.gmail.com", 587) as s:
-        s.starttls(); s.login(user, pwd); s.sendmail(user, to, msg.as_string())
+    gmail_send(user, pwd, to, msg.as_string())
     print(f"  ✓ package emailed to {to}")
+
+def gmail_send(user, pwd, to, raw):
+    """Gmail SMTP, trying STARTTLS on 587 and then SSL on 465 (587 drops the connection from some runners)."""
+    errs = []
+    for port in (587, 465):
+        try:
+            if port == 587:
+                with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as s:
+                    s.starttls(); s.login(user, pwd); s.sendmail(user, to, raw)
+            else:
+                with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30) as s:
+                    s.login(user, pwd); s.sendmail(user, to, raw)
+            return
+        except smtplib.SMTPAuthenticationError as e:
+            raise RuntimeError(f"Gmail rejected the login ({e.smtp_code}): the app password in SMTP_PASS needs replacing") from None
+        except Exception as e:
+            errs.append(f"port {port}: {type(e).__name__}: {e}")
+    raise RuntimeError("; ".join(errs))
 
 # ─── MAIN ────────────────────────────────────────────────────────────────────
 
