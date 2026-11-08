@@ -449,6 +449,8 @@ def slug(s): return re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")[:40
 # ─── 6. BRIEF + EMAIL ────────────────────────────────────────────────────────
 
 def people_links(company, title):
+    # "Onward Search (client: entertainment technology company)" -> "Onward Search"
+    company = re.sub(r"\s*[\(\[].*?[\)\]]", "", company or "").strip() or company
     q = lambda s: urllib.parse.quote(s)
     net = "&network=%5B%22F%22%2C%22S%22%5D"
     return [
@@ -629,9 +631,15 @@ def main():
             if fb:
                 t2 = scrub_dashes(tailor(posting, a.url, intel, feedback=fb))
                 if not lint(t2) or len(lint(t2)) <= len(lint(t)):
-                    t = t2
-                    rt = recruiter_test(posting, t, assemble(t, posting))
-                    print(f"  after fixes: {rt['verdict']}")
+                    rt2 = recruiter_test(posting, t2, assemble(t2, posting))
+                    # Keep the fixed draft only if the recruiter rates it at least as well. Two of the first
+                    # three real builds went from "interview" to "maybe" after fixing, and kept the worse one.
+                    rank = {"pass": 0, "maybe": 1, "interview": 2}
+                    if rank[rt2["verdict"]] >= rank[rt["verdict"]]:
+                        t, rt = t2, rt2
+                        print(f"  after fixes: {rt['verdict']} (kept)")
+                    else:
+                        print(f"  after fixes: {rt2['verdict']}, worse than {rt['verdict']}; kept the original draft")
             t["recruiter_test"] = rt
         except Exception as e:
             print(f"  recruiter test failed: {e}")
