@@ -406,11 +406,27 @@ def assemble(t, posting):
         "re": f"Re: {t['role_display']}  ·  {t['company_display']}",
     }
 
+UNKNOWN_RE = re.compile(r"^\s*(unknown|not (conclusively )?identifiable|n/?a|none|not found|unconfirmed)\b", re.I)
+
+def known(v, max_len=80):
+    """A research answer worth showing: present, not an 'unknown' placeholder, and short enough to be a name."""
+    v = (v or "").strip()
+    return v if v and not UNKNOWN_RE.match(v) and len(v) <= max_len else ""
+
 def readable_ids(msg):
     """Swap bullet IDs (for Claude) for the bullet's opening words (for Travis)."""
     text = {i: b for j in CAREER["jobs"] for i, b in j["bullets"].items()}
     return re.sub(r"\b(" + "|".join(map(re.escape, sorted(text, key=len, reverse=True))) + r")\b",
                   lambda m: "“" + " ".join(text[m.group(1)].split()[:6]) + "…”", msg)
+
+def strip_ids(msg):
+    """Recruiter-test text for Travis: drop "t_built/t_zero:" style labels where the bullet is quoted anyway,
+    and turn any other bullet IDs into the bullet's opening words."""
+    ids = "|".join(map(re.escape, sorted({i for j in CAREER["jobs"] for i in j["bullets"]}, key=len, reverse=True)))
+    msg = re.sub(rf"^\s*(?:(?:{ids})\s*[/,&]?\s*)+:\s*", "", msg or "")
+    msg = re.sub(rf"\b(?:{ids})\s*/\s*(?=(?:{ids})\b)", "", msg)  # "t_built/t_toyota" -> "t_toyota"
+    msg = re.sub(rf"\b(?:{ids})'s\b", lambda m: readable_ids(m.group(0)[:-2]) + "'s", msg)
+    return readable_ids(msg)
 
 def dj_order(d, bullet_id):
     """Position of a bullet on the rendered page (for the proof check after trimming)."""
@@ -459,16 +475,16 @@ def brief_md(url, posting, intel, t, d, layout, issues, stem):
     rt = t.get("recruiter_test")
     if rt:
         L.append(f"## Recruiter test: {dict(interview='would interview', maybe='maybe', **{'pass': 'would pass'})[rt['verdict']]}")
-        L.append("**Reasons to call you**\n" + "\n".join(f"- {x}" for x in rt.get("reasons", [])))
+        L.append("**Reasons to call you**\n" + "\n".join(f"- {strip_ids(x)}" for x in rt.get("reasons", [])))
         if rt.get("doubts"):
             # These are the doubts left AFTER the automatic fix round, so a "fixable" one wasn't fixed.
             tag = {"reorder": "still open: try reordering", "swap_bullet": "still open: try a different bullet",
                    "reword_profile_or_letter": "still open: reword the profile or letter",
                    "needs_new_fact": "only you can fix: needs a fact we don't have on file", "real_gap": "a real gap; address it in the interview"}
-            L.append("\n**Doubts**\n" + "\n".join(f"- {x['doubt']} *({tag.get(x['fix_type'], x['fix_type'])})*" for x in rt["doubts"]))
+            L.append("\n**Doubts**\n" + "\n".join(f"- {strip_ids(x['doubt'])} *({tag.get(x['fix_type'], x['fix_type'])})*" for x in rt["doubts"]))
         if rt.get("interview_questions"):
             L.append("\n**Tough questions to prepare for**\n" + "\n".join(
-                f"{i}. {q['question']}  \n   *Your example:* {q['prepare']}" for i, q in enumerate(rt["interview_questions"], 1)))
+                f"{i}. {q['question']}  \n   *Your example:* {strip_ids(q['prepare'])}" for i, q in enumerate(rt["interview_questions"], 1)))
         L.append("")
     L.append("## Do this, in this order\n1. Find a warm path in (links below). If you know someone, send the referral ask first and wait a day.\n"
              "2. Apply with the **Resume.pdf**. Attach the cover letter if there's a field.\n"
@@ -480,7 +496,7 @@ def brief_md(url, posting, intel, t, d, layout, issues, stem):
                  "or you can bring me on through an employer-of-record like Deel or Remote, which is simple on your side.\"*\n")
     L.append("## Who to contact\n")
     hl = intel.get("likely_hiring_leader") or {}
-    if hl.get("name"):
+    if known(hl.get("name")):
         L.append(f"- **Likely hiring leader:** {hl.get('name')}, {hl.get('title','')} ({hl.get('confidence','?')} confidence) {hl.get('linkedin','')}  \n  Source: {hl.get('source','')}")
     for c in intel.get("other_contacts") or []:
         L.append(f"- {c.get('name')}, {c.get('title','')}: {c.get('role_in_hire','')} {c.get('linkedin','')}")
@@ -488,10 +504,16 @@ def brief_md(url, posting, intel, t, d, layout, issues, stem):
     if ef.get("pattern") and ef.get("pattern") != "unknown":
         L.append(f"- **Email format:** {ef.get('pattern')} ({ef.get('confidence','?')} confidence; source {ef.get('source','')}). Verify before sending.")
     if intel.get("is_intermediary"):
-        L.append(f"- Posted by an intermediary. Real company: {intel.get('real_company') or 'not identifiable'}.")
-    L.append("\nSearch links:")
-    for label, link in people_links(intel.get("real_company") or t["company_display"], posting["title"]):
-        L.append(f"- [{label}]({link})")
+        real = known(intel.get("real_company"))
+        L.append(f"- Posted by an intermediary. Real company: {real or 'not identified yet'}"
+                 + ("" if real else f". Research notes: {intel.get('real_company', '')[:400]}"))
+    search_co = known(intel.get("real_company")) or ("" if intel.get("is_intermediary") else t["company_display"])
+    if search_co:
+        L.append("\nSearch links:")
+        for label, link in people_links(search_co, posting["title"]):
+            L.append(f"- [{label}]({link})")
+    elif not known(hl.get("name")):
+        L.append("- No contact or real employer identified, so no search links. Ask the recruiter who the client is.")
     if intel.get("company_summary"):
         L.append(f"\n**About them:** {intel['company_summary']}")
     for s in intel.get("recent_signals") or []:
@@ -592,7 +614,7 @@ def main():
     else:
         print("[2/6] Researching the company and contacts…")
         intel = research(posting, a.url)
-        print(f"  hiring leader found: {'yes' if (intel.get('likely_hiring_leader') or {}).get('name') else 'no'}")  # names stay out of public logs
+        print(f"  hiring leader found: {'yes' if known((intel.get('likely_hiring_leader') or {}).get('name')) else 'no'}")  # names stay out of public logs
         print("[3/6] Tailoring from your master content…")
         t = scrub_dashes(tailor(posting, a.url, intel))
         probs = lint(t)
