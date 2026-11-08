@@ -99,9 +99,18 @@ def claude(messages, system=None, schema=None, tools=None, max_tokens=4000):
     if tools: body["tools"] = tools
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=json.dumps(body).encode(), headers={
         "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"})
-    with urllib.request.urlopen(req, timeout=300) as r:
-        data = json.loads(r.read())
-    return "".join(b.get("text", "") for b in data.get("content", []) if b.get("type") == "text")
+    try:
+        with urllib.request.urlopen(req, timeout=300) as r:
+            data = json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        if schema:  # surface schema/API errors instead of a bare 400
+            raise RuntimeError(f"Claude API HTTP {e.code}: {e.read().decode(errors='replace')[:600]}") from None
+        raise
+    text = "".join(b.get("text", "") for b in data.get("content", []) if b.get("type") == "text")
+    if schema and not text.strip():
+        raise RuntimeError(f"Claude returned no text (stop_reason={data.get('stop_reason')}, "
+                           f"blocks={[b.get('type') for b in data.get('content', [])]}, usage={data.get('usage')})")
+    return text
 
 def research(posting, url):
     """Company snapshot + likely hiring leader + recruiter, via web search. Never fatal."""
