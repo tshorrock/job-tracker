@@ -263,7 +263,34 @@ def collapse_regional(jobs):
                 if f in best: keep[f] = best[f]
         out.append(keep); dropped += len(js) - 1
     if dropped: print(f"  → collapsed {dropped} regional repost(s) into their main card")
-    return [j for j in jobs if j in out]
+    return collapse_retitled([j for j in jobs if j in out])
+
+def _desc_sig(j):
+    return re.sub(r"[^a-z0-9]", "", (j.get("description") or "").lower())
+
+def collapse_retitled(jobs):
+    """One hire posted under several titles (Creative Director / Head of Creative / Director of
+    Creative) with the same description. Same company + 95%+ identical description = one card."""
+    import difflib
+    by_co = {}
+    for j in jobs:
+        by_co.setdefault((j.get("company") or "").lower(), []).append(j)
+    gone = set()
+    for co, js in by_co.items():
+        js = [j for j in js if len(_desc_sig(j)) > 1500]
+        for i, a in enumerate(js):
+            if id(a) in gone: continue
+            twins = [b for b in js[i+1:] if id(b) not in gone and
+                     difflib.SequenceMatcher(None, _desc_sig(a), _desc_sig(b), autojunk=False).ratio() > 0.95]
+            if not twins: continue
+            group = [a] + twins
+            keep = max(group, key=lambda j: (j.get("score", 0), bool(re.search("canada", j.get("title") or "", re.I))))
+            keep["also_posted"] = sorted({u for j in group for u in ([j.get("url")] + (j.get("also_posted") or []))
+                                          if u and u != keep.get("url")})
+            keep["also_titled"] = sorted({j.get("title") for j in group if j is not keep})
+            gone |= {id(j) for j in group if j is not keep}
+    if gone: print(f"  → collapsed {len(gone)} retitled repost(s) (same description, different title)")
+    return [j for j in jobs if id(j) not in gone]
 
 def content_key(job):
     """Same title + same opening text = same posting, even when two feeds name the company differently."""
