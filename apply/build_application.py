@@ -92,10 +92,16 @@ def fetch_posting(url):
 
 # ─── 2 + 3. CLAUDE ───────────────────────────────────────────────────────────
 
+EFFORT = os.environ.get("APPLY_EFFORT") or "medium"
+
 def claude(messages, system=None, schema=None, tools=None, max_tokens=4000):
-    body = {"model": MODEL, "max_tokens": max_tokens, "messages": messages}
+    # Claude 5 models think before answering, and thinking counts against max_tokens: at the default
+    # (high) effort the tailoring call spent all 6,000 tokens thinking and returned nothing (Nov 2026).
+    # Medium effort is the docs' cost-saving step down; the larger budget leaves room for the answer.
+    body = {"model": MODEL, "max_tokens": max(max_tokens, 16000) if schema else max_tokens, "messages": messages,
+            "output_config": {"effort": EFFORT}}
     if system: body["system"] = system
-    if schema: body["output_config"] = {"format": {"type": "json_schema", "schema": schema}}
+    if schema: body["output_config"]["format"] = {"type": "json_schema", "schema": schema}
     if tools: body["tools"] = tools
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=json.dumps(body).encode(), headers={
         "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"})
