@@ -144,9 +144,15 @@ def tailor_schema():
     arr = lambda enum, lo=0, hi=12: {"type": "array", "items": {"type": "string", "enum": enum}}
     email = {"type": "object", "additionalProperties": False, "required": ["to", "subject", "body"],
              "properties": {"to": {"type": "string"}, "subject": {"type": "string"}, "body": {"type": "string"}}}
+    all_ids = [i for v in job_ids.values() for i in v]
+    need = {"type": "object", "additionalProperties": False, "required": ["need", "level", "proof"],
+            "properties": {"need": {"type": "string", "description": "The requirement in a few words, in the posting's language"},
+                           "level": {"type": "string", "enum": ["required", "preferred"]},
+                           "proof": {"type": "array", "items": {"type": "string", "enum": all_ids},
+                                     "description": "Bullet IDs that prove it. Empty = no proof yet."}}}
     return {
         "type": "object", "additionalProperties": False,
-        "required": ["company_display", "role_display", "variant", "fit_read", "tagline", "profile", "bullets",
+        "required": ["company_display", "role_display", "variant", "fit_read", "needs", "tagline", "profile", "bullets",
                      "skills_creative", "skills_ai", "skills_leadership", "skills_tools", "brands", "cover_letter",
                      "hiring_leader_email", "referral_ask", "follow_up", "knockout_notes",
                      "check_before_sending", "questions_for_first_call", "keywords_matched"],
@@ -155,11 +161,17 @@ def tailor_schema():
             "role_display": {"type": "string"},
             "variant": {"type": "string", "enum": list(CAREER["variants"].keys())},
             "fit_read": {"type": "string", "description": "Two honest lines: worth applying?, the angle, the biggest gap."},
+            "needs": {"type": "array", "items": need,
+                      "description": "The posting's 5 most important needs, most important first, each matched to proof or none. Decide this BEFORE choosing bullets."},
             "tagline": {"type": "string", "description": "3 short phrases joined by '  ·  ', starting with 'Creative Director' unless the posting's exact title is truer"},
             "profile": {"type": "string", "description": "2-3 sentences, max 330 characters, adapted from the chosen variant's profile using ONLY facts in career.json, echoing the posting's language"},
             "bullets": {"type": "object", "additionalProperties": False, "required": list(job_ids),
                         "properties": {k: arr(v) for k, v in job_ids.items()},
-                        "description": "Ordered bullet IDs per job, most relevant first. shorrock 2-3, tpm 4-5, tms 2-3, havas 1."},
+                        "description": "Ordered bullet IDs per job. shorrock 2-3, tpm 4-5, tms 2-3, havas 1. Jobs stay in date "
+                                       "order, so within each job lead with the bullet proving the highest-ranked need it can. The "
+                                       "top REQUIRED need that has proof must be proven by the FIRST bullet of some job, and the "
+                                       "strongest relevant number must sit in the first two bullets of its job. Every bullet listed "
+                                       "as proof for a required need must be included."},
             "skills_creative": arr(S["creative"]), "skills_ai": arr(S["ai"]), "skills_leadership": arr(S["leadership"]), "skills_tools": arr(S["tools"]),
             "brands": arr(CAREER["brands"]),
             "cover_letter": {"type": "array", "items": {"type": "string"},
@@ -179,6 +191,9 @@ def tailor(posting, url, intel, feedback=""):
               "'[Name]'), with one specific hook about the company, one proof point, a small ask, and a link to "
               "travisshorrock.com. referral_ask is to a friendly connection at the company ('[Name]'), short and easy "
               "to say yes to. follow_up is sent 5-7 business days later, 2-3 sentences. Subjects are short and plain."
+              "\n\nORDER OF WORK: first rank the posting's 5 most important needs (required or preferred) and match each to "
+              "the bullet IDs that prove it, or none. Be strict: a bullet proves a need only if a recruiter would accept it as "
+              "evidence. Then choose bullets so the top of the page answers the top needs."
               "\n\nCAREER:\n" + json.dumps(CAREER, ensure_ascii=False))
     user = (f"POSTING URL: {url}\nTITLE: {posting['title']}\nCOMPANY: {posting['company']}\nLOCATION: {posting['location']}\n"
             f"PAY: {posting['salary']}\n\nDESCRIPTION:\n{posting['description'][:14000]}\n\n"
@@ -211,7 +226,115 @@ def lint(t):
                 probs.append(f"{name} {what}: '{m.group(0)}'")
     words = len(" ".join(t["cover_letter"]).split())
     if not 150 <= words <= 260: probs.append(f"cover letter is {words} words; keep it 170-240")
+    return probs + proof_problems(t)
+
+def proof_problems(t, bullets=None):
+    """Does the page lead with proof for the job's top needs? `bullets` is {job_key: [ids on the page]};
+    defaults to the tailoring's own choice (before any one-page trimming)."""
+    placed = bullets or t.get("bullets") or {}
+    on_page = {i for ids in placed.values() for i in ids}
+    firsts = {ids[0] for ids in placed.values() if ids}
+    probs, needs = [], t.get("needs") or []
+    for n in needs:
+        if n.get("level") == "required" and n.get("proof") and not on_page & set(n["proof"]):
+            probs.append(f"the proof for required need '{n['need']}' ({', '.join(n['proof'])}) isn't on the resume")
+    top = next((n for n in needs if n.get("level") == "required" and n.get("proof")), None)
+    if top and not firsts & set(top["proof"]):
+        probs.append(f"no job leads with proof for the top required need '{top['need']}'; "
+                     f"put one of {', '.join(top['proof'])} first in its job")
     return probs
+
+# ─── RECRUITER TEST ──────────────────────────────────────────────────────────
+
+def resume_text(d):
+    """The resume as plain text, in page order: what a screener or a recruiter's skim actually takes in."""
+    L = [d["person"]["name"], d["tagline"], "", "PROFILE", d["profile"], "", "EXPERIENCE"]
+    for j in d["jobs"]:
+        if not j["bullets"]: continue
+        L.append(f"{j['title']}, {j['company']} ({j['dates']})")
+        L += [f"- {b}" for b in j["bullets"]]
+    L += ["", "SKILLS"] + [f"{k}: {', '.join(v)}" for k, v in d["skills"] if v]
+    L += ["", "Brands: " + ", ".join(d["brands"])]
+    return "\n".join(L)
+
+def recruiter_schema():
+    ids = [i for j in CAREER["jobs"] for i in j["bullets"]]
+    return {"type": "object", "additionalProperties": False,
+            "required": ["verdict", "reasons", "doubts", "interview_questions"],
+            "properties": {
+                "verdict": {"type": "string", "enum": ["interview", "maybe", "pass"]},
+                "reasons": {"type": "array", "items": {"type": "string"},
+                            "description": "Up to 3 strong reasons to interview, each pointing to the exact resume line"},
+                "doubts": {"type": "array", "items": {"type": "object", "additionalProperties": False,
+                           "required": ["doubt", "fix_type", "fix"],
+                           "properties": {
+                               "doubt": {"type": "string", "description": "Exact line or gap that raises it"},
+                               "fix_type": {"type": "string", "enum": ["reorder", "swap_bullet", "reword_profile_or_letter", "needs_new_fact", "real_gap"],
+                                            "description": "needs_new_fact = only Travis can fix it with a fact not in CAREER; real_gap = he doesn't have it"},
+                               "fix": {"type": "string", "description": "The specific change, naming bullet IDs where relevant. Only changes CAREER supports."},
+                               "bullet_ids": {"type": "array", "items": {"type": "string", "enum": ids}}}}},
+                "interview_questions": {"type": "array", "items": {"type": "object", "additionalProperties": False,
+                           "required": ["question", "prepare"],
+                           "properties": {"question": {"type": "string"},
+                                          "prepare": {"type": "string", "description": "Which real example from CAREER answers it, or 'no example on file'"}}},
+                           "description": "3 tough questions this role's hiring manager would ask him"}}}
+
+def recruiter_test(posting, t, d):
+    """A second, colder read: would a recruiter for THIS role interview him, and why not?"""
+    system = ("You are the recruiter screening for this role, reading a stack of resumes. You are fair but not generous. "
+              "You may only suggest fixes that use facts in CAREER; never suggest inventing numbers or claims. "
+              "Point to exact lines.\n\nCAREER:\n" + json.dumps(CAREER, ensure_ascii=False))
+    user = (f"ROLE: {posting['title']} at {posting['company']}\n\nPOSTING:\n{posting['description'][:12000]}\n\n"
+            f"HIS RESUME (plain text, page order):\n{resume_text(d)}\n\nHIS COVER LETTER:\n" + "\n\n".join(t["cover_letter"]) +
+            f"\n\nTHE NEEDS HE MAPPED:\n{json.dumps(t.get('needs', []), ensure_ascii=False)}\n\n"
+            "Would you invite him to interview? Give up to 3 reasons and up to 3 doubts. Check: does the first bullet of a job "
+            "prove the top required need? Is the best relevant number near the top? Does an older job take too much room? "
+            "Then give 3 tough interview questions for this role.")
+    return json.loads(claude([{"role": "user", "content": user}], system=system, schema=recruiter_schema(), max_tokens=3000))
+
+FIXABLE = ("reorder", "swap_bullet", "reword_profile_or_letter")
+
+def recruiter_feedback(rt):
+    fixes = [f"- {x['doubt']} FIX: {x['fix']}" for x in rt.get("doubts", []) if x.get("fix_type") in FIXABLE]
+    return ("A recruiter read your draft and raised these doubts. Apply each fix, using only CAREER facts, and keep "
+            "everything else that works:\n" + "\n".join(fixes)) if fixes else ""
+
+# ─── PLAIN-TEXT CHECK ────────────────────────────────────────────────────────
+
+def _squash(s):
+    s = (s or "").lower().replace("­", "").replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
+    return re.sub(r"[^a-z0-9]", "", s)
+
+def pdf_text(path):
+    import pypdfium2
+    pdf = pypdfium2.PdfDocument(str(path))
+    return "\n".join(pdf[i].get_textpage().get_text_range() for i in range(len(pdf)))
+
+def parse_check(pdf_path, d):
+    """What an applicant tracking system sees when it pulls the text out of the PDF.
+    Returns (problems, text). Every chosen line must survive, in page order."""
+    try:
+        txt = pdf_text(pdf_path)
+    except Exception as e:
+        return [f"Couldn't read text back out of the resume PDF ({e}); open it and try copying the text yourself"], ""
+    flat, probs, pos = _squash(txt), [], 0
+    if len(flat) < 400:
+        return ["The resume PDF has almost no readable text; screeners would see it as blank"], txt
+    p = d["person"]
+    for label, val in (("your name", p["name"]), ("your email", p["email"]), ("your site", p["site"])):
+        if _squash(val) not in flat: probs.append(f"Plain-text test: {label} doesn't come through")
+    for j in d["jobs"]:
+        if not j["bullets"]: continue
+        for label, val in [("job", j["company"].split("·")[0].strip())] + [("bullet", b) for b in j["bullets"]]:
+            key = _squash(val)[:60]
+            at = flat.find(key, pos)
+            if at < 0:
+                where = flat.find(key)
+                probs.append(f"Plain-text test: {label} \"{val[:50]}…\" " +
+                             ("comes out of order" if where >= 0 else "is missing or garbled"))
+            else:
+                pos = at
+    return probs, txt
 
 def scrub_dashes(t):
     fix = lambda s: re.sub(r"\s*[—–]\s*", ", ", s)
@@ -241,6 +364,19 @@ def assemble(t, posting):
         "re": f"Re: {t['role_display']}  ·  {t['company_display']}",
     }
 
+def readable_ids(msg):
+    """Swap bullet IDs (for Claude) for the bullet's opening words (for Travis)."""
+    text = {i: b for j in CAREER["jobs"] for i, b in j["bullets"].items()}
+    return re.sub(r"\b(" + "|".join(map(re.escape, sorted(text, key=len, reverse=True))) + r")\b",
+                  lambda m: "“" + " ".join(text[m.group(1)].split()[:6]) + "…”", msg)
+
+def dj_order(d, bullet_id):
+    """Position of a bullet on the rendered page (for the proof check after trimming)."""
+    for j, dj in zip(CAREER["jobs"], d["jobs"]):
+        if bullet_id in j["bullets"] and j["bullets"][bullet_id] in dj["bullets"]:
+            return dj["bullets"].index(j["bullets"][bullet_id])
+    return 99
+
 def trim_to_one_page(d):
     """Drop the least important bullet from the longest job (keeping minimums)."""
     mins = {0: 2, 1: 3, 2: 1, 3: 1}
@@ -269,6 +405,29 @@ def brief_md(url, posting, intel, t, d, layout, issues, stem):
     L.append(f"# {t['role_display']} · {t['company_display']}\n")
     L.append(f"**Posting:** {url}  \n**Base version used:** {CAREER['variants'][t['variant']]['label']}  \n**Built:** {datetime.date.today()}\n")
     L.append(f"## Honest read\n{t['fit_read']}\n")
+    if t.get("needs"):
+        L.append("## What they need, and your proof\n| # | Need | | Your proof on the page |\n|---|---|---|---|")
+        bullet = {i: b for j in CAREER["jobs"] for i, b in j["bullets"].items()}
+        shown = {b for j in d["jobs"] for b in j["bullets"]}
+        for n_, n in enumerate(t["needs"], 1):
+            proof = [bullet[i] for i in n.get("proof", []) if i in bullet and bullet[i] in shown]
+            cell = "<br>".join(f"“{p[:90]}{'…' if len(p) > 90 else ''}”" for p in proof) or "**No proof yet**"
+            L.append(f"| {n_} | {n['need']} | {n['level']} | {cell} |")
+        L.append("")
+    rt = t.get("recruiter_test")
+    if rt:
+        L.append(f"## Recruiter test: {dict(interview='would interview', maybe='maybe', **{'pass': 'would pass'})[rt['verdict']]}")
+        L.append("**Reasons to call you**\n" + "\n".join(f"- {x}" for x in rt.get("reasons", [])))
+        if rt.get("doubts"):
+            # These are the doubts left AFTER the automatic fix round, so a "fixable" one wasn't fixed.
+            tag = {"reorder": "still open: try reordering", "swap_bullet": "still open: try a different bullet",
+                   "reword_profile_or_letter": "still open: reword the profile or letter",
+                   "needs_new_fact": "only you can fix: needs a fact we don't have on file", "real_gap": "a real gap; address it in the interview"}
+            L.append("\n**Doubts**\n" + "\n".join(f"- {x['doubt']} *({tag.get(x['fix_type'], x['fix_type'])})*" for x in rt["doubts"]))
+        if rt.get("interview_questions"):
+            L.append("\n**Tough questions to prepare for**\n" + "\n".join(
+                f"{i}. {q['question']}  \n   *Your example:* {q['prepare']}" for i, q in enumerate(rt["interview_questions"], 1)))
+        L.append("")
     L.append("## Do this, in this order\n1. Find a warm path in (links below). If you know someone, send the referral ask first and wait a day.\n"
              "2. Apply with the **Resume.pdf**. Attach the cover letter if there's a field.\n"
              "3. Same day, send the hiring-leader note (below).\n4. Follow up in 5-7 business days if you hear nothing.\n")
@@ -362,8 +521,22 @@ def main():
         t = scrub_dashes(tailor(posting, a.url, intel))
         probs = lint(t)
         if probs:
-            print(f"  fixing {len(probs)} style issue(s)")
+            print(f"  fixing {len(probs)} style or proof issue(s)")
             t = scrub_dashes(tailor(posting, a.url, intel, feedback="\n".join(probs)))
+        print("  recruiter test…")
+        try:
+            rt = recruiter_test(posting, t, assemble(t, posting))
+            fb = recruiter_feedback(rt)
+            print(f"  verdict: {rt['verdict']}; {sum(1 for x in rt['doubts'] if x.get('fix_type') in FIXABLE)} fixable doubt(s)")
+            if fb:
+                t2 = scrub_dashes(tailor(posting, a.url, intel, feedback=fb))
+                if not lint(t2) or len(lint(t2)) <= len(lint(t)):
+                    t = t2
+                    rt = recruiter_test(posting, t, assemble(t, posting))
+                    print(f"  after fixes: {rt['verdict']}")
+            t["recruiter_test"] = rt
+        except Exception as e:
+            print(f"  recruiter test failed: {e}")
 
     stem = f"Travis Shorrock"
     folder = Path(a.out) / f"{datetime.date.today()}-{slug(t['company_display'])}-{slug(t['role_display'])}"
@@ -392,8 +565,17 @@ def main():
         d["profile"], d["letter"] = t["profile"], t["cover_letter"]
         layout = render.render_all(d, folder, stem)
         widows = layout["resume"]["widows"] + layout["letter"]["widows"]
-    issues = [f"Widow to fix by hand: \"…{w[-60:]}\"" for w in widows] + [f"Style check: {p}" for p in lint(t)]
+    on_page = {j["key"]: [k for k, v in j["bullets"].items() if v in dj["bullets"]]
+               for j, dj in zip(CAREER["jobs"], d["jobs"])}
+    on_page = {k: sorted(v, key=lambda i: dj_order(d, i)) for k, v in on_page.items()}
+    issues = [f"Widow to fix by hand: \"…{w[-60:]}\"" for w in widows] + \
+             [f"Style check: {p}" for p in lint(t) if p not in proof_problems(t)] + \
+             [f"Proof check: {readable_ids(p)}" for p in proof_problems(t, on_page)]
     if (layout["resume"].get("pages") or 1) > 1: issues.append("Resume runs past one page")
+    parse_probs, plain = parse_check(folder / f"{stem} - Resume.pdf", d)
+    issues += parse_probs
+    if plain: (folder / f"{stem} - Resume (plain text).txt").write_text(plain)
+    print(f"  plain-text test: {'passed' if not parse_probs else f'{len(parse_probs)} problem(s)'}")
 
     print("[5/6] Writing the brief…")
     brief = brief_md(a.url, posting, intel, t, d, layout, issues, stem)
