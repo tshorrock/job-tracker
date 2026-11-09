@@ -1,29 +1,29 @@
 {
-  "updated": "2026-11-08T09:03:31.094015+00:00",
-  "new_today": 0,
-  "today": [],
-  "this_week": [
+  "updated": "2026-11-09T09:51:21.870498+00:00",
+  "new_today": 1,
+  "today": [
     {
-      "title": "Creative Director",
-      "company": "AvantStay",
-      "url": "https://www.linkedin.com/jobs/view/4404711181/",
-      "score": 7,
-      "salary": "$75K\u2013$120K/yr",
-      "where": "Remote worldwide outside the US (Spain listed)",
+      "title": "AI-Driven Creative Director: Brand Studio Leader (Remote)",
+      "company": "Superside",
+      "url": "https://jobmesh.io/job/620846f1-e9d9-4ce2-b527-4bce05043ce4",
+      "score": 8,
+      "salary": "",
+      "where": "Not stated; posting labeled Remote",
       "remote": "FULLY_REMOTE",
-      "geo": "OPEN_ANYWHERE",
-      "hire_path": "OPEN_GLOBAL",
-      "pay_currency": "USD",
+      "geo": "NOT_STATED",
+      "hire_path": "UNCLEAR",
+      "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 6,
+      "age_days": 3,
       "repost_count": 0,
-      "why": "Legit remote CD role with AI focus, but pay tops out at $120K\u2014well under his $150K floor\u2014and wants luxury hospitality/travel brand background he doesn't have.",
+      "why": "A genuine AI-driven Creative Director role at a remote-first creative studio that matches his AI tool expertise, but pay and geo eligibility are unstated.",
       "red_flags": [
-        "Pay ceiling ($120K) below his $150K+ target",
-        "Requires luxury hospitality/travel/lifestyle brand experience, not his ad-agency background",
-        "Explicitly excludes US candidates, so likely non-US payroll/entity"
+        "No pay information provided",
+        "Location data looks like a scraped/templated job-board artifact (New York zip)",
+        "Title conflates Creative Director and Associate Creative Director, unclear actual seniority"
       ],
-      "added": "2026-11-02"
+      "added": "2026-11-09"
     }
-  ]
+  ],
+  "this_week": []
 }
