@@ -1,7 +1,8 @@
 {
-  "updated": "2026-11-09T09:51:21.870498+00:00",
-  "new_today": 1,
-  "today": [
+  "updated": "2026-11-10T09:51:13.084917+00:00",
+  "new_today": 0,
+  "today": [],
+  "this_week": [
     {
       "title": "AI-Driven Creative Director: Brand Studio Leader (Remote)",
       "company": "Superside",
@@ -14,7 +15,7 @@
       "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
       "board": "us",
-      "age_days": 3,
+      "age_days": 4,
       "repost_count": 0,
       "why": "A genuine AI-driven Creative Director role at a remote-first creative studio that matches his AI tool expertise, but pay and geo eligibility are unstated.",
       "red_flags": [
@@ -24,6 +25,5 @@
       ],
       "added": "2026-11-09"
     }
-  ],
-  "this_week": []
+  ]
 }
