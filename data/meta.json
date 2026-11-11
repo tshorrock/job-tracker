@@ -1,28 +1,28 @@
 {
-  "updated": "2026-11-10T09:51:13.084917+00:00",
-  "new_count": 0,
-  "total_count": 17,
+  "updated": "2026-11-11T09:26:47.150638+00:00",
+  "new_count": 5,
+  "total_count": 22,
   "model": "claude-sonnet-5",
   "sources": {
     "Apify LinkedIn": {
-      "fetched": 13,
-      "new": 10
+      "fetched": 20,
+      "new": 11
     },
     "LinkedIn alerts": {
-      "fetched": 5,
+      "fetched": 3,
       "new": 0
     },
     "LinkedIn guest": {
-      "fetched": 525,
-      "new": 111
+      "fetched": 474,
+      "new": 83
     },
     "Careers pages": {
-      "fetched": 30,
-      "new": 3
+      "fetched": 27,
+      "new": 0
     },
     "Adzuna": {
-      "fetched": 103,
-      "new": 2
+      "fetched": 135,
+      "new": 19
     },
     "JSearch": {
       "fetched": 0,
@@ -33,7 +33,7 @@
       "new": 0
     },
     "Working Nomads": {
-      "fetched": 35,
+      "fetched": 37,
       "new": 0
     },
     "Himalayas": {
@@ -42,11 +42,11 @@
     }
   },
   "prefilter_dropped": {
-    "hybrid": 18,
-    "us_only": 2,
+    "hybrid": 13,
+    "us_only": 1,
     "blocked_company": 0,
     "already_applied": 0,
-    "us_payroll": 57
+    "us_payroll": 41
   },
-  "email": "skipped: no new jobs"
+  "email": "sent"
 }
