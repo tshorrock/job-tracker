@@ -1,30 +1,8 @@
 {
-  "updated": "2026-11-15T09:27:17.433068+00:00",
-  "new_today": 2,
+  "updated": "2026-11-16T09:43:06.755276+00:00",
+  "new_today": 1,
   "today": [],
   "this_week": [
-    {
-      "title": "Creative Director",
-      "company": "Superside",
-      "url": "https://www.linkedin.com/jobs/view/4489825379/",
-      "score": 8,
-      "salary": "",
-      "where": "Fully remote, any of 60+ countries",
-      "remote": "FULLY_REMOTE",
-      "geo": "OPEN_ANYWHERE",
-      "hire_path": "OPEN_GLOBAL",
-      "pay_currency": "NOT_STATED",
-      "board": "us",
-      "age_days": 1,
-      "repost_count": 0,
-      "why": "Legit global CD role fitting his AI-creative skillset, but it's the same company (Superside) he already passed on, with no pay stated and likely compressed agency-style rates.",
-      "red_flags": [
-        "No compensation listed",
-        "Already dismissed a similar Superside AI Creative Director role",
-        "Globally distributed team may mean lower US-level pay"
-      ],
-      "added": "2026-11-14"
-    },
     {
       "title": "Creative Director",
       "company": "Ursus, Inc.",
@@ -37,7 +15,7 @@
       "hire_path": "CONTRACT",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 3,
+      "age_days": 4,
       "repost_count": 0,
       "why": "Solid pay and fully remote, but it's a contract gig focused narrowly on performance-marketing/GenAI ad production for Meta's SMB audience, not his strategic brand-campaign strength.",
       "red_flags": [
