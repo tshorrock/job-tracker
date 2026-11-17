@@ -1,7 +1,30 @@
 {
-  "updated": "2026-11-16T09:43:06.755276+00:00",
-  "new_today": 1,
-  "today": [],
+  "updated": "2026-11-17T10:47:07.563224+00:00",
+  "new_today": 2,
+  "today": [
+    {
+      "title": "Creative Director, Brand Experience",
+      "company": "Kinaxis",
+      "url": "https://www.linkedin.com/jobs/view/4491520233/",
+      "score": 7,
+      "salary": "",
+      "where": "Remote, anywhere in Canada or US",
+      "remote": "FULLY_REMOTE",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "pay_currency": "NOT_STATED",
+      "board": "canada",
+      "age_days": 0,
+      "repost_count": 0,
+      "why": "Legit senior in-house Creative Director role with real brand/campaign scope and explicit fully-remote Canada option, but pay is unstated and likely CAD through a Canadian employer.",
+      "red_flags": [
+        "No compensation listed",
+        "Canadian HQ likely means CAD payroll, a step down from his USD target",
+        "In-house tech/SaaS brand role, not agency, may be less creative-scope than his background"
+      ],
+      "added": "2026-11-17"
+    }
+  ],
   "this_week": [
     {
       "title": "Creative Director",
@@ -15,7 +38,7 @@
       "hire_path": "CONTRACT",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 4,
+      "age_days": 5,
       "repost_count": 0,
       "why": "Solid pay and fully remote, but it's a contract gig focused narrowly on performance-marketing/GenAI ad production for Meta's SMB audience, not his strategic brand-campaign strength.",
       "red_flags": [
