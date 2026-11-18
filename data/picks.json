@@ -1,7 +1,8 @@
 {
-  "updated": "2026-11-18T10:12:25.238730+00:00",
-  "new_today": 4,
-  "today": [
+  "updated": "2026-11-18T15:38:44.760467+00:00",
+  "new_today": 0,
+  "today": [],
+  "this_week": [
     {
       "title": "Creative Director",
       "company": "Fireflies AI",
@@ -23,6 +24,28 @@
         "Employer base and payroll country not explicitly confirmed"
       ],
       "added": "2026-11-18"
+    },
+    {
+      "title": "Creative Director",
+      "company": "Ursus, Inc.",
+      "url": "https://www.linkedin.com/jobs/view/4488583583/",
+      "score": 8,
+      "salary": "$135.00/hr - $140.00/hr",
+      "where": "Remote, flexible across timezones",
+      "remote": "FULLY_REMOTE",
+      "geo": "NOT_STATED",
+      "hire_path": "CONTRACT",
+      "pay_currency": "USD",
+      "board": "us",
+      "age_days": 6,
+      "repost_count": 0,
+      "why": "Solid pay and fully remote, but it's a contract gig focused narrowly on performance-marketing/GenAI ad production for Meta's SMB audience, not his strategic brand-campaign strength.",
+      "red_flags": [
+        "Contract through 3/31/27 via staffing agency, not FTE",
+        "Scope is narrow performance-marketing/digital ads, not integrated brand leadership",
+        "Only 5-8 yrs experience required, mismatched with his 30-year seniority"
+      ],
+      "added": "2026-11-13"
     },
     {
       "title": "Creative Director",
@@ -67,30 +90,6 @@
         "Posting mixes 'remote' label with hybrid office language, creating ambiguity about true remote status"
       ],
       "added": "2026-11-18"
-    }
-  ],
-  "this_week": [
-    {
-      "title": "Creative Director",
-      "company": "Ursus, Inc.",
-      "url": "https://www.linkedin.com/jobs/view/4488583583/",
-      "score": 8,
-      "salary": "$135.00/hr - $140.00/hr",
-      "where": "Remote, flexible across timezones",
-      "remote": "FULLY_REMOTE",
-      "geo": "NOT_STATED",
-      "hire_path": "CONTRACT",
-      "pay_currency": "USD",
-      "board": "us",
-      "age_days": 6,
-      "repost_count": 0,
-      "why": "Solid pay and fully remote, but it's a contract gig focused narrowly on performance-marketing/GenAI ad production for Meta's SMB audience, not his strategic brand-campaign strength.",
-      "red_flags": [
-        "Contract through 3/31/27 via staffing agency, not FTE",
-        "Scope is narrow performance-marketing/digital ads, not integrated brand leadership",
-        "Only 5-8 yrs experience required, mismatched with his 30-year seniority"
-      ],
-      "added": "2026-11-13"
     },
     {
       "title": "Creative Director, Brand Experience",
