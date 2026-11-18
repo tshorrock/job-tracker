@@ -1,28 +1,72 @@
 {
-  "updated": "2026-11-17T10:47:07.563224+00:00",
-  "new_today": 2,
+  "updated": "2026-11-18T10:12:25.238730+00:00",
+  "new_today": 4,
   "today": [
     {
-      "title": "Creative Director, Brand Experience",
-      "company": "Kinaxis",
-      "url": "https://www.linkedin.com/jobs/view/4491520233/",
+      "title": "Creative Director",
+      "company": "Fireflies AI",
+      "url": "https://builtin.com/job/creative-director/12259383",
+      "score": 10,
+      "salary": "Competitive compensation (unspecified)",
+      "where": "Remote, anywhere in your own country",
+      "remote": "FULLY_REMOTE",
+      "geo": "OPEN_ANYWHERE",
+      "hire_path": "OPEN_GLOBAL",
+      "pay_currency": "NOT_STATED",
+      "board": "us",
+      "age_days": 2,
+      "repost_count": 0,
+      "why": "A Creative Director role built around hands-on AI video tools (Higgsfield, Runway, Veo) that matches his exact toolkit and is genuinely fully remote and globally hireable.",
+      "red_flags": [
+        "No pay figures stated anywhere",
+        "Role leans heavily toward solo scripting/ideation rather than leading a department",
+        "Employer base and payroll country not explicitly confirmed"
+      ],
+      "added": "2026-11-18"
+    },
+    {
+      "title": "Creative Director",
+      "company": "JumpSeat",
+      "url": "https://www.linkedin.com/jobs/view/4490196979/",
       "score": 7,
       "salary": "",
-      "where": "Remote, anywhere in Canada or US",
+      "where": "Remote, US or Buenos Aires",
       "remote": "FULLY_REMOTE",
-      "geo": "CANADA_OK",
-      "hire_path": "CANADA_POSSIBLE",
+      "geo": "AMERICAS_OR_LATAM",
+      "hire_path": "UNCLEAR",
       "pay_currency": "NOT_STATED",
-      "board": "canada",
-      "age_days": 0,
+      "board": "us",
+      "age_days": 1,
       "repost_count": 0,
-      "why": "Legit senior in-house Creative Director role with real brand/campaign scope and explicit fully-remote Canada option, but pay is unstated and likely CAD through a Canadian employer.",
+      "why": "Solid CD leadership role with AI focus and real remote flexibility, but it's a small B2B growth agency, not brand advertising, and pay isn't stated.",
       "red_flags": [
         "No compensation listed",
-        "Canadian HQ likely means CAD payroll, a step down from his USD target",
-        "In-house tech/SaaS brand role, not agency, may be less creative-scope than his background"
+        "Small agency scale (two full-time creatives) may undersell his experience leading large departments",
+        "B2B growth/ABM focus is narrower than his integrated brand campaign background"
       ],
-      "added": "2026-11-17"
+      "added": "2026-11-18"
+    },
+    {
+      "title": "Creative Director - 6-Month Contract, with Potential for Extension (Remote)",
+      "company": "RemoteHyQ",
+      "url": "https://remotehyq.q0p.ifree.page/remote-jobs/creative-director-6-month-contract-with-potential-for-extension-remote",
+      "score": 7,
+      "salary": "USD 120,000 \u2013 160,000 / year (Hiring Range $120,000\u2014$160,000 USD)",
+      "where": "Remote \u2014 United States, contract role",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "hire_path": "CONTRACT",
+      "pay_currency": "USD",
+      "board": "canada",
+      "age_days": 1,
+      "repost_count": 0,
+      "why": "Strong CD-level brand leadership fit, but it's a short-term US contract requiring E-Verify work authorization Travis likely lacks.",
+      "red_flags": [
+        "6-month contract with only 'potential' extension, no guaranteed full-time role",
+        "E-Verify requirement signals need for US work authorization, which Travis doesn't have",
+        "Posting mixes 'remote' label with hybrid office language, creating ambiguity about true remote status"
+      ],
+      "added": "2026-11-18"
     }
   ],
   "this_week": [
@@ -38,7 +82,7 @@
       "hire_path": "CONTRACT",
       "pay_currency": "USD",
       "board": "us",
-      "age_days": 5,
+      "age_days": 6,
       "repost_count": 0,
       "why": "Solid pay and fully remote, but it's a contract gig focused narrowly on performance-marketing/GenAI ad production for Meta's SMB audience, not his strategic brand-campaign strength.",
       "red_flags": [
@@ -47,6 +91,28 @@
         "Only 5-8 yrs experience required, mismatched with his 30-year seniority"
       ],
       "added": "2026-11-13"
+    },
+    {
+      "title": "Creative Director, Brand Experience",
+      "company": "Kinaxis",
+      "url": "https://www.linkedin.com/jobs/view/4491520233/",
+      "score": 7,
+      "salary": "",
+      "where": "Remote, anywhere in Canada or US",
+      "remote": "FULLY_REMOTE",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "pay_currency": "NOT_STATED",
+      "board": "canada",
+      "age_days": 1,
+      "repost_count": 0,
+      "why": "Legit senior in-house Creative Director role with real brand/campaign scope and explicit fully-remote Canada option, but pay is unstated and likely CAD through a Canadian employer.",
+      "red_flags": [
+        "No compensation listed",
+        "Canadian HQ likely means CAD payroll, a step down from his USD target",
+        "In-house tech/SaaS brand role, not agency, may be less creative-scope than his background"
+      ],
+      "added": "2026-11-17"
     }
   ]
 }
