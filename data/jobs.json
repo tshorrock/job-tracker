@@ -335,6 +335,46 @@
     "applied_via": "email"
   },
   {
+    "title": "Executive Creative Director",
+    "company": "Ladders",
+    "url": "https://www.linkedin.com/jobs/view/4491614142/",
+    "description": "For our client, we are seeking a Executive Creative Director to join the team of a leader in the Media space. This role will shape and elevate creative direction across a portfolio of client work, with a strong emphasis on performance-driven storytelling and high-quality execution. You will lead a creative team spanning writing, production, and client-facing work while partnering closely with analytics and account stakeholders. The position also plays a key role in new business pitches, talent development, and maintaining creative standards under pressure. Location: Remote Compensation: $170,000 \u2013 $210,000 annually Responsibilities Ensure high creative quality across all client accounts through rigorous review processes Integrate advanced analytics as a meaningful benchmark for creative performance Oversee talent onboarding and provide structured feedback to enhance performance Collaborate with Analytics to connect creative output with market performance Foster a test-and-learn culture by embedding testing into the creative process Lead and develop the creative team across various disciplines Maintain direct relationships with key clients and talent for creative direction Drive the creative strategy for new business pitches and bespoke campaigns Qualifications 10+ years of creative leadership experience across multiple accounts or productions Deep understanding of audio advertising formats, including host-read and bespoke creative Proven ability to link creative decisions to measurable performance outcomes Experience leading and developing creative teams across writing and production Strong perspective on effective audio creative elements and standards Experience in new business pitches and high-stakes creative presentations Comfortable working directly with talent for onboarding and feedback Ownership mentality with a focus on quality under pressure Benefits Opportunity to shape the creative direction of a leading agency Collaborative environment with a focus on performance and quality Access to advanced analytics tools for creative insights Direct involvement in high-stakes client relationships and pitches Support for professional development and team growth Our client is an equal opportunity employer. We encourage you to apply even if you don\u2019t meet every qualification\u2014your background could be exactly what this team needs.",
+    "salary": "$170,000.00/yr - $210,000.00/yr",
+    "location": "United States",
+    "source": "LinkedIn",
+    "posted": "2026-11-19",
+    "li_id": "4491614142",
+    "li_seniority": "Not Applicable",
+    "snippet_only": true,
+    "score": 4,
+    "age_days": 1,
+    "category": "CORE",
+    "score_reason": "Legit ECD title and strong US pay, but it's a niche audio/podcast-ad shop, not his integrated brand/TV background.",
+    "score_method": "claude-sonnet-5",
+    "facts": {
+      "lane": "CORE",
+      "seniority": "EXECUTIVE",
+      "remote": "FULLY_REMOTE",
+      "geo": "US_REMOTE",
+      "hire_path": "UNCLEAR",
+      "employer_base": "UNCLEAR",
+      "pay_currency": "USD",
+      "timezone": "NOT_STATED",
+      "fit": 5,
+      "comp_min_usd": 170000,
+      "comp_max_usd": 210000,
+      "red_flags": [
+        "Niche audio advertising focus (host-read ads) doesn't match his TV/digital/CRM background",
+        "No clarity on whether a non-US-authorized hire is possible",
+        "Recruiter posting with vague/undisclosed client details"
+      ]
+    },
+    "where": "Remote, United States",
+    "board": "us",
+    "id": "e3864c9f6347",
+    "added": "2026-11-20T10:03:11.335010+00:00"
+  },
+  {
     "title": "Creative Director",
     "company": "JumpSeat",
     "url": "https://www.linkedin.com/jobs/view/4490196979/",
