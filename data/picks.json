@@ -1,6 +1,29 @@
 {
-  "updated": "2026-11-27T10:54:31.000706+00:00",
-  "new_today": 2,
-  "today": [],
+  "updated": "2026-11-28T10:26:41.795793+00:00",
+  "new_today": 1,
+  "today": [
+    {
+      "title": "Creative Director",
+      "company": "StackAdapt",
+      "url": "https://www.adzuna.ca/details/5981131444?utm_medium=api&utm_source=757a890e",
+      "score": 8,
+      "salary": "",
+      "where": "Remote anywhere in Canada or US",
+      "remote": "FULLY_REMOTE",
+      "geo": "CANADA_OK",
+      "hire_path": "CANADA_POSSIBLE",
+      "pay_currency": "NOT_STATED",
+      "board": "canada",
+      "age_days": 0,
+      "repost_count": 0,
+      "why": "Legit senior CD role leading brand and creative for a scaling ad-tech company, fully remote across Canada/US, but it's a Canadian employer with no pay stated so he may land on CAD payroll.",
+      "red_flags": [
+        "No salary disclosed",
+        "Canadian-headquartered company likely pays in CAD",
+        "Marketing copy is heavy on buzzwords ('brand swagger'), light on specifics of creative scope"
+      ],
+      "added": "2026-11-28"
+    }
+  ],
   "this_week": []
 }
